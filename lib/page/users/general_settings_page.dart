@@ -1,13 +1,15 @@
-import 'package:filmoly/generated/l10n.dart';
-import 'package:filmoly/widget/components_widgets.dart';
-import 'package:filmoly/providers/language_provider.dart';
-import 'package:filmoly/providers/theme_provider.dart';
+import 'package:filmoly/api/filmoly_api.dart';
 import 'package:filmoly/core/global_functions.dart';
 import 'package:filmoly/core/global_variables.dart';
 import 'package:filmoly/core/user_preferences.dart';
+import 'package:filmoly/generated/l10n.dart';
+import 'package:filmoly/model/user_model.dart';
+import 'package:filmoly/providers/language_provider.dart';
+import 'package:filmoly/providers/theme_provider.dart';
+import 'package:filmoly/widget/components_widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 /// Ajustes generales de Filmoly (idioma, tema, inicio de semana, formato fecha).
 class GeneralSettingsPage extends StatefulWidget {
@@ -40,44 +42,51 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        return AlertDialog(
-          title: Text(S.current.dialogWarningTitle),
-          content: Text(
-            S.current.dialogConfirmSave,
-            style: Theme.of(context).textTheme.bodySmall,
+        return PopScope(
+          canPop: false,
+          child: AlertDialog(
+            title: Text(S.current.dialogWarningTitle),
+            content: Text(S.current.dialogConfirmSave),
+            actions: [
+              Row(
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: () {
+                        Navigator.of(context)
+                            .pop({"saved": false, "success": false});
+                        setState(() {
+                          _isEditing = false;
+                          final themeProvider = context.read<ThemeProvider>();
+                          final langProvider = context.read<LanguageProvider>();
+                          if (themeProvider.isDarkMode != _initialIsDarkMode) {
+                            themeProvider.toggleTheme();
+                          }
+                          if (langProvider.currentLanguage != _initialLanguage) {
+                            langProvider.changeLanguage(_initialLanguage);
+                          }
+                          _weekStart = _initialWeekStart;
+                          _dateFormat = _initialDateFormat;
+                        });
+                      },
+                      child: Text(S.current.actionNo),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        final ok = await _saveSettings();
+                        Navigator.of(context)
+                            .pop({"saved": true, "success": ok});
+                      },
+                      child: Text(S.current.actionYes),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
-          actions: [
-            Row(
-              children: [
-                Expanded(
-                  child: OutlinedButton(
-                    onPressed: () {
-                      Navigator.of(context)
-                          .pop({"saved": false, "success": false});
-                    },
-                    child: Text(
-                      S.current.actionNo,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      final ok = await _saveSettings();
-                      Navigator.of(context)
-                          .pop({"saved": true, "success": ok});
-                    },
-                    child: Text(
-                      S.current.actionYes,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
         );
       },
     );
@@ -86,31 +95,44 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
   }
 
   Future<void> _loadInitialValues() async {
-    // Tema e idioma iniciales
     _initialIsDarkMode = context.read<ThemeProvider>().isDarkMode;
     _initialLanguage = context.read<LanguageProvider>().currentLanguage;
 
-    // Semana y formato fecha desde prefs (si existen)
-    final savedWeekStart = await _prefs.getWeekStart();
-    final savedDateFormat = await _prefs.getDateFormat();
-
+    // Semana y formato fecha desde usuario (backend/caché)
+    final u = globalCurrentUser;
+    if (u.weekStart == 'sunday' || u.weekStart == 'monday') {
+      _weekStart = u.weekStart;
+    }
+    if (u.dateFormat.isNotEmpty) {
+      _dateFormat = u.dateFormat;
+    }
     setState(() {
-      if (savedWeekStart == 'sunday' || savedWeekStart == 'monday') {
-        _weekStart = savedWeekStart!;
-      }
-      if (savedDateFormat != null && savedDateFormat.isNotEmpty) {
-        _dateFormat = savedDateFormat;
-      }
       _initialWeekStart = _weekStart;
       _initialDateFormat = _dateFormat;
     });
   }
 
   Future<bool> _saveSettings() async {
+    if (globalUserToken.isEmpty || globalCurrentUser.username.isEmpty) {
+      showCustomSnackBar(S.current.error, type: -1);
+      return false;
+    }
     try {
-      await _prefs.setWeekStart(_weekStart);
-      await _prefs.setDateFormat(_dateFormat);
-      // De momento solo persistimos en local; más adelante se llamará al endpoint WP.
+      final result = await FilmolyApi.updateUser(
+        userEmail: globalCurrentUser.email,
+        language: context.read<LanguageProvider>().currentLanguage,
+        dateFormat: _dateFormat,
+        weekStart: _weekStart,
+      );
+      if (result['success'] != true) {
+        showCustomSnackBar(S.current.error, type: -1);
+        return false;
+      }
+      final userJson = result['user'];
+      if (userJson is Map<String, dynamic>) {
+        globalCurrentUser = FilmolyUser.fromJson(userJson);
+        await _prefs.setCachedUser(globalCurrentUser);
+      }
       showCustomSnackBar(S.current.success, type: 1);
       setState(() {
         _initialWeekStart = _weekStart;
@@ -147,10 +169,9 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
       canPop: !_isEditing,
       onPopInvoked: (didPop) async {
         if (_isEditing && !didPop) {
-          final result = await _confirmChangesDialog();
-          if (result["success"] == true || !_isEditing) {
-            Navigator.pop(context);
-          }
+          await _confirmChangesDialog();
+          // Siempre salir tras el diálogo (como Fitcron): guardando o sin guardar
+          if (context.mounted) Navigator.pop(context);
         }
       },
       child: Scaffold(

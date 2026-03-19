@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+/// Cursor de mano para elementos interactuables en Windows/desktop.
+final _clickCursor = WidgetStateProperty.all<MouseCursor>(SystemMouseCursors.click);
+
 /// Colores de Filmoly según el logo: verde lima y gris antracita.
 class AppColors {
   /// Verde lima vibrante (elementos principales, botones, acentos)
@@ -57,6 +60,12 @@ ThemeData themeFromColorScheme(ColorScheme colorScheme) {
     useMaterial3: true,
     colorScheme: colorScheme,
     scaffoldBackgroundColor: colorScheme.surface,
+    // Estilos de hover/highlight para elementos tipo ListTile (ej. CheckboxListTile)
+    hoverColor: colorScheme.tertiary.withValues(alpha: 0.3),
+    highlightColor: colorScheme.tertiary.withValues(alpha: 0.3),
+    hintColor: colorScheme.tertiary.withValues(alpha: 0.6),
+    focusColor: colorScheme.secondary.withValues(alpha: 0.3),
+    disabledColor: colorScheme.onSurface.withValues(alpha: 0.3),
     appBarTheme: AppBarTheme(
       backgroundColor: colorScheme.primary,
       foregroundColor: colorScheme.onPrimary,
@@ -90,16 +99,19 @@ ThemeData themeFromColorScheme(ColorScheme colorScheme) {
       shape: const Border(),
     ),
     listTileTheme: ListTileThemeData(
-      mouseCursor: WidgetStateProperty.all<MouseCursor>(SystemMouseCursors.click),
+      mouseCursor: _clickCursor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
-        mouseCursor: WidgetStateProperty.all<MouseCursor>(SystemMouseCursors.click),
+        mouseCursor: _clickCursor,
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        mouseCursor: WidgetStateProperty.all<MouseCursor>(SystemMouseCursors.click),
+        mouseCursor: _clickCursor,
         backgroundColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.disabled)) {
             return colorScheme.primary.withValues(alpha: 0.4);
@@ -124,10 +136,21 @@ ThemeData themeFromColorScheme(ColorScheme colorScheme) {
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: ButtonStyle(
-        mouseCursor: WidgetStateProperty.all<MouseCursor>(SystemMouseCursors.click),
-        foregroundColor: WidgetStateProperty.all<Color>(colorScheme.onSurface),
-        side: WidgetStateProperty.all<BorderSide>(
-          BorderSide(color: colorScheme.primary),
+        mouseCursor: _clickCursor,
+        foregroundColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return colorScheme.onSurface.withValues(alpha: 0.4);
+          }
+          return colorScheme.onSurface;
+        }),
+        side: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.disabled)) {
+            return BorderSide(color: colorScheme.primary.withValues(alpha: 0.3));
+          }
+          return BorderSide(color: colorScheme.primary);
+        }),
+        padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
+          const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
         shape: WidgetStateProperty.all<OutlinedBorder>(
           RoundedRectangleBorder(
@@ -140,6 +163,23 @@ ThemeData themeFromColorScheme(ColorScheme colorScheme) {
       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
       filled: true,
       contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+    ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      mouseCursor: _clickCursor,
+    ),
+    iconButtonTheme: IconButtonThemeData(
+      style: ButtonStyle(mouseCursor: _clickCursor),
+    ),
+    dialogTheme: DialogThemeData(
+      titleTextStyle: TextStyle(
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: colorScheme.onSurface,
+      ),
+      contentTextStyle: TextStyle(
+        fontSize: 16,
+        color: colorScheme.onSurface,
+      ),
     ),
     snackBarTheme: SnackBarThemeData(
       backgroundColor: colorScheme.inverseSurface,

@@ -40,7 +40,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Changelog",
     ),
     "back": MessageLookupByLibrary.simpleMessage("Back"),
+    "buttonCancel": MessageLookupByLibrary.simpleMessage("Cancel"),
     "buttonClose": MessageLookupByLibrary.simpleMessage("Close"),
+    "buttonConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+    "buttonDeleteAccount": MessageLookupByLibrary.simpleMessage(
+      "Delete account",
+    ),
     "close": MessageLookupByLibrary.simpleMessage("Close"),
     "code6Digits": MessageLookupByLibrary.simpleMessage(
       "Code must be 6 digits",
@@ -68,6 +73,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "dialogConfirmSave": MessageLookupByLibrary.simpleMessage(
       "Do you want to save the changes made?",
     ),
+    "dialogDeleteAccount": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to delete your account? This action is irreversible. Enter your password to confirm.",
+    ),
+    "dialogDeleteAccountPassword": MessageLookupByLibrary.simpleMessage(
+      "Password",
+    ),
     "dialogErrorAppVersion": MessageLookupByLibrary.simpleMessage(
       "A new version of Filmoly is available.\nPlease update the app to continue.",
     ),
@@ -84,6 +95,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "email": MessageLookupByLibrary.simpleMessage("Email"),
     "error": MessageLookupByLibrary.simpleMessage("Error"),
+    "errorAuthDeleteAccountFailed": MessageLookupByLibrary.simpleMessage(
+      "Could not delete account. Please try again.",
+    ),
     "errorAuthEmailExists": MessageLookupByLibrary.simpleMessage(
       "That email is already registered.",
     ),
@@ -128,6 +142,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "errorAuthUsernameExists": MessageLookupByLibrary.simpleMessage(
       "That username already exists.",
+    ),
+    "errorProcessingImage": MessageLookupByLibrary.simpleMessage(
+      "Error processing image",
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Expand"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
@@ -182,6 +199,21 @@ class MessageLookup extends MessageLookupByLibrary {
       "Social networks",
     ),
     "menuHome": MessageLookupByLibrary.simpleMessage("Home"),
+    "messageDeleteAccountError": MessageLookupByLibrary.simpleMessage(
+      "Error deleting account",
+    ),
+    "messageDeleteAccountSuccess": MessageLookupByLibrary.simpleMessage(
+      "Account deleted successfully",
+    ),
+    "messageGeneralError": MessageLookupByLibrary.simpleMessage(
+      "An error occurred",
+    ),
+    "messageUpdateError": MessageLookupByLibrary.simpleMessage(
+      "Error updating profile",
+    ),
+    "messageUpdateSuccess": MessageLookupByLibrary.simpleMessage(
+      "Profile updated successfully",
+    ),
     "newPassword": MessageLookupByLibrary.simpleMessage("New password"),
     "notificationsLabel": MessageLookupByLibrary.simpleMessage("Notifications"),
     "password": MessageLookupByLibrary.simpleMessage("Password"),
@@ -221,6 +253,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "socialWebError": MessageLookupByLibrary.simpleMessage(
       "Could not open the link.",
     ),
+    "socialWhatsappError": MessageLookupByLibrary.simpleMessage(
+      "Could not open WhatsApp.",
+    ),
+    "socialWhatsappLabel": MessageLookupByLibrary.simpleMessage("WhatsApp"),
     "subjectSupport": MessageLookupByLibrary.simpleMessage("Filmoly contact"),
     "success": MessageLookupByLibrary.simpleMessage("Success"),
     "termsAndConditionsLabel": MessageLookupByLibrary.simpleMessage(
@@ -229,13 +265,33 @@ class MessageLookup extends MessageLookupByLibrary {
     "textUserSupportDescription": MessageLookupByLibrary.simpleMessage(
       "Need help? Email us or visit our website.",
     ),
+    "textfieldDisplayNameLabel": MessageLookupByLibrary.simpleMessage(
+      "Display name",
+    ),
+    "textfieldMailEmpty": MessageLookupByLibrary.simpleMessage(
+      "Email is required",
+    ),
+    "textfieldMailError": MessageLookupByLibrary.simpleMessage("Invalid email"),
+    "textfieldUserBirthdayLabel": MessageLookupByLibrary.simpleMessage(
+      "Date of birth",
+    ),
+    "textfieldUserCountryLabel": MessageLookupByLibrary.simpleMessage(
+      "Country",
+    ),
     "theme": MessageLookupByLibrary.simpleMessage("Theme"),
     "themeDark": MessageLookupByLibrary.simpleMessage("Dark mode"),
     "themeLight": MessageLookupByLibrary.simpleMessage("Light mode"),
+    "userAvatar": MessageLookupByLibrary.simpleMessage("Avatar"),
+    "userDescription": MessageLookupByLibrary.simpleMessage("Description"),
+    "userEmail": MessageLookupByLibrary.simpleMessage("Email"),
     "userOrEmail": MessageLookupByLibrary.simpleMessage("Username or email"),
+    "userSectionAccount": MessageLookupByLibrary.simpleMessage(
+      "Account and profile",
+    ),
     "userSectionContact": MessageLookupByLibrary.simpleMessage("Contact"),
     "userSectionFAQs": MessageLookupByLibrary.simpleMessage("FAQs"),
     "userSectionSessionClose": MessageLookupByLibrary.simpleMessage("Log out"),
+    "userYears": MessageLookupByLibrary.simpleMessage("years"),
     "username": MessageLookupByLibrary.simpleMessage("Username"),
     "usernameMinLength": MessageLookupByLibrary.simpleMessage(
       "At least 4 characters",

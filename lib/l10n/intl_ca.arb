@@ -96,6 +96,8 @@
   "dialogConfirmSave": "Vols desar els canvis realitzats?",
   "textUserSupportDescription": "Necessites ajuda? Escriu-nos per correu o visita la nostra web.",
   "socialWebError": "No s'ha pogut obrir l'enllaç.",
+  "socialWhatsappLabel": "WhatsApp",
+  "socialWhatsappError": "No s'ha pogut obrir WhatsApp.",
   "menuBarSectionSocial": "Xarxes socials",
   "socialNetworksText": "Segueix-nos a les xarxes socials.",
   "privacyPoliciesLabel": "Política de privacitat",

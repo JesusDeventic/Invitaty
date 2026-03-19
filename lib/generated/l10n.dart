@@ -759,6 +759,26 @@ class S {
     );
   }
 
+  /// `WhatsApp`
+  String get socialWhatsappLabel {
+    return Intl.message(
+      'WhatsApp',
+      name: 'socialWhatsappLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Could not open WhatsApp.`
+  String get socialWhatsappError {
+    return Intl.message(
+      'Could not open WhatsApp.',
+      name: 'socialWhatsappError',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Social networks`
   String get menuBarSectionSocial {
     return Intl.message(
@@ -1052,6 +1072,201 @@ class S {
       desc: '',
       args: [],
     );
+  }
+
+  /// `Could not delete account. Please try again.`
+  String get errorAuthDeleteAccountFailed {
+    return Intl.message(
+      'Could not delete account. Please try again.',
+      name: 'errorAuthDeleteAccountFailed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account and profile`
+  String get userSectionAccount {
+    return Intl.message(
+      'Account and profile',
+      name: 'userSectionAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Avatar`
+  String get userAvatar {
+    return Intl.message('Avatar', name: 'userAvatar', desc: '', args: []);
+  }
+
+  /// `Description`
+  String get userDescription {
+    return Intl.message(
+      'Description',
+      name: 'userDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email`
+  String get userEmail {
+    return Intl.message('Email', name: 'userEmail', desc: '', args: []);
+  }
+
+  /// `Country`
+  String get textfieldUserCountryLabel {
+    return Intl.message(
+      'Country',
+      name: 'textfieldUserCountryLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Date of birth`
+  String get textfieldUserBirthdayLabel {
+    return Intl.message(
+      'Date of birth',
+      name: 'textfieldUserBirthdayLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Display name`
+  String get textfieldDisplayNameLabel {
+    return Intl.message(
+      'Display name',
+      name: 'textfieldDisplayNameLabel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Email is required`
+  String get textfieldMailEmpty {
+    return Intl.message(
+      'Email is required',
+      name: 'textfieldMailEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Invalid email`
+  String get textfieldMailError {
+    return Intl.message(
+      'Invalid email',
+      name: 'textfieldMailError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `years`
+  String get userYears {
+    return Intl.message('years', name: 'userYears', desc: '', args: []);
+  }
+
+  /// `Delete account`
+  String get buttonDeleteAccount {
+    return Intl.message(
+      'Delete account',
+      name: 'buttonDeleteAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Are you sure you want to delete your account? This action is irreversible. Enter your password to confirm.`
+  String get dialogDeleteAccount {
+    return Intl.message(
+      'Are you sure you want to delete your account? This action is irreversible. Enter your password to confirm.',
+      name: 'dialogDeleteAccount',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password`
+  String get dialogDeleteAccountPassword {
+    return Intl.message(
+      'Password',
+      name: 'dialogDeleteAccountPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Profile updated successfully`
+  String get messageUpdateSuccess {
+    return Intl.message(
+      'Profile updated successfully',
+      name: 'messageUpdateSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error updating profile`
+  String get messageUpdateError {
+    return Intl.message(
+      'Error updating profile',
+      name: 'messageUpdateError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `An error occurred`
+  String get messageGeneralError {
+    return Intl.message(
+      'An error occurred',
+      name: 'messageGeneralError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Account deleted successfully`
+  String get messageDeleteAccountSuccess {
+    return Intl.message(
+      'Account deleted successfully',
+      name: 'messageDeleteAccountSuccess',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error deleting account`
+  String get messageDeleteAccountError {
+    return Intl.message(
+      'Error deleting account',
+      name: 'messageDeleteAccountError',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error processing image`
+  String get errorProcessingImage {
+    return Intl.message(
+      'Error processing image',
+      name: 'errorProcessingImage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirm`
+  String get buttonConfirm {
+    return Intl.message('Confirm', name: 'buttonConfirm', desc: '', args: []);
+  }
+
+  /// `Cancel`
+  String get buttonCancel {
+    return Intl.message('Cancel', name: 'buttonCancel', desc: '', args: []);
   }
 }
 

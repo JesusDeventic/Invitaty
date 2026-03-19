@@ -1,10 +1,12 @@
 import 'package:filmoly/api/filmoly_api.dart';
 import 'package:filmoly/core/api_error_messages.dart';
+import 'package:filmoly/core/user_preferences.dart';
 import 'package:filmoly/core/global_functions.dart';
 import 'package:filmoly/core/global_variables.dart';
 import 'package:filmoly/controller/recaptcha_controller.dart';
 import 'package:filmoly/generated/l10n.dart';
 import 'package:filmoly/model/user_model.dart';
+import 'package:filmoly/page/users/contact_page.dart';
 import 'package:filmoly/routes/app_routes.dart';
 import 'package:filmoly/widget/components_widgets.dart';
 import 'package:filmoly/providers/language_provider.dart';
@@ -70,6 +72,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
     setState(() => _isLoading = true);
     try {
+      final lang = context.read<LanguageProvider>().currentLanguage;
       final result = await FilmolyApi.register(
         username: _usernameController.text.trim(),
         email: _emailController.text.trim(),
@@ -78,6 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
             ? null
             : _displayNameController.text.trim(),
         marketingConsent: _acceptMarketing,
+        language: lang,
       );
       if (!mounted) return;
       if (result['success'] == true && result['token'] != null) {
@@ -86,7 +90,8 @@ class _RegisterPageState extends State<RegisterPage> {
         if (userJson != null) {
           await FilmolyApi.saveToken(token);
           globalCurrentUser = FilmolyUser.fromJson(userJson);
-          showCustomSnackBar(S.current.welcome, type: 1);
+          await UserPreferences().setCachedUser(globalCurrentUser);
+          showCustomSnackBar(S.current.welcome);
           RecaptchaService.hideBadge();
           context.go(AppRoutes.home);
           return;
@@ -109,6 +114,19 @@ class _RegisterPageState extends State<RegisterPage> {
       child: GestureDetector(
         onTap: unFocusGlobal,
         child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              unFocusGlobal();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ContactPage(),
+                ),
+              );
+            },
+            tooltip: S.current.userSectionContact,
+            child: const Icon(Icons.support_agent_rounded, size: 30),
+          ),
           body: SafeArea(
             child: SingleChildScrollView(
               child: Center(
@@ -311,7 +329,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 : Text(S.current.signUp),
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 16),
                         SizedBox(
                           width: double.infinity,
                           child: OutlinedButton(

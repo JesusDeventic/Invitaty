@@ -3,16 +3,17 @@ import 'dart:io';
 import 'package:filmoly/api/filmoly_api.dart';
 import 'package:filmoly/api/firebase_web_config.dart';
 import 'package:filmoly/core/global_variables.dart';
+import 'package:intl/intl.dart';
 import 'package:filmoly/core/secure_storage.dart';
+import 'package:filmoly/core/user_preferences.dart';
 import 'package:filmoly/generated/l10n.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
-import 'package:filmoly/providers/language_provider.dart';
 import 'package:filmoly/main.dart';
-
+import 'package:filmoly/providers/language_provider.dart';
 final _secureStorage = FilmolySecureStorage();
 
 Future<void> loadAppVersion() async {
@@ -34,19 +35,25 @@ Future<void> logoutUser() async {
     }
   }
   await FilmolyApi.logoutAndClear();
+  await UserPreferences().clearCachedUser();
 }
 
 /// Intenta restaurar sesión leyendo el token del secure storage y validándolo con /auth/me.
 Future<bool> loginUser() async {
   final token = await _secureStorage.getToken();
   if (token == null || token.isEmpty) return false;
-  final user = await FilmolyApi.validateToken(token);
-  if (user == null) return false;
-  globalUserToken = token;
-  globalCurrentUser = user;
-  // Sincronizar push tras login silencioso (token + topic por idioma)
-  await syncPushConfig();
-  return true;
+  try {
+    final user = await FilmolyApi.validateToken(token);
+    if (user == null) return false;
+    globalUserToken = token;
+    globalCurrentUser = user;
+    await UserPreferences().setCachedUser(user);
+    await syncPushConfig();
+    return true;
+  } catch (_) {
+    // Sin conexión u otro error de red: no se puede validar, ir a login
+    return false;
+  }
 }
 
 /// Sincroniza la configuración push del usuario actual:
@@ -203,5 +210,44 @@ String getLanguageFlag(String code) {
       return '🇺🇦';
     default:
       return '🌐';
+  }
+}
+
+/// Formatea una fecha al formato del usuario (dd/MM/yyyy, dd-MM-yyyy, etc.).
+String formatDate(String inputDate, {bool showTime = false}) {
+  if (inputDate.isEmpty) return '';
+  final pattern = globalCurrentUser.dateFormat;
+  try {
+    DateTime date;
+    if (RegExp(r'^\d{4}-\d{2}-\d{2}').hasMatch(inputDate)) {
+      date = DateTime.parse(inputDate);
+    } else {
+      date = DateFormat('dd/MM/yyyy').parse(inputDate);
+    }
+    return DateFormat(pattern).format(date);
+  } catch (_) {
+    return inputDate;
+  }
+}
+
+/// Calcula la edad desde una fecha de nacimiento (YYYY-MM-DD o dd-MM-yyyy).
+String formatAgeFromBirthday(String inputDate, {String? inputFormat}) {
+  if (inputDate.isEmpty) return '?';
+  try {
+    DateTime birthDate;
+    if (inputFormat != null) {
+      birthDate = DateFormat(inputFormat).parse(inputDate);
+    } else {
+      birthDate = DateTime.parse(inputDate); // yyyy-MM-dd
+    }
+    final now = DateTime.now();
+    int age = now.year - birthDate.year;
+    if (now.month < birthDate.month ||
+        (now.month == birthDate.month && now.day < birthDate.day)) {
+      age--;
+    }
+    return age > 0 ? age.toString() : '?';
+  } catch (_) {
+    return '?';
   }
 }

@@ -3,6 +3,7 @@ import 'package:filmoly/core/api_error_messages.dart';
 import 'package:filmoly/core/global_functions.dart';
 import 'package:filmoly/controller/recaptcha_controller.dart';
 import 'package:filmoly/generated/l10n.dart';
+import 'package:filmoly/page/users/contact_page.dart';
 import 'package:filmoly/routes/app_routes.dart';
 import 'package:filmoly/widget/components_widgets.dart';
 import 'package:filmoly/providers/language_provider.dart';
@@ -24,6 +25,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _codeController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  final FocusNode _loginFocusNode = FocusNode();
+  final FocusNode _codeFocusNode = FocusNode();
+  final FocusNode _passwordFocusNode = FocusNode();
+  final FocusNode _confirmPasswordFocusNode = FocusNode();
+  final FocusNode _sendCodeButtonFocusNode = FocusNode();
+  final FocusNode _confirmButtonFocusNode = FocusNode();
   bool _showCodeAndPassword = false;
   bool _obscureText = true;
   bool _isLoadingSend = false;
@@ -41,6 +48,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     _codeController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
+    _loginFocusNode.dispose();
+    _codeFocusNode.dispose();
+    _passwordFocusNode.dispose();
+    _confirmPasswordFocusNode.dispose();
+    _sendCodeButtonFocusNode.dispose();
+    _confirmButtonFocusNode.dispose();
     super.dispose();
   }
 
@@ -105,6 +118,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       child: GestureDetector(
         onTap: unFocusGlobal,
         child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              unFocusGlobal();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ContactPage(),
+                ),
+              );
+            },
+            tooltip: S.current.userSectionContact,
+            child: const Icon(Icons.support_agent_rounded, size: 30),
+          ),
           body: SafeArea(
             child: SingleChildScrollView(
               child: Center(
@@ -124,13 +150,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             const SizedBox(height: 24),
                             TextFormField(
                               controller: _loginController,
+                              focusNode: _loginFocusNode,
                               decoration: InputDecoration(
                                 labelText: S.current.userOrEmail,
                                 prefixIcon: const Icon(Icons.person_outline),
                                 border: const OutlineInputBorder(),
                               ),
                               keyboardType: TextInputType.emailAddress,
-                              textInputAction: TextInputAction.done,
+                              textInputAction: TextInputAction.next,
+                              onFieldSubmitted: (_) {
+                                _sendCodeButtonFocusNode.requestFocus();
+                              },
                               validator: (v) =>
                                   (v == null || v.isEmpty) ? S.current.fieldRequired : null,
                             ),
@@ -139,6 +169,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
+                              focusNode: _sendCodeButtonFocusNode,
                               onPressed: _isLoadingSend ? null : _sendCode,
                               child: _isLoadingSend
                                   ? const SizedBox(
@@ -149,7 +180,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                   : Text(S.current.sendCode),
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 16),
                           SizedBox(
                             width: double.infinity,
                             child: OutlinedButton(
@@ -162,6 +193,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               const SizedBox(height: 16),
                               TextFormField(
                                 controller: _codeController,
+                                focusNode: _codeFocusNode,
                             decoration: InputDecoration(
                               labelText: S.current.verificationCode,
                               prefixIcon: const Icon(Icons.pin_outlined),
@@ -169,6 +201,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             ),
                             keyboardType: TextInputType.number,
                             textInputAction: TextInputAction.next,
+                              onFieldSubmitted: (_) {
+                                _passwordFocusNode.requestFocus();
+                              },
                             inputFormatters: [
                               LengthLimitingTextInputFormatter(6),
                               FilteringTextInputFormatter.digitsOnly,
@@ -182,6 +217,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _passwordController,
+                            focusNode: _passwordFocusNode,
                             obscureText: _obscureText,
                             decoration: InputDecoration(
                               labelText: S.current.newPassword,
@@ -194,6 +230,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               ),
                             ),
                             textInputAction: TextInputAction.next,
+                            onFieldSubmitted: (_) {
+                              _confirmPasswordFocusNode.requestFocus();
+                            },
                             validator: (v) {
                               if (v == null || v.isEmpty) return S.current.fieldRequired;
                               if (v.length < 6) return S.current.passwordMinLength;
@@ -203,11 +242,21 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           const SizedBox(height: 16),
                           TextFormField(
                             controller: _confirmPasswordController,
+                            focusNode: _confirmPasswordFocusNode,
                             obscureText: _obscureText,
                             decoration: InputDecoration(
                               labelText: S.current.confirmPassword,
                               prefixIcon: const Icon(Icons.lock_outline),
                               border: const OutlineInputBorder(),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  _obscureText
+                                      ? Icons.visibility_off
+                                      : Icons.visibility,
+                                ),
+                                onPressed: () =>
+                                    setState(() => _obscureText = !_obscureText),
+                              ),
                             ),
                             textInputAction: TextInputAction.done,
                             onFieldSubmitted: (_) => _resetPassword(),
@@ -221,6 +270,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
+                              focusNode: _confirmButtonFocusNode,
                               onPressed: _isLoadingConfirm ? null : _resetPassword,
                               child: _isLoadingConfirm
                                   ? const SizedBox(
@@ -231,7 +281,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                   : Text(S.current.confirm),
                             ),
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: 16),
                           SizedBox(
                             width: double.infinity,
                             child: OutlinedButton(

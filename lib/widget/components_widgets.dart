@@ -21,7 +21,6 @@ void showCustomSnackBar(String message, {int? type}) {
       textColor = Colors.white;
       break;
     default:
-      textColor = Colors.white;
       break;
   }
   final snack = SnackBar(

@@ -1,6 +1,6 @@
 {
-    "name": "filmoly",
-    "short_name": "filmoly",
+    "name": "Filmoly",
+    "short_name": "Filmoly",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#000000",

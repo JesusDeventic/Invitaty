@@ -9,7 +9,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-require_once __DIR__ . '/filmoly_translations.php';
+// require_once __DIR__ . '/filmoly_translations.php'; // No hace falta porque estan en otro snippet
 
 /**
  * =========================================================
@@ -443,6 +443,7 @@ function filmoly_auth_register(WP_REST_Request $request) {
     $password = isset($params['password']) ? (string) $params['password'] : '';
     $display_name = isset($params['display_name']) ? sanitize_text_field($params['display_name']) : '';
     $marketing_consent = isset($params['marketing_consent']) ? filter_var($params['marketing_consent'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) : false;
+    $language = isset($params['language']) ? sanitize_text_field($params['language']) : '';
 
     // Username: 4-20 caracteres, solo [a-zA-Z0-9_-]
     if ($username === '' || strlen($username) < 4) {
@@ -485,6 +486,11 @@ function filmoly_auth_register(WP_REST_Request $request) {
 
     // Guardar consentimiento de marketing en usermeta
     update_user_meta($user_id, 'filmoly_marketing_consent', $marketing_consent ? 1 : 0);
+
+    // Guardar idioma si se envía (ej: es, en, etc.)
+    if ($language !== '' && preg_match('/^[a-z]{2,3}$/', $language)) {
+        update_user_meta($user_id, 'filmoly_language', $language);
+    }
 
     $session = filmoly_auth_create_session($user_id);
 

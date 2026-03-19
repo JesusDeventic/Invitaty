@@ -4,6 +4,7 @@ import 'package:filmoly/core/global_functions.dart';
 import 'package:filmoly/core/global_variables.dart';
 import 'package:filmoly/generated/l10n.dart';
 import 'package:filmoly/page/home/placeholder_section_page.dart';
+import 'package:filmoly/page/users/account_profile_page.dart';
 import 'package:filmoly/page/users/contact_page.dart';
 import 'package:filmoly/page/users/general_settings_page.dart';
 import 'package:filmoly/page/users/faq_page.dart';
@@ -251,9 +252,7 @@ class _HomePlaceholderPageState extends State<HomePlaceholderPage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => PlaceholderSectionPage(
-                            title: S.current.accountAndProfile,
-                          ),
+                          builder: (context) => const AccountProfilePage(),
                         ),
                       );
                     },
@@ -341,9 +340,7 @@ class _HomePlaceholderPageState extends State<HomePlaceholderPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PlaceholderSectionPage(
-                          title: S.current.accountAndProfile,
-                        ),
+                        builder: (context) => const AccountProfilePage(),
                       ),
                     );
                   },
@@ -453,10 +450,7 @@ class _HomePlaceholderPageState extends State<HomePlaceholderPage> {
       context: context,
       builder: (c) => AlertDialog(
         title: Text(S.current.dialogCloseAppTitle),
-        content: Text(
-          '${S.current.dialogCloseAppTitle}?',
-          style: const TextStyle(fontSize: 16),
-        ),
+        content: Text('${S.current.dialogCloseAppTitle}?'),
         actions: [
           Row(
             children: [

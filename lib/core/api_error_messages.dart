@@ -33,6 +33,10 @@ String getAuthErrorMessage(String? code) {
       return S.current.errorAuthTooManyAttempts;
     case 'expired_code':
       return S.current.errorAuthExpiredCode;
+    case 'missing_password':
+      return S.current.errorAuthInvalidPassword;
+    case 'delete_failed':
+      return S.current.errorAuthDeleteAccountFailed;
     default:
       return S.current.errorAuthGeneric;
   }

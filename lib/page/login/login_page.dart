@@ -1,10 +1,12 @@
 import 'package:filmoly/api/filmoly_api.dart';
 import 'package:filmoly/core/api_error_messages.dart';
+import 'package:filmoly/core/user_preferences.dart';
 import 'package:filmoly/core/global_functions.dart';
 import 'package:filmoly/core/global_variables.dart';
 import 'package:filmoly/controller/recaptcha_controller.dart';
 import 'package:filmoly/generated/l10n.dart';
 import 'package:filmoly/model/user_model.dart';
+import 'package:filmoly/page/users/contact_page.dart';
 import 'package:filmoly/routes/app_routes.dart';
 import 'package:filmoly/widget/components_widgets.dart';
 import 'package:filmoly/providers/language_provider.dart';
@@ -90,12 +92,13 @@ class _LoginPageState extends State<LoginPage> {
         if (token != null && userJson != null) {
           await FilmolyApi.saveToken(token);
           globalCurrentUser = FilmolyUser.fromJson(userJson);
+          await UserPreferences().setCachedUser(globalCurrentUser);
           if (_keepSession) {
             // Token ya guardado en saveToken
           }
           RecaptchaService.hideBadge();
           context.go(AppRoutes.home);
-          showCustomSnackBar(S.current.welcome, type: 1);
+          showCustomSnackBar(S.current.welcome);
           syncPushConfig(); // En segundo plano: registrar token en backend + topic idioma
           return;
         }
@@ -123,6 +126,19 @@ class _LoginPageState extends State<LoginPage> {
       child: GestureDetector(
         onTap: unFocusGlobal,
         child: Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              unFocusGlobal();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ContactPage(),
+                ),
+              );
+            },
+            tooltip: S.current.userSectionContact,
+            child: const Icon(Icons.support_agent_rounded, size: 30),
+          ),
           body: SafeArea(
             child: SingleChildScrollView(
               child: Center(
@@ -130,6 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                   width: screenWidth > 500 ? 500 : screenWidth,
                   padding: const EdgeInsets.all(16),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       rowSettingsAppAndVersion(context),
                       const SizedBox(height: 32),
@@ -193,7 +210,7 @@ class _LoginPageState extends State<LoginPage> {
                                       setState(() => _keepSession = v ?? true),
                               controlAffinity: ListTileControlAffinity.leading,
                             ),
-                            const SizedBox(height: 16),
+                            const SizedBox(height: 8),
                             SizedBox(
                               width: double.infinity,
                               child: ElevatedButton(
@@ -214,7 +231,7 @@ class _LoginPageState extends State<LoginPage> {
                                     : Text(S.current.signIn),
                               ),
                             ),
-                            const SizedBox(height: 8),
+                            const SizedBox(height: 16),
                             SizedBox(
                               width: double.infinity,
                               child: OutlinedButton(
@@ -224,11 +241,15 @@ class _LoginPageState extends State<LoginPage> {
                                 child: Text(S.current.signUp),
                               ),
                             ),
-                            TextButton(
-                              onPressed: (_isLoading || _isButtonDisabled)
-                                  ? null
-                                  : () => context.go(AppRoutes.forgotPassword),
-                              child: Text(S.current.forgotPassword),
+                            const SizedBox(height: 16),
+                            SizedBox(
+                              width: double.infinity,
+                              child: TextButton(
+                                onPressed: (_isLoading || _isButtonDisabled)
+                                    ? null
+                                    : () => context.go(AppRoutes.forgotPassword),
+                                child: Text(S.current.forgotPassword),
+                              ),
                             ),
                           ],
                         ),

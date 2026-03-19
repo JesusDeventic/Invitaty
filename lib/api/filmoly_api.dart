@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:filmoly/core/global_variables.dart';
 import 'package:filmoly/core/secure_storage.dart';
@@ -55,6 +56,7 @@ class FilmolyApi {
     required String password,
     String? displayName,
     bool marketingConsent = false,
+    String? language,
   }) async {
     final url = Uri.parse('$_baseUrl/auth/register');
     final body = <String, dynamic>{
@@ -65,6 +67,9 @@ class FilmolyApi {
     };
     if (displayName != null && displayName.isNotEmpty) {
       body['display_name'] = displayName;
+    }
+    if (language != null && language.isNotEmpty) {
+      body['language'] = language;
     }
     final response = await http.post(
       url,
@@ -227,6 +232,86 @@ class FilmolyApi {
     } catch (_) {
       return false;
     }
+  }
+
+  /// POST /user/update — actualiza perfil. Multipart si hay avatar.
+  /// [avatarBytes] permite subir avatar en web y móvil (usa bytes de file_picker).
+  static Future<Map<String, dynamic>> updateUser({
+    required String userEmail,
+    String? displayName,
+    String? description,
+    String? language,
+    String? dateFormat,
+    String? weekStart,
+    String? country,
+    String? birthdate,
+    bool? marketingConsent,
+    bool deleteAvatar = false,
+    Uint8List? avatarBytes,
+    String avatarFilename = 'avatar.jpg',
+  }) async {
+    final token = globalUserToken;
+    if (token.isEmpty) return {'success': false, 'message': 'No token', 'code': 'missing_token'};
+
+    final url = Uri.parse('$_baseUrl/user/update');
+    final request = http.MultipartRequest('POST', url);
+    request.headers['Authorization'] = 'Bearer $token';
+    request.headers['User-Agent'] = _getFilmolyUserAgent();
+    request.headers['Accept'] = 'application/json';
+
+    request.fields['user_email'] = userEmail;
+    if (displayName != null) request.fields['display_name'] = displayName;
+    if (description != null) request.fields['description'] = description;
+    if (language != null) request.fields['language'] = language;
+    if (dateFormat != null) request.fields['date_format'] = dateFormat;
+    if (weekStart != null) request.fields['start_day_week'] = weekStart;
+    if (country != null) request.fields['country'] = country;
+    if (birthdate != null) request.fields['birthdate'] = birthdate;
+    if (marketingConsent != null) request.fields['marketing_consent'] = marketingConsent.toString();
+    if (deleteAvatar) request.fields['delete_avatar'] = 'true';
+
+    if (avatarBytes != null && avatarBytes.isNotEmpty) {
+      request.files.add(http.MultipartFile.fromBytes(
+        'avatar',
+        avatarBytes,
+        filename: avatarFilename,
+      ));
+    }
+
+    try {
+      final streamed = await request.send();
+      final response = await http.Response.fromStream(streamed);
+      final data = jsonDecode(response.body) as Map<String, dynamic>? ?? {};
+
+      if (response.statusCode == 200 && (data['success'] == true)) {
+        return data;
+      }
+      final message = data['message'] as String? ?? 'Error al actualizar';
+      final code = data['code'] as String?;
+      return {'success': false, 'message': message, 'code': code, 'data': data};
+    } catch (e) {
+      return {'success': false, 'message': e.toString(), 'code': 'network_error'};
+    }
+  }
+
+  /// POST /auth/delete-account — elimina la cuenta (requiere contraseña).
+  static Future<Map<String, dynamic>> deleteAccount(String password) async {
+    final token = globalUserToken;
+    if (token.isEmpty) return {'success': false, 'message': 'No token', 'code': 'missing_token'};
+
+    final url = Uri.parse('$_baseUrl/auth/delete-account');
+    final response = await http.post(
+      url,
+      headers: _headers(token: token),
+      body: jsonEncode({'password': password}),
+    );
+    final data = jsonDecode(response.body) as Map<String, dynamic>? ?? {};
+    if (response.statusCode == 200 && (data['success'] == true)) {
+      return data;
+    }
+    final message = data['message'] as String? ?? 'Error al eliminar';
+    final code = data['code'] as String?;
+    return {'success': false, 'message': message, 'code': code, 'data': data};
   }
 
   /// POST /push/unregister-token — marca un token (o deviceId) como inactivo.

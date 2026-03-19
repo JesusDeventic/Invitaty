@@ -1,6 +1,7 @@
 import 'package:filmoly/generated/l10n.dart';
 import 'package:filmoly/widget/components_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 /// Página de contacto/soporte (misma estructura que Fitcron UserSettingsSupport).
@@ -201,7 +202,7 @@ class _ContactPageState extends State<ContactPage> {
       children: [
         _contactButton(
           context: context,
-          icon: Icons.email_rounded,
+          icon: Icon(Icons.email_rounded, size: 40, color: Colors.indigo),
           color: Colors.indigo,
           label: S.current.socialMailLabel,
           onTap: () async {
@@ -220,22 +221,37 @@ class _ContactPageState extends State<ContactPage> {
         ),
         _contactButton(
           context: context,
-          icon: Icons.language_rounded,
+          icon: SvgPicture.asset(
+            'assets/svg/whatsapp.svg',
+            colorFilter: const ColorFilter.mode(Colors.green, BlendMode.srcIn),
+            width: 40,
+            height: 40,
+          ),
           color: Colors.green,
-          label: 'Web',
+          label: S.current.socialWhatsappLabel,
           onTap: () async {
-            const url = 'https://deventic.com';
-            if (await canLaunchUrl(Uri.parse(url))) {
-              await launchUrl(Uri.parse(url),
-                  mode: LaunchMode.externalApplication);
-            } else {
-              showCustomSnackBar(S.current.socialWebError, type: -1);
+            try {
+              const whatsappUrl = 'whatsapp://send?phone=+34611151880';
+              final whatsappUri = Uri.parse(whatsappUrl);
+              if (await canLaunchUrl(whatsappUri)) {
+                await launchUrl(whatsappUri);
+              } else {
+                const webUrl = 'https://wa.me/34611151880';
+                final webUri = Uri.parse(webUrl);
+                if (await canLaunchUrl(webUri)) {
+                  await launchUrl(webUri, mode: LaunchMode.externalApplication);
+                } else {
+                  showCustomSnackBar(S.current.socialWhatsappError, type: -1);
+                }
+              }
+            } catch (_) {
+              showCustomSnackBar(S.current.socialWhatsappError, type: -1);
             }
           },
         ),
         _contactButton(
           context: context,
-          icon: Icons.telegram_rounded,
+          icon: Icon(Icons.telegram_rounded, size: 40, color: Colors.lightBlueAccent),
           color: Colors.lightBlueAccent,
           label: S.current.socialTelegramLabel,
           onTap: () async {
@@ -266,7 +282,7 @@ class _ContactPageState extends State<ContactPage> {
 
   Widget _contactButton({
     required BuildContext context,
-    required IconData icon,
+    required Widget icon,
     required Color color,
     required String label,
     required VoidCallback onTap,
@@ -288,7 +304,7 @@ class _ContactPageState extends State<ContactPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 40, color: color),
+              SizedBox(width: 40, height: 40, child: icon),
               const SizedBox(height: 8),
               Text(
                 label,

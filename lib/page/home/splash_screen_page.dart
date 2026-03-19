@@ -119,7 +119,6 @@ class _SplashScreenPageState extends State<SplashScreenPage>
         content: Text(
           message,
           textAlign: TextAlign.justify,
-          style: const TextStyle(fontSize: 16),
         ),
         actionsAlignment: MainAxisAlignment.center,
         actions: [

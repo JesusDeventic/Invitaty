@@ -235,6 +235,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "socialWebError": MessageLookupByLibrary.simpleMessage(
       "No s\'ha pogut obrir l\'enllaç.",
     ),
+    "socialWhatsappError": MessageLookupByLibrary.simpleMessage(
+      "No s\'ha pogut obrir WhatsApp.",
+    ),
+    "socialWhatsappLabel": MessageLookupByLibrary.simpleMessage("WhatsApp"),
     "subjectSupport": MessageLookupByLibrary.simpleMessage("Contacte Filmoly"),
     "success": MessageLookupByLibrary.simpleMessage("Èxit"),
     "termsAndConditionsLabel": MessageLookupByLibrary.simpleMessage(
