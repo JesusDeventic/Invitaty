@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "838782505944",
-    "project_id": "filmaniak",
-    "storage_bucket": "filmaniak.firebasestorage.app"
+    "project_number": "344135822235",
+    "project_id": "filmaniak-app",
+    "storage_bucket": "filmaniak-app.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:838782505944:android:f8658339693592cdf518ad",
+        "mobilesdk_app_id": "1:344135822235:android:c1981738f568254e8f4f3e",
         "android_client_info": {
           "package_name": "com.deventic.filmaniak"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBg71r4Ox4FZVFr0nyWmiPHvqjjUMki5Qs"
+          "current_key": "AIzaSyC_qpo0pgmCbJyBYSUNHTdCd3BqkThRu7Y"
         }
       ],
       "services": {
