@@ -1,15 +1,15 @@
 {
   "project_info": {
     "project_number": "838782505944",
-    "project_id": "filmoly",
-    "storage_bucket": "filmoly.firebasestorage.app"
+    "project_id": "filmaniak",
+    "storage_bucket": "filmaniak.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
         "mobilesdk_app_id": "1:838782505944:android:f8658339693592cdf518ad",
         "android_client_info": {
-          "package_name": "com.deventic.filmoly"
+          "package_name": "com.deventic.filmaniak"
         }
       },
       "oauth_client": [],

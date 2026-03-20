@@ -1,20 +1,20 @@
 import 'dart:io';
 
-import 'package:filmoly/api/filmoly_api.dart';
-import 'package:filmoly/api/firebase_web_config.dart';
-import 'package:filmoly/core/global_variables.dart';
+import 'package:filmaniak/api/filmaniak_api.dart';
+import 'package:filmaniak/api/firebase_web_config.dart';
+import 'package:filmaniak/core/global_variables.dart';
 import 'package:intl/intl.dart';
-import 'package:filmoly/core/secure_storage.dart';
-import 'package:filmoly/core/user_preferences.dart';
-import 'package:filmoly/generated/l10n.dart';
+import 'package:filmaniak/core/secure_storage.dart';
+import 'package:filmaniak/core/user_preferences.dart';
+import 'package:filmaniak/generated/l10n.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
-import 'package:filmoly/main.dart';
-import 'package:filmoly/providers/language_provider.dart';
-final _secureStorage = FilmolySecureStorage();
+import 'package:filmaniak/main.dart';
+import 'package:filmaniak/providers/language_provider.dart';
+final _secureStorage = FilmaniakSecureStorage();
 
 Future<void> loadAppVersion() async {
   final info = await PackageInfo.fromPlatform();
@@ -34,7 +34,7 @@ Future<void> logoutUser() async {
       // ignorar errores de FCM en logout
     }
   }
-  await FilmolyApi.logoutAndClear();
+  await FilmaniakApi.logoutAndClear();
   await UserPreferences().clearCachedUser();
 }
 
@@ -43,7 +43,7 @@ Future<bool> loginUser() async {
   final token = await _secureStorage.getToken();
   if (token == null || token.isEmpty) return false;
   try {
-    final user = await FilmolyApi.validateToken(token);
+    final user = await FilmaniakApi.validateToken(token);
     if (user == null) return false;
     globalUserToken = token;
     globalCurrentUser = user;
@@ -73,11 +73,11 @@ Future<void> syncPushConfig() async {
     }
     final fcm = FirebaseMessaging.instance;
     final fcmToken = kIsWeb
-        ? await fcm.getToken(vapidKey: FilmolyFirebaseWebConfig.webVapidKey)
+        ? await fcm.getToken(vapidKey: FilmaniakFirebaseWebConfig.webVapidKey)
         : await fcm.getToken();
     if (fcmToken == null || fcmToken.isEmpty) return;
 
-    final ok = await FilmolyApi.registerPushToken(
+    final ok = await FilmaniakApi.registerPushToken(
       token: globalUserToken,
       fcmToken: fcmToken,
     );

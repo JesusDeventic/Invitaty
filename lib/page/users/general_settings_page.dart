@@ -1,17 +1,17 @@
-import 'package:filmoly/api/filmoly_api.dart';
-import 'package:filmoly/core/global_functions.dart';
-import 'package:filmoly/core/global_variables.dart';
-import 'package:filmoly/core/user_preferences.dart';
-import 'package:filmoly/generated/l10n.dart';
-import 'package:filmoly/model/user_model.dart';
-import 'package:filmoly/providers/language_provider.dart';
-import 'package:filmoly/providers/theme_provider.dart';
-import 'package:filmoly/widget/components_widgets.dart';
+import 'package:filmaniak/api/filmaniak_api.dart';
+import 'package:filmaniak/core/global_functions.dart';
+import 'package:filmaniak/core/global_variables.dart';
+import 'package:filmaniak/core/user_preferences.dart';
+import 'package:filmaniak/generated/l10n.dart';
+import 'package:filmaniak/model/user_model.dart';
+import 'package:filmaniak/providers/language_provider.dart';
+import 'package:filmaniak/providers/theme_provider.dart';
+import 'package:filmaniak/widget/components_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-/// Ajustes generales de Filmoly (idioma, tema, inicio de semana, formato fecha).
+/// Ajustes generales de Filmaniak (idioma, tema, inicio de semana, formato fecha).
 class GeneralSettingsPage extends StatefulWidget {
   const GeneralSettingsPage({super.key});
 
@@ -118,7 +118,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
       return false;
     }
     try {
-      final result = await FilmolyApi.updateUser(
+      final result = await FilmaniakApi.updateUser(
         userEmail: globalCurrentUser.email,
         language: context.read<LanguageProvider>().currentLanguage,
         dateFormat: _dateFormat,
@@ -130,7 +130,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage> {
       }
       final userJson = result['user'];
       if (userJson is Map<String, dynamic>) {
-        globalCurrentUser = FilmolyUser.fromJson(userJson);
+        globalCurrentUser = FilmaniakUser.fromJson(userJson);
         await _prefs.setCachedUser(globalCurrentUser);
       }
       showCustomSnackBar(S.current.success, type: 1);

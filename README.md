@@ -1,4 +1,4 @@
-# filmoly
+# filmaniak
 
 A new Flutter project.
 

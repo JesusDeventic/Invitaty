@@ -54,9 +54,9 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Filmoly`
+  /// `Filmaniak`
   String get appName {
-    return Intl.message('Filmoly', name: 'appName', desc: '', args: []);
+    return Intl.message('Filmaniak', name: 'appName', desc: '', args: []);
   }
 
   /// `Sign in`
@@ -379,10 +379,10 @@ class S {
     return Intl.message('v1.0.0', name: 'appVersion10Code', desc: '', args: []);
   }
 
-  /// `· Initial release of Filmoly.\n· Login, register and password recovery.\n· Connection with La Retroteca (WordPress).`
+  /// `· Initial release of Filmaniak.\n· Login, register and password recovery.\n· Connection with La Retroteca (WordPress).`
   String get appVersion10Description {
     return Intl.message(
-      '· Initial release of Filmoly.\n· Login, register and password recovery.\n· Connection with La Retroteca (WordPress).',
+      '· Initial release of Filmaniak.\n· Login, register and password recovery.\n· Connection with La Retroteca (WordPress).',
       name: 'appVersion10Description',
       desc: '',
       args: [],
@@ -819,20 +819,20 @@ class S {
     return Intl.message('Error', name: 'dialogErrorTitle', desc: '', args: []);
   }
 
-  /// `Could not connect to the Filmoly server.`
+  /// `Could not connect to the Filmaniak server.`
   String get dialogErrorServerConnection {
     return Intl.message(
-      'Could not connect to the Filmoly server.',
+      'Could not connect to the Filmaniak server.',
       name: 'dialogErrorServerConnection',
       desc: '',
       args: [],
     );
   }
 
-  /// `A new version of Filmoly is available.\nPlease update the app to continue.`
+  /// `A new version of Filmaniak is available.\nPlease update the app to continue.`
   String get dialogErrorAppVersion {
     return Intl.message(
-      'A new version of Filmoly is available.\nPlease update the app to continue.',
+      'A new version of Filmaniak is available.\nPlease update the app to continue.',
       name: 'dialogErrorAppVersion',
       desc: '',
       args: [],
@@ -994,20 +994,20 @@ class S {
     );
   }
 
-  /// `Filmoly contact`
+  /// `Filmaniak contact`
   String get subjectSupport {
     return Intl.message(
-      'Filmoly contact',
+      'Filmaniak contact',
       name: 'subjectSupport',
       desc: '',
       args: [],
     );
   }
 
-  /// `What is Filmoly?`
+  /// `What is Filmaniak?`
   String get faq1Question {
     return Intl.message(
-      'What is Filmoly?',
+      'What is Filmaniak?',
       name: 'faq1Question',
       desc: '',
       args: [],
@@ -1034,10 +1034,10 @@ class S {
     );
   }
 
-  /// `No, Filmoly is not a streaming app; it only works as a database with various features around that data.`
+  /// `No, Filmaniak is not a streaming app; it only works as a database with various features around that data.`
   String get faq2Answer {
     return Intl.message(
-      'No, Filmoly is not a streaming app; it only works as a database with various features around that data.',
+      'No, Filmaniak is not a streaming app; it only works as a database with various features around that data.',
       name: 'faq2Answer',
       desc: '',
       args: [],
@@ -1644,10 +1644,10 @@ class S {
     );
   }
 
-  /// `Profile of @{username} on Filmoly`
+  /// `Profile of @{username} on Filmaniak`
   String profileShareSubject(Object username) {
     return Intl.message(
-      'Profile of @$username on Filmoly',
+      'Profile of @$username on Filmaniak',
       name: 'profileShareSubject',
       desc: '',
       args: [username],

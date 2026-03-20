@@ -1,6 +1,6 @@
 <?php
 /**
- * Filmoly Auth API
+ * Filmaniak Auth API
  * Registro, login, logout, me, forgot password y reset password
  * usando token Bearer propio + código de recuperación por email.
  */
@@ -14,54 +14,54 @@ if (!defined('ABSPATH')) {
  * AVATAR HELPERS (fallback a Gravatar si no hay avatar propio)
  * =========================================================
  */
-if (!function_exists('filmoly_avatar_path')) {
-    function filmoly_avatar_path($user_id) {
+if (!function_exists('filmaniak_avatar_path')) {
+    function filmaniak_avatar_path($user_id) {
         $upload_dir = wp_upload_dir();
         return $upload_dir['basedir'] . '/app_avatars/' . (int) $user_id . '.webp';
     }
 }
 
-if (!function_exists('filmoly_avatar_url')) {
-    function filmoly_avatar_url($user_id) {
+if (!function_exists('filmaniak_avatar_url')) {
+    function filmaniak_avatar_url($user_id) {
         $upload_dir = wp_upload_dir();
         return $upload_dir['baseurl'] . '/app_avatars/' . (int) $user_id . '.webp';
     }
 }
 
-if (!function_exists('filmoly_get_user_avatar_url')) {
-    function filmoly_get_user_avatar_url($user_id) {
-        $path = filmoly_avatar_path($user_id);
+if (!function_exists('filmaniak_get_user_avatar_url')) {
+    function filmaniak_get_user_avatar_url($user_id) {
+        $path = filmaniak_avatar_path($user_id);
         if (file_exists($path)) {
-            return add_query_arg('v', (string) filemtime($path), filmoly_avatar_url($user_id));
+            return add_query_arg('v', (string) filemtime($path), filmaniak_avatar_url($user_id));
         }
         return get_avatar_url($user_id);
     }
 }
 
-// require_once __DIR__ . '/filmoly_translations.php'; // No hace falta porque estan en otro snippet
+// require_once __DIR__ . '/filmaniak_translations.php'; // No hace falta porque estan en otro snippet
 
 /**
  * =========================================================
  * CONFIG
  * =========================================================
  */
-define('FILMOLY_AUTH_NAMESPACE', 'filmoly/v1');
-define('FILMOLY_AUTH_TOKEN_TTL', 365 * DAY_IN_SECONDS); // 1 año
-define('FILMOLY_RESET_CODE_TTL', 15 * MINUTE_IN_SECONDS); // 15 min
-define('FILMOLY_RESET_CODE_MAX_ATTEMPTS', 5);
+define('FILMANIAK_AUTH_NAMESPACE', 'filmaniak/v1');
+define('FILMANIAK_AUTH_TOKEN_TTL', 365 * DAY_IN_SECONDS); // 1 año
+define('FILMANIAK_RESET_CODE_TTL', 15 * MINUTE_IN_SECONDS); // 15 min
+define('FILMANIAK_RESET_CODE_MAX_ATTEMPTS', 5);
 
 /**
  * =========================================================
  * TABLAS
  * =========================================================
  */
-function filmoly_auth_create_tables() {
+function filmaniak_auth_create_tables() {
     global $wpdb;
 
     $charset_collate = $wpdb->get_charset_collate();
 
-    $sessions_table = $wpdb->prefix . 'filmoly_sessions';
-    $resets_table   = $wpdb->prefix . 'filmoly_password_resets';
+    $sessions_table = $wpdb->prefix . 'filmaniak_sessions';
+    $resets_table   = $wpdb->prefix . 'filmaniak_password_resets';
 
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
@@ -100,18 +100,18 @@ function filmoly_auth_create_tables() {
     dbDelta($sql_sessions);
     dbDelta($sql_resets);
 }
-add_action('init', 'filmoly_auth_create_tables');
+add_action('init', 'filmaniak_auth_create_tables');
 
 /**
  * =========================================================
  * HELPERS
  * =========================================================
  */
-function filmoly_auth_error($code, $message, $status = 400) {
+function filmaniak_auth_error($code, $message, $status = 400) {
     return new WP_Error($code, $message, ['status' => $status]);
 }
 
-function filmoly_auth_get_json_params(WP_REST_Request $request) {
+function filmaniak_auth_get_json_params(WP_REST_Request $request) {
     $params = $request->get_json_params();
     return is_array($params) ? $params : [];
 }
@@ -120,23 +120,23 @@ function filmoly_auth_get_json_params(WP_REST_Request $request) {
  * Limpieza previa al borrado de usuario.
  * Se usa para acciones que pueden requerir datos aún existentes.
  */
-function filmoly_cleanup_user_before_delete($user_id) {
+function filmaniak_cleanup_user_before_delete($user_id) {
     $user_id = (int) $user_id;
     if ($user_id <= 0) {
         return;
     }
 
-    if (function_exists('filmoly_delete_old_avatar_if_exists')) {
-        filmoly_delete_old_avatar_if_exists($user_id);
+    if (function_exists('filmaniak_delete_old_avatar_if_exists')) {
+        filmaniak_delete_old_avatar_if_exists($user_id);
     }
 }
-add_action('delete_user', 'filmoly_cleanup_user_before_delete');
+add_action('delete_user', 'filmaniak_cleanup_user_before_delete');
 
 /**
  * Limpieza posterior al borrado de usuario.
  * Aplica tanto a borrado desde endpoint como desde wp-admin.
  */
-function filmoly_cleanup_deleted_user_data($user_id) {
+function filmaniak_cleanup_deleted_user_data($user_id) {
     global $wpdb;
 
     $user_id = (int) $user_id;
@@ -144,28 +144,28 @@ function filmoly_cleanup_deleted_user_data($user_id) {
         return;
     }
 
-    $sessions_table = $wpdb->prefix . 'filmoly_sessions';
+    $sessions_table = $wpdb->prefix . 'filmaniak_sessions';
     $wpdb->delete(
         $sessions_table,
         ['user_id' => $user_id],
         ['%d']
     );
 
-    $resets_table = $wpdb->prefix . 'filmoly_password_resets';
+    $resets_table = $wpdb->prefix . 'filmaniak_password_resets';
     $wpdb->delete(
         $resets_table,
         ['user_id' => $user_id],
         ['%d']
     );
 
-    $private_messages_table = $wpdb->prefix . 'filmoly_private_messages';
+    $private_messages_table = $wpdb->prefix . 'filmaniak_private_messages';
     $wpdb->query($wpdb->prepare(
         "DELETE FROM {$private_messages_table} WHERE sender_id = %d OR recipient_id = %d",
         $user_id,
         $user_id
     ));
 
-    $notifications_table = $wpdb->prefix . 'filmoly_notifications';
+    $notifications_table = $wpdb->prefix . 'filmaniak_notifications';
     $wpdb->delete(
         $notifications_table,
         ['user_id' => $user_id],
@@ -185,9 +185,9 @@ function filmoly_cleanup_deleted_user_data($user_id) {
         }
     }
 }
-add_action('deleted_user', 'filmoly_cleanup_deleted_user_data');
+add_action('deleted_user', 'filmaniak_cleanup_deleted_user_data');
 
-function filmoly_auth_get_bearer_token(WP_REST_Request $request) {
+function filmaniak_auth_get_bearer_token(WP_REST_Request $request) {
     $auth_header = $request->get_header('authorization');
 
     if (!$auth_header) {
@@ -202,35 +202,35 @@ function filmoly_auth_get_bearer_token(WP_REST_Request $request) {
     return false;
 }
 
-function filmoly_auth_generate_token() {
+function filmaniak_auth_generate_token() {
     return bin2hex(random_bytes(32)); // 64 chars hex
 }
 
-function filmoly_auth_hash_token($token) {
+function filmaniak_auth_hash_token($token) {
     return hash('sha256', $token);
 }
 
-function filmoly_auth_generate_reset_code() {
+function filmaniak_auth_generate_reset_code() {
     return (string) random_int(100000, 999999); // 6 dígitos
 }
 
-function filmoly_auth_hash_reset_code($code) {
+function filmaniak_auth_hash_reset_code($code) {
     return hash('sha256', $code);
 }
 
-function filmoly_auth_get_request_ip() {
+function filmaniak_auth_get_request_ip() {
     return isset($_SERVER['REMOTE_ADDR'])
         ? sanitize_text_field(wp_unslash($_SERVER['REMOTE_ADDR']))
         : 'unknown';
 }
 
-function filmoly_auth_get_request_user_agent() {
+function filmaniak_auth_get_request_user_agent() {
     return isset($_SERVER['HTTP_USER_AGENT'])
         ? substr(sanitize_text_field(wp_unslash($_SERVER['HTTP_USER_AGENT'])), 0, 255)
         : null;
 }
 
-function filmoly_auth_find_user_by_login_or_email($login) {
+function filmaniak_auth_find_user_by_login_or_email($login) {
     if ($login === '') {
         return false;
     }
@@ -242,15 +242,15 @@ function filmoly_auth_find_user_by_login_or_email($login) {
     return get_user_by('login', $login);
 }
 
-function filmoly_auth_create_session($user_id) {
+function filmaniak_auth_create_session($user_id) {
     global $wpdb;
 
-    $table_name = $wpdb->prefix . 'filmoly_sessions';
-    $token = filmoly_auth_generate_token();
-    $token_hash = filmoly_auth_hash_token($token);
+    $table_name = $wpdb->prefix . 'filmaniak_sessions';
+    $token = filmaniak_auth_generate_token();
+    $token_hash = filmaniak_auth_hash_token($token);
 
     $now = current_time('mysql');
-    $expires_at = date('Y-m-d H:i:s', current_time('timestamp') + FILMOLY_AUTH_TOKEN_TTL);
+    $expires_at = date('Y-m-d H:i:s', current_time('timestamp') + FILMANIAK_AUTH_TOKEN_TTL);
 
     $inserted = $wpdb->insert(
         $table_name,
@@ -261,8 +261,8 @@ function filmoly_auth_create_session($user_id) {
             'expires_at'   => $expires_at,
             'last_used_at' => $now,
             'revoked_at'   => null,
-            'user_agent'   => filmoly_auth_get_request_user_agent(),
-            'ip_address'   => filmoly_auth_get_request_ip(),
+            'user_agent'   => filmaniak_auth_get_request_user_agent(),
+            'ip_address'   => filmaniak_auth_get_request_ip(),
         ],
         [
             '%d',
@@ -285,17 +285,17 @@ function filmoly_auth_create_session($user_id) {
     ];
 }
 
-function filmoly_auth_validate_token(WP_REST_Request $request) {
+function filmaniak_auth_validate_token(WP_REST_Request $request) {
     global $wpdb;
 
-    $token = filmoly_auth_get_bearer_token($request);
+    $token = filmaniak_auth_get_bearer_token($request);
 
     if (!$token) {
-        return filmoly_auth_error('missing_token', 'Token no proporcionado.', 401);
+        return filmaniak_auth_error('missing_token', 'Token no proporcionado.', 401);
     }
 
-    $token_hash = filmoly_auth_hash_token($token);
-    $table_name = $wpdb->prefix . 'filmoly_sessions';
+    $token_hash = filmaniak_auth_hash_token($token);
+    $table_name = $wpdb->prefix . 'filmaniak_sessions';
 
     $session = $wpdb->get_row(
         $wpdb->prepare(
@@ -308,16 +308,16 @@ function filmoly_auth_validate_token(WP_REST_Request $request) {
     );
 
     if (!$session) {
-        return filmoly_auth_error('invalid_token', 'Sesión no válida.', 401);
+        return filmaniak_auth_error('invalid_token', 'Sesión no válida.', 401);
     }
 
     if (strtotime($session->expires_at) < current_time('timestamp')) {
-        return filmoly_auth_error('expired_token', 'La sesión ha expirado.', 401);
+        return filmaniak_auth_error('expired_token', 'La sesión ha expirado.', 401);
     }
 
     $user = get_user_by('id', (int) $session->user_id);
     if (!$user) {
-        return filmoly_auth_error('invalid_user', 'Usuario no válido.', 401);
+        return filmaniak_auth_error('invalid_user', 'Usuario no válido.', 401);
     }
 
     $wpdb->update(
@@ -331,7 +331,7 @@ function filmoly_auth_validate_token(WP_REST_Request $request) {
     return (int) $user->ID;
 }
 
-function filmoly_auth_get_user_data($user_id) {
+function filmaniak_auth_get_user_data($user_id) {
     $user = get_userdata($user_id);
 
     if (!$user) {
@@ -343,33 +343,33 @@ function filmoly_auth_get_user_data($user_id) {
         'username' => $user->user_login,
         'email' => $user->user_email,
         'display_name' => $user->display_name,
-        'avatar_url' => function_exists('filmoly_get_user_avatar_url') ? filmoly_get_user_avatar_url($user->ID) : get_avatar_url($user->ID),
+        'avatar_url' => function_exists('filmaniak_get_user_avatar_url') ? filmaniak_get_user_avatar_url($user->ID) : get_avatar_url($user->ID),
     ];
 }
 
 /**
  * Devuelve los datos del usuario para login/me/register.
- * Si está cargado usuario.php y existe filmoly_get_full_user_data(), devuelve el usuario completo
+ * Si está cargado usuario.php y existe filmaniak_get_full_user_data(), devuelve el usuario completo
  * (language, start_day_week, date_format, country, birthdate, etc.); si no, solo los básicos.
  */
-function filmoly_auth_get_user_data_for_response($user_id) {
-    if (function_exists('filmoly_get_full_user_data')) {
-        $full = filmoly_get_full_user_data($user_id);
-        return $full !== null ? $full : filmoly_auth_get_user_data($user_id);
+function filmaniak_auth_get_user_data_for_response($user_id) {
+    if (function_exists('filmaniak_get_full_user_data')) {
+        $full = filmaniak_get_full_user_data($user_id);
+        return $full !== null ? $full : filmaniak_auth_get_user_data($user_id);
     }
-    return filmoly_auth_get_user_data($user_id);
+    return filmaniak_auth_get_user_data($user_id);
 }
 
-function filmoly_auth_revoke_current_token(WP_REST_Request $request) {
+function filmaniak_auth_revoke_current_token(WP_REST_Request $request) {
     global $wpdb;
 
-    $token = filmoly_auth_get_bearer_token($request);
+    $token = filmaniak_auth_get_bearer_token($request);
     if (!$token) {
         return false;
     }
 
-    $token_hash = filmoly_auth_hash_token($token);
-    $table_name = $wpdb->prefix . 'filmoly_sessions';
+    $token_hash = filmaniak_auth_hash_token($token);
+    $table_name = $wpdb->prefix . 'filmaniak_sessions';
 
     $wpdb->update(
         $table_name,
@@ -382,10 +382,10 @@ function filmoly_auth_revoke_current_token(WP_REST_Request $request) {
     return true;
 }
 
-function filmoly_auth_delete_existing_reset_codes($user_id) {
+function filmaniak_auth_delete_existing_reset_codes($user_id) {
     global $wpdb;
 
-    $table_name = $wpdb->prefix . 'filmoly_password_resets';
+    $table_name = $wpdb->prefix . 'filmaniak_password_resets';
 
     $wpdb->query(
         $wpdb->prepare(
@@ -395,17 +395,17 @@ function filmoly_auth_delete_existing_reset_codes($user_id) {
     );
 }
 
-function filmoly_auth_create_reset_code($user_id) {
+function filmaniak_auth_create_reset_code($user_id) {
     global $wpdb;
 
-    $table_name = $wpdb->prefix . 'filmoly_password_resets';
-    $code = filmoly_auth_generate_reset_code();
-    $code_hash = filmoly_auth_hash_reset_code($code);
+    $table_name = $wpdb->prefix . 'filmaniak_password_resets';
+    $code = filmaniak_auth_generate_reset_code();
+    $code_hash = filmaniak_auth_hash_reset_code($code);
 
     $now = current_time('mysql');
-    $expires_at = date('Y-m-d H:i:s', current_time('timestamp') + FILMOLY_RESET_CODE_TTL);
+    $expires_at = date('Y-m-d H:i:s', current_time('timestamp') + FILMANIAK_RESET_CODE_TTL);
 
-    filmoly_auth_delete_existing_reset_codes($user_id);
+    filmaniak_auth_delete_existing_reset_codes($user_id);
 
     $inserted = $wpdb->insert(
         $table_name,
@@ -416,7 +416,7 @@ function filmoly_auth_create_reset_code($user_id) {
             'expires_at' => $expires_at,
             'used_at'    => null,
             'attempts'   => 0,
-            'ip_address' => filmoly_auth_get_request_ip(),
+            'ip_address' => filmaniak_auth_get_request_ip(),
         ],
         [
             '%d',
@@ -439,13 +439,13 @@ function filmoly_auth_create_reset_code($user_id) {
     ];
 }
 
-function filmoly_auth_send_reset_email($user, $code) {
+function filmaniak_auth_send_reset_email($user, $code) {
     $to = $user->user_email;
-    $locale = function_exists('filmoly_get_user_language') ? filmoly_get_user_language($user->ID) : 'en';
+    $locale = function_exists('filmaniak_get_user_language') ? filmaniak_get_user_language($user->ID) : 'en';
     $name = $user->display_name ? $user->display_name : $user->user_login;
 
-    $subject = filmoly_t('reset_email_subject', $locale);
-    $message = filmoly_t('reset_email_body', $locale, ['name' => $name, 'code' => $code]);
+    $subject = filmaniak_t('reset_email_subject', $locale);
+    $message = filmaniak_t('reset_email_body', $locale, ['name' => $name, 'code' => $code]);
 
     $headers = ['Content-Type: text/plain; charset=UTF-8'];
 
@@ -457,8 +457,8 @@ function filmoly_auth_send_reset_email($user, $code) {
  * RATE LIMIT BÁSICO
  * =========================================================
  */
-function filmoly_auth_rate_limit($key, $max_attempts = 10, $window_seconds = 900) {
-    $transient_key = 'filmoly_rl_' . md5($key);
+function filmaniak_auth_rate_limit($key, $max_attempts = 10, $window_seconds = 900) {
+    $transient_key = 'filmaniak_rl_' . md5($key);
     $data = get_transient($transient_key);
 
     if (!is_array($data)) {
@@ -488,50 +488,50 @@ function filmoly_auth_rate_limit($key, $max_attempts = 10, $window_seconds = 900
  * =========================================================
  */
 add_action('rest_api_init', function () {
-    register_rest_route(FILMOLY_AUTH_NAMESPACE, '/auth/register', [
+    register_rest_route(FILMANIAK_AUTH_NAMESPACE, '/auth/register', [
         'methods' => 'POST',
-        'callback' => 'filmoly_auth_register',
+        'callback' => 'filmaniak_auth_register',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route(FILMOLY_AUTH_NAMESPACE, '/auth/login', [
+    register_rest_route(FILMANIAK_AUTH_NAMESPACE, '/auth/login', [
         'methods' => 'POST',
-        'callback' => 'filmoly_auth_login',
+        'callback' => 'filmaniak_auth_login',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route(FILMOLY_AUTH_NAMESPACE, '/auth/me', [
+    register_rest_route(FILMANIAK_AUTH_NAMESPACE, '/auth/me', [
         'methods' => 'GET',
-        'callback' => 'filmoly_auth_me',
+        'callback' => 'filmaniak_auth_me',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route(FILMOLY_AUTH_NAMESPACE, '/auth/logout', [
+    register_rest_route(FILMANIAK_AUTH_NAMESPACE, '/auth/logout', [
         'methods' => 'POST',
-        'callback' => 'filmoly_auth_logout',
+        'callback' => 'filmaniak_auth_logout',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route(FILMOLY_AUTH_NAMESPACE, '/auth/forgot-password', [
+    register_rest_route(FILMANIAK_AUTH_NAMESPACE, '/auth/forgot-password', [
         'methods' => 'POST',
-        'callback' => 'filmoly_auth_forgot_password',
+        'callback' => 'filmaniak_auth_forgot_password',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route(FILMOLY_AUTH_NAMESPACE, '/auth/reset-password', [
+    register_rest_route(FILMANIAK_AUTH_NAMESPACE, '/auth/reset-password', [
         'methods' => 'POST',
-        'callback' => 'filmoly_auth_reset_password',
+        'callback' => 'filmaniak_auth_reset_password',
         'permission_callback' => '__return_true',
     ]);
-    register_rest_route(FILMOLY_AUTH_NAMESPACE, '/auth/delete-account', [
+    register_rest_route(FILMANIAK_AUTH_NAMESPACE, '/auth/delete-account', [
         'methods' => 'POST',
-        'callback' => 'filmoly_auth_delete_account',
+        'callback' => 'filmaniak_auth_delete_account',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route(FILMOLY_AUTH_NAMESPACE, '/auth/change-password', [
+    register_rest_route(FILMANIAK_AUTH_NAMESPACE, '/auth/change-password', [
         'methods' => 'POST',
-        'callback' => 'filmoly_auth_change_password',
+        'callback' => 'filmaniak_auth_change_password',
         'permission_callback' => '__return_true',
     ]);
 });
@@ -541,8 +541,8 @@ add_action('rest_api_init', function () {
  * CALLBACKS
  * =========================================================
  */
-function filmoly_auth_register(WP_REST_Request $request) {
-    $params = filmoly_auth_get_json_params($request);
+function filmaniak_auth_register(WP_REST_Request $request) {
+    $params = filmaniak_auth_get_json_params($request);
 
     $username = isset($params['username']) ? sanitize_user($params['username']) : '';
     $email = isset($params['email']) ? sanitize_email($params['email']) : '';
@@ -553,29 +553,29 @@ function filmoly_auth_register(WP_REST_Request $request) {
 
     // Username: 4-20 caracteres, solo [a-zA-Z0-9_-]
     if ($username === '' || strlen($username) < 4) {
-        return filmoly_auth_error('invalid_username', 'El nombre de usuario debe tener al menos 4 caracteres.', 400);
+        return filmaniak_auth_error('invalid_username', 'El nombre de usuario debe tener al menos 4 caracteres.', 400);
     }
     if (strlen($username) > 20) {
-        return filmoly_auth_error('invalid_username', 'El nombre de usuario no puede superar 20 caracteres.', 400);
+        return filmaniak_auth_error('invalid_username', 'El nombre de usuario no puede superar 20 caracteres.', 400);
     }
     if (!preg_match('/^[a-zA-Z0-9_-]+$/', $username)) {
-        return filmoly_auth_error('invalid_username', 'El nombre de usuario solo puede contener letras, números, guiones y guiones bajos.', 400);
+        return filmaniak_auth_error('invalid_username', 'El nombre de usuario solo puede contener letras, números, guiones y guiones bajos.', 400);
     }
 
     if (!is_email($email)) {
-        return filmoly_auth_error('invalid_email', 'El email es inválido.', 400);
+        return filmaniak_auth_error('invalid_email', 'El email es inválido.', 400);
     }
 
     if (strlen($password) < 6) {
-        return filmoly_auth_error('invalid_password', 'La contraseña debe tener al menos 6 caracteres.', 400);
+        return filmaniak_auth_error('invalid_password', 'La contraseña debe tener al menos 6 caracteres.', 400);
     }
 
     if (username_exists($username)) {
-        return filmoly_auth_error('username_exists', 'Ese nombre de usuario ya existe.', 409);
+        return filmaniak_auth_error('username_exists', 'Ese nombre de usuario ya existe.', 409);
     }
 
     if (email_exists($email)) {
-        return filmoly_auth_error('email_exists', 'Ese email ya está registrado.', 409);
+        return filmaniak_auth_error('email_exists', 'Ese email ya está registrado.', 409);
     }
 
     $user_id = wp_insert_user([
@@ -587,21 +587,21 @@ function filmoly_auth_register(WP_REST_Request $request) {
     ]);
 
     if (is_wp_error($user_id)) {
-        return filmoly_auth_error('register_failed', $user_id->get_error_message(), 400);
+        return filmaniak_auth_error('register_failed', $user_id->get_error_message(), 400);
     }
 
     // Guardar consentimiento de marketing en usermeta
-    update_user_meta($user_id, 'filmoly_marketing_consent', $marketing_consent ? 1 : 0);
+    update_user_meta($user_id, 'filmaniak_marketing_consent', $marketing_consent ? 1 : 0);
 
     // Guardar idioma si se envía (ej: es, en, etc.)
     if ($language !== '' && preg_match('/^[a-z]{2,3}$/', $language)) {
-        update_user_meta($user_id, 'filmoly_language', $language);
+        update_user_meta($user_id, 'filmaniak_language', $language);
     }
 
-    $session = filmoly_auth_create_session($user_id);
+    $session = filmaniak_auth_create_session($user_id);
 
     if (!$session) {
-        return filmoly_auth_error('session_failed', 'No se pudo crear la sesión.', 500);
+        return filmaniak_auth_error('session_failed', 'No se pudo crear la sesión.', 500);
     }
 
     return new WP_REST_Response([
@@ -609,35 +609,35 @@ function filmoly_auth_register(WP_REST_Request $request) {
         'message' => 'Registro completado correctamente.',
         'token' => $session['token'],
         'expires_at' => $session['expires_at'],
-        'user' => filmoly_auth_get_user_data_for_response($user_id),
+        'user' => filmaniak_auth_get_user_data_for_response($user_id),
     ], 201);
 }
 
-function filmoly_auth_login(WP_REST_Request $request) {
-    $params = filmoly_auth_get_json_params($request);
+function filmaniak_auth_login(WP_REST_Request $request) {
+    $params = filmaniak_auth_get_json_params($request);
 
     $login = isset($params['login']) ? sanitize_text_field($params['login']) : '';
     $password = isset($params['password']) ? (string) $params['password'] : '';
 
-    $ip = filmoly_auth_get_request_ip();
-    if (!filmoly_auth_rate_limit('login_' . $ip, 20, 900)) {
-        return filmoly_auth_error('too_many_requests', 'Demasiados intentos. Inténtalo más tarde.', 429);
+    $ip = filmaniak_auth_get_request_ip();
+    if (!filmaniak_auth_rate_limit('login_' . $ip, 20, 900)) {
+        return filmaniak_auth_error('too_many_requests', 'Demasiados intentos. Inténtalo más tarde.', 429);
     }
 
     if ($login === '' || $password === '') {
-        return filmoly_auth_error('missing_fields', 'Faltan campos obligatorios.', 400);
+        return filmaniak_auth_error('missing_fields', 'Faltan campos obligatorios.', 400);
     }
 
     $user = wp_authenticate($login, $password);
 
     if (is_wp_error($user)) {
-        return filmoly_auth_error('invalid_credentials', 'Credenciales incorrectas.', 401);
+        return filmaniak_auth_error('invalid_credentials', 'Credenciales incorrectas.', 401);
     }
 
-    $session = filmoly_auth_create_session($user->ID);
+    $session = filmaniak_auth_create_session($user->ID);
 
     if (!$session) {
-        return filmoly_auth_error('session_failed', 'No se pudo crear la sesión.', 500);
+        return filmaniak_auth_error('session_failed', 'No se pudo crear la sesión.', 500);
     }
 
     return new WP_REST_Response([
@@ -645,12 +645,12 @@ function filmoly_auth_login(WP_REST_Request $request) {
         'message' => 'Login correcto.',
         'token' => $session['token'],
         'expires_at' => $session['expires_at'],
-        'user' => filmoly_auth_get_user_data_for_response($user->ID),
+        'user' => filmaniak_auth_get_user_data_for_response($user->ID),
     ], 200);
 }
 
-function filmoly_auth_me(WP_REST_Request $request) {
-    $user_id = filmoly_auth_validate_token($request);
+function filmaniak_auth_me(WP_REST_Request $request) {
+    $user_id = filmaniak_auth_validate_token($request);
 
     if (is_wp_error($user_id)) {
         return $user_id;
@@ -658,18 +658,18 @@ function filmoly_auth_me(WP_REST_Request $request) {
 
     return new WP_REST_Response([
         'success' => true,
-        'user' => filmoly_auth_get_user_data_for_response($user_id),
+        'user' => filmaniak_auth_get_user_data_for_response($user_id),
     ], 200);
 }
 
-function filmoly_auth_logout(WP_REST_Request $request) {
-    $user_id = filmoly_auth_validate_token($request);
+function filmaniak_auth_logout(WP_REST_Request $request) {
+    $user_id = filmaniak_auth_validate_token($request);
 
     if (is_wp_error($user_id)) {
         return $user_id;
     }
 
-    filmoly_auth_revoke_current_token($request);
+    filmaniak_auth_revoke_current_token($request);
 
     return new WP_REST_Response([
         'success' => true,
@@ -677,27 +677,27 @@ function filmoly_auth_logout(WP_REST_Request $request) {
     ], 200);
 }
 
-function filmoly_auth_forgot_password(WP_REST_Request $request) {
-    $params = filmoly_auth_get_json_params($request);
+function filmaniak_auth_forgot_password(WP_REST_Request $request) {
+    $params = filmaniak_auth_get_json_params($request);
 
     $login = isset($params['login']) ? sanitize_text_field($params['login']) : '';
 
-    $ip = filmoly_auth_get_request_ip();
-    if (!filmoly_auth_rate_limit('forgot_' . $ip, 10, 900)) {
-        return filmoly_auth_error('too_many_requests', 'Demasiados intentos. Inténtalo más tarde.', 429);
+    $ip = filmaniak_auth_get_request_ip();
+    if (!filmaniak_auth_rate_limit('forgot_' . $ip, 10, 900)) {
+        return filmaniak_auth_error('too_many_requests', 'Demasiados intentos. Inténtalo más tarde.', 429);
     }
 
     if ($login === '') {
-        return filmoly_auth_error('missing_login', 'Debes indicar username o email.', 400);
+        return filmaniak_auth_error('missing_login', 'Debes indicar username o email.', 400);
     }
 
-    $user = filmoly_auth_find_user_by_login_or_email($login);
+    $user = filmaniak_auth_find_user_by_login_or_email($login);
 
     if ($user) {
-        $reset = filmoly_auth_create_reset_code($user->ID);
+        $reset = filmaniak_auth_create_reset_code($user->ID);
 
         if ($reset) {
-            filmoly_auth_send_reset_email($user, $reset['code']);
+            filmaniak_auth_send_reset_email($user, $reset['code']);
         }
     }
 
@@ -707,34 +707,34 @@ function filmoly_auth_forgot_password(WP_REST_Request $request) {
     ], 200);
 }
 
-function filmoly_auth_reset_password(WP_REST_Request $request) {
+function filmaniak_auth_reset_password(WP_REST_Request $request) {
     global $wpdb;
 
-    $params = filmoly_auth_get_json_params($request);
+    $params = filmaniak_auth_get_json_params($request);
 
     $login = isset($params['login']) ? sanitize_text_field($params['login']) : '';
     $code = isset($params['code']) ? preg_replace('/\D+/', '', (string) $params['code']) : '';
     $new_password = isset($params['new_password']) ? (string) $params['new_password'] : '';
 
     if ($login === '' || $code === '' || $new_password === '') {
-        return filmoly_auth_error('missing_fields', 'Faltan campos obligatorios.', 400);
+        return filmaniak_auth_error('missing_fields', 'Faltan campos obligatorios.', 400);
     }
 
     if (strlen($code) !== 6) {
-        return filmoly_auth_error('invalid_code', 'El código no es válido.', 400);
+        return filmaniak_auth_error('invalid_code', 'El código no es válido.', 400);
     }
 
     if (strlen($new_password) < 6) {
-        return filmoly_auth_error('invalid_password', 'La nueva contraseña debe tener al menos 6 caracteres.', 400);
+        return filmaniak_auth_error('invalid_password', 'La nueva contraseña debe tener al menos 6 caracteres.', 400);
     }
 
-    $user = filmoly_auth_find_user_by_login_or_email($login);
+    $user = filmaniak_auth_find_user_by_login_or_email($login);
 
     if (!$user) {
-        return filmoly_auth_error('invalid_code', 'Código o usuario no válidos.', 400);
+        return filmaniak_auth_error('invalid_code', 'Código o usuario no válidos.', 400);
     }
 
-    $table_name = $wpdb->prefix . 'filmoly_password_resets';
+    $table_name = $wpdb->prefix . 'filmaniak_password_resets';
 
     $reset_row = $wpdb->get_row(
         $wpdb->prepare(
@@ -748,18 +748,18 @@ function filmoly_auth_reset_password(WP_REST_Request $request) {
     );
 
     if (!$reset_row) {
-        return filmoly_auth_error('invalid_code', 'Código o usuario no válidos.', 400);
+        return filmaniak_auth_error('invalid_code', 'Código o usuario no válidos.', 400);
     }
 
-    if ((int) $reset_row->attempts >= FILMOLY_RESET_CODE_MAX_ATTEMPTS) {
-        return filmoly_auth_error('too_many_attempts', 'Has superado el número máximo de intentos.', 429);
+    if ((int) $reset_row->attempts >= FILMANIAK_RESET_CODE_MAX_ATTEMPTS) {
+        return filmaniak_auth_error('too_many_attempts', 'Has superado el número máximo de intentos.', 429);
     }
 
     if (strtotime($reset_row->expires_at) < current_time('timestamp')) {
-        return filmoly_auth_error('expired_code', 'El código ha expirado.', 400);
+        return filmaniak_auth_error('expired_code', 'El código ha expirado.', 400);
     }
 
-    $code_hash = filmoly_auth_hash_reset_code($code);
+    $code_hash = filmaniak_auth_hash_reset_code($code);
 
     if (!hash_equals($reset_row->code_hash, $code_hash)) {
         $wpdb->update(
@@ -770,7 +770,7 @@ function filmoly_auth_reset_password(WP_REST_Request $request) {
             ['%d']
         );
 
-        return filmoly_auth_error('invalid_code', 'Código o usuario no válidos.', 400);
+        return filmaniak_auth_error('invalid_code', 'Código o usuario no válidos.', 400);
     }
 
     wp_set_password($new_password, $user->ID);
@@ -787,7 +787,7 @@ function filmoly_auth_reset_password(WP_REST_Request $request) {
     );
 
     // Revocar todas las sesiones activas del usuario tras cambiar contraseña
-    $sessions_table = $wpdb->prefix . 'filmoly_sessions';
+    $sessions_table = $wpdb->prefix . 'filmaniak_sessions';
     $wpdb->query(
         $wpdb->prepare(
             "UPDATE {$sessions_table}
@@ -805,36 +805,36 @@ function filmoly_auth_reset_password(WP_REST_Request $request) {
     ], 200);
 }
 
-function filmoly_auth_delete_account(WP_REST_Request $request) {
+function filmaniak_auth_delete_account(WP_REST_Request $request) {
     global $wpdb;
 
-    $user_id = filmoly_auth_validate_token($request);
+    $user_id = filmaniak_auth_validate_token($request);
 
     if (is_wp_error($user_id)) {
         return $user_id;
     }
 
-    $params = filmoly_auth_get_json_params($request);
+    $params = filmaniak_auth_get_json_params($request);
     $password = isset($params['password']) ? (string) $params['password'] : '';
 
     if ($password === '') {
-        return filmoly_auth_error('missing_password', 'Debes indicar tu contraseña actual.', 400);
+        return filmaniak_auth_error('missing_password', 'Debes indicar tu contraseña actual.', 400);
     }
 
     $user = get_user_by('id', $user_id);
 
     if (!$user) {
-        return filmoly_auth_error('invalid_user', 'Usuario no válido.', 404);
+        return filmaniak_auth_error('invalid_user', 'Usuario no válido.', 404);
     }
 
     // Seguridad: no permitir borrar cuentas admin
     if (in_array('administrator', (array) $user->roles, true)) {
-        return filmoly_auth_error('forbidden', 'Esta cuenta no se puede eliminar.', 403);
+        return filmaniak_auth_error('forbidden', 'Esta cuenta no se puede eliminar.', 403);
     }
 
     // Confirmar contraseña actual
     if (!wp_check_password($password, $user->user_pass, $user->ID)) {
-        return filmoly_auth_error('wrong_password', 'La contraseña actual no es correcta.', 401);
+        return filmaniak_auth_error('wrong_password', 'La contraseña actual no es correcta.', 401);
     }
 
     // Cargar función de borrado de usuarios
@@ -845,7 +845,7 @@ function filmoly_auth_delete_account(WP_REST_Request $request) {
     $deleted = wp_delete_user($user->ID);
 
     if (!$deleted) {
-        return filmoly_auth_error('delete_failed', 'No se pudo eliminar la cuenta.', 500);
+        return filmaniak_auth_error('delete_failed', 'No se pudo eliminar la cuenta.', 500);
     }
 
     return new WP_REST_Response([
@@ -854,33 +854,33 @@ function filmoly_auth_delete_account(WP_REST_Request $request) {
     ], 200);
 }
 
-function filmoly_auth_change_password(WP_REST_Request $request) {
-    $user_id = filmoly_auth_validate_token($request);
+function filmaniak_auth_change_password(WP_REST_Request $request) {
+    $user_id = filmaniak_auth_validate_token($request);
 
     if (is_wp_error($user_id)) {
         return $user_id;
     }
 
-    $params = filmoly_auth_get_json_params($request);
+    $params = filmaniak_auth_get_json_params($request);
     $current_password = isset($params['current_password']) ? (string) $params['current_password'] : '';
     $new_password     = isset($params['new_password'])     ? (string) $params['new_password']     : '';
 
     if ($current_password === '' || $new_password === '') {
-        return filmoly_auth_error('missing_fields', 'Faltan campos obligatorios.', 400);
+        return filmaniak_auth_error('missing_fields', 'Faltan campos obligatorios.', 400);
     }
 
     if (strlen($new_password) < 6) {
-        return filmoly_auth_error('invalid_password', 'La contraseña debe tener al menos 6 caracteres.', 400);
+        return filmaniak_auth_error('invalid_password', 'La contraseña debe tener al menos 6 caracteres.', 400);
     }
 
     $user = get_user_by('id', $user_id);
 
     if (!$user) {
-        return filmoly_auth_error('invalid_user', 'Usuario no válido.', 404);
+        return filmaniak_auth_error('invalid_user', 'Usuario no válido.', 404);
     }
 
     if (!wp_check_password($current_password, $user->user_pass, $user->ID)) {
-        return filmoly_auth_error('wrong_password', 'La contraseña actual no es correcta.', 401);
+        return filmaniak_auth_error('wrong_password', 'La contraseña actual no es correcta.', 401);
     }
 
     wp_set_password($new_password, $user->ID);

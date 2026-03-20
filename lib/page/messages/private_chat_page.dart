@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
-import 'package:filmoly/api/filmoly_api.dart';
-import 'package:filmoly/core/global_variables.dart';
-import 'package:filmoly/core/global_functions.dart';
-import 'package:filmoly/generated/l10n.dart';
-import 'package:filmoly/model/private_message_model.dart';
-import 'package:filmoly/widget/components_widgets.dart';
+import 'package:filmaniak/api/filmaniak_api.dart';
+import 'package:filmaniak/core/global_variables.dart';
+import 'package:filmaniak/core/global_functions.dart';
+import 'package:filmaniak/generated/l10n.dart';
+import 'package:filmaniak/model/private_message_model.dart';
+import 'package:filmaniak/widget/components_widgets.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show LogicalKeyboardKey, KeyDownEvent;
@@ -69,7 +69,7 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
 
   Future<void> _loadInitial() async {
     setState(() => _loading = true);
-    final msgs = await FilmolyApi.getMessages(otherUserId: widget.recipientId);
+    final msgs = await FilmaniakApi.getMessages(otherUserId: widget.recipientId);
     if (!mounted) return;
     setState(() {
       _messages.clear();
@@ -86,7 +86,7 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
     if (_loadingMore || !_hasMore || _messages.isEmpty) return;
     setState(() => _loadingMore = true);
     final oldest = _messages.last.id;
-    final msgs = await FilmolyApi.getMessages(
+    final msgs = await FilmaniakApi.getMessages(
       otherUserId: widget.recipientId, beforeId: oldest);
     if (!mounted) return;
     setState(() {
@@ -119,7 +119,7 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
 
   Future<void> _pollDelta() async {
     if (_lastCreatedAt == null) return;
-    final delta = await FilmolyApi.getMessages(
+    final delta = await FilmaniakApi.getMessages(
       otherUserId: widget.recipientId, afterCreated: _lastCreatedAt);
     if (!mounted || delta.isEmpty) return;
 
@@ -161,7 +161,7 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
     );
     if (!hasUnreadMine) return;
 
-    final isRead = await FilmolyApi.getMessageReadStatus(widget.recipientId);
+    final isRead = await FilmaniakApi.getMessageReadStatus(widget.recipientId);
     if (!mounted) return;
     if (isRead != true) return;
 
@@ -195,7 +195,7 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
   Future<void> _sendNew(String text) async {
     setState(() => _sending = true);
     _inputController.clear();
-    final msg = await FilmolyApi.sendMessage(
+    final msg = await FilmaniakApi.sendMessage(
       recipientId: widget.recipientId, message: text);
     if (!mounted) return;
     setState(() {
@@ -219,7 +219,7 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
     final msg = _editingMessage!;
     setState(() { _sending = true; _editingMessage = null; });
     _inputController.clear();
-    final ok = await FilmolyApi.editMessage(id: msg.id, message: text);
+    final ok = await FilmaniakApi.editMessage(id: msg.id, message: text);
     if (!mounted) return;
     setState(() => _sending = false);
     if (!ok) showCustomSnackBar(S.current.messagesErrorEdit, type: -1);
@@ -238,7 +238,7 @@ class _PrivateChatPageState extends State<PrivateChatPage> {
   }
 
   Future<void> _deleteMessage(PrivateMessage msg) async {
-    final ok = await FilmolyApi.deleteMessage(msg.id);
+    final ok = await FilmaniakApi.deleteMessage(msg.id);
     if (!mounted) return;
     if (!ok) {
       showCustomSnackBar(S.current.messagesErrorDelete, type: -1);

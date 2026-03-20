@@ -1,58 +1,58 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:filmoly/core/global_variables.dart';
-import 'package:filmoly/core/secure_storage.dart';
-import 'package:filmoly/model/user_model.dart';
-import 'package:filmoly/model/app_status_model.dart';
-import 'package:filmoly/model/private_message_model.dart';
+import 'package:filmaniak/core/global_variables.dart';
+import 'package:filmaniak/core/secure_storage.dart';
+import 'package:filmaniak/model/user_model.dart';
+import 'package:filmaniak/model/app_status_model.dart';
+import 'package:filmaniak/model/private_message_model.dart';
 import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:http/http.dart' as http;
 
 /// Base URL del WordPress (La Retroteca).
-const String filmolyBaseUrl = 'https://retroteca.org/wp-json/filmoly/v1';
+const String filmaniakBaseUrl = 'https://retroteca.org/wp-json/filmaniak/v1';
 /// Base pública de la app Flutter Web para enlaces compartibles de perfil.
 /// Ajusta este valor al dominio real donde publiques la app web.
-const String filmolyAppPublicBaseUrl = 'https://app.filmoly.com';
+const String filmaniakAppPublicBaseUrl = 'https://app.filmaniak.com';
 
-final FilmolySecureStorage _secureStorage = FilmolySecureStorage();
+final FilmaniakSecureStorage _secureStorage = FilmaniakSecureStorage();
 
 /// User-Agent con app + dispositivo para que el backend lo guarde en user_agent.
-String _getFilmolyUserAgent() {
+String _getFilmaniakUserAgent() {
   final v = globalCurrentVersionApp.isNotEmpty ? globalCurrentVersionApp : '1.0.0';
-  if (kIsWeb) return 'Filmoly/$v (Web)';
+  if (kIsWeb) return 'Filmaniak/$v (Web)';
   switch (defaultTargetPlatform) {
     case TargetPlatform.android:
-      return 'Filmoly/$v (Android)';
+      return 'Filmaniak/$v (Android)';
     case TargetPlatform.iOS:
-      return 'Filmoly/$v (iOS)';
+      return 'Filmaniak/$v (iOS)';
     case TargetPlatform.windows:
-      return 'Filmoly/$v (Windows)';
+      return 'Filmaniak/$v (Windows)';
     case TargetPlatform.macOS:
-      return 'Filmoly/$v (macOS)';
+      return 'Filmaniak/$v (macOS)';
     case TargetPlatform.linux:
-      return 'Filmoly/$v (Linux)';
+      return 'Filmaniak/$v (Linux)';
     default:
-      return 'Filmoly/$v';
+      return 'Filmaniak/$v';
   }
 }
 
-class FilmolyApi {
-  static const String _baseUrl = filmolyBaseUrl;
+class FilmaniakApi {
+  static const String _baseUrl = filmaniakBaseUrl;
 
   static String buildPublicProfileUrl(String username) {
     final clean = username.trim();
     if (clean.isEmpty) return '';
     // Deep link para navegación dentro de la app web (y que también se puede
     // mapear a la app nativa con App Links / Universal Links).
-    return '$filmolyAppPublicBaseUrl/user/${Uri.encodeComponent(clean)}';
+    return '$filmaniakAppPublicBaseUrl/user/${Uri.encodeComponent(clean)}';
   }
 
   static Map<String, String> _headers({String? token}) {
     final map = <String, String>{
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'User-Agent': _getFilmolyUserAgent(),
+      'User-Agent': _getFilmaniakUserAgent(),
     };
     if (token != null && token.isNotEmpty) {
       map['Authorization'] = 'Bearer $token';
@@ -119,7 +119,7 @@ class FilmolyApi {
   }
 
   /// GET /auth/me — valida token y devuelve usuario o null.
-  static Future<FilmolyUser?> validateToken(String token) async {
+  static Future<FilmaniakUser?> validateToken(String token) async {
     final url = Uri.parse('$_baseUrl/auth/me');
     final response = await http.get(
       url,
@@ -130,7 +130,7 @@ class FilmolyApi {
     if (data == null || data['success'] != true) return null;
     final userJson = data['user'];
     if (userJson is! Map<String, dynamic>) return null;
-    return FilmolyUser.fromJson(userJson);
+    return FilmaniakUser.fromJson(userJson);
   }
 
   /// POST /auth/logout
@@ -193,13 +193,13 @@ class FilmolyApi {
       await logout(globalUserToken);
     }
     globalUserToken = '';
-    globalCurrentUser = FilmolyUser();
+    globalCurrentUser = FilmaniakUser();
     await _secureStorage.removeToken();
   }
 
   /// Verifica un token de reCAPTCHA v3 contra el endpoint de WordPress.
   static Future<Map<String, dynamic>> verifyRecaptcha(String token) async {
-    final url = Uri.parse('$filmolyBaseUrl/verify-recaptcha');
+    final url = Uri.parse('$filmaniakBaseUrl/verify-recaptcha');
     final response = await http.post(
       url,
       headers: _headers(),
@@ -218,13 +218,13 @@ class FilmolyApi {
   }
 
   /// GET /status — devuelve versión mínima y estado (mantenimiento).
-  static Future<FilmolyAppStatus?> getStatus() async {
-    final url = Uri.parse('$filmolyBaseUrl/status');
+  static Future<FilmaniakAppStatus?> getStatus() async {
+    final url = Uri.parse('$filmaniakBaseUrl/status');
     try {
       final response = await http.get(url, headers: _headers());
       if (response.statusCode != 200) return null;
       final data = jsonDecode(response.body) as Map<String, dynamic>? ?? {};
-      return FilmolyAppStatus.fromJson(data);
+      return FilmaniakAppStatus.fromJson(data);
     } catch (_) {
       return null;
     }
@@ -279,7 +279,7 @@ class FilmolyApi {
     final url = Uri.parse('$_baseUrl/user/update');
     final request = http.MultipartRequest('POST', url);
     request.headers['Authorization'] = 'Bearer $token';
-    request.headers['User-Agent'] = _getFilmolyUserAgent();
+    request.headers['User-Agent'] = _getFilmaniakUserAgent();
     request.headers['Accept'] = 'application/json';
 
     request.fields['user_email'] = userEmail;
@@ -321,7 +321,7 @@ class FilmolyApi {
   }
 
   /// GET /user/public/{username}
-  static Future<FilmolyUser?> getPublicUserByUsername(String username) async {
+  static Future<FilmaniakUser?> getPublicUserByUsername(String username) async {
     final clean = username.trim();
     if (clean.isEmpty) return null;
 
@@ -336,7 +336,7 @@ class FilmolyApi {
       if (data['success'] != true) return null;
       final userJson = data['user'];
       if (userJson is! Map<String, dynamic>) return null;
-      return FilmolyUser.fromJson(userJson);
+      return FilmaniakUser.fromJson(userJson);
     } catch (_) {
       return null;
     }

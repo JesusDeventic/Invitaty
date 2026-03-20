@@ -2,15 +2,15 @@ import 'dart:typed_data';
 
 import 'package:country_picker/country_picker.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:filmoly/api/filmoly_api.dart';
-import 'package:filmoly/core/api_error_messages.dart';
-import 'package:filmoly/core/user_preferences.dart';
-import 'package:filmoly/core/global_functions.dart';
-import 'package:filmoly/core/global_variables.dart';
-import 'package:filmoly/generated/l10n.dart';
-import 'package:filmoly/model/user_model.dart';
-import 'package:filmoly/routes/app_routes.dart';
-import 'package:filmoly/widget/components_widgets.dart';
+import 'package:filmaniak/api/filmaniak_api.dart';
+import 'package:filmaniak/core/api_error_messages.dart';
+import 'package:filmaniak/core/user_preferences.dart';
+import 'package:filmaniak/core/global_functions.dart';
+import 'package:filmaniak/core/global_variables.dart';
+import 'package:filmaniak/generated/l10n.dart';
+import 'package:filmaniak/model/user_model.dart';
+import 'package:filmaniak/routes/app_routes.dart';
+import 'package:filmaniak/widget/components_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -204,7 +204,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
       ),
     );
 
-    final result = await FilmolyApi.updateUser(
+    final result = await FilmaniakApi.updateUser(
       userEmail: _emailController.text.trim(),
       websiteUrl: _websiteController.text.trim(),
       displayName: _displayNameController.text.trim().isEmpty ? null : _displayNameController.text.trim(),
@@ -223,7 +223,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
     if (result['success'] == true) {
       final userJson = result['user'];
       if (userJson is Map<String, dynamic>) {
-        globalCurrentUser = FilmolyUser.fromJson(userJson);
+        globalCurrentUser = FilmaniakUser.fromJson(userJson);
         await UserPreferences().setCachedUser(globalCurrentUser);
       }
       showCustomSnackBar(S.current.messageUpdateSuccess, type: 1);
@@ -705,7 +705,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                         ),
                       );
 
-                      final result = await FilmolyApi.changePassword(
+                      final result = await FilmaniakApi.changePassword(
                         currentPassword: current,
                         newPassword: newPwd,
                       );
@@ -796,7 +796,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                         ),
                       );
 
-                      final result = await FilmolyApi.deleteAccount(pwd);
+                      final result = await FilmaniakApi.deleteAccount(pwd);
 
                       navigator.pop();
 

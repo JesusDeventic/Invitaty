@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="Filmoly"
+        android:label="Filmaniak"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -25,14 +25,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
-            <!-- Deep link para perfiles compartibles: https://app.filmoly.com/user/{username} -->
+            <!-- Deep link para perfiles compartibles: https://app.filmaniak.com/user/{username} -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:scheme="https"
-                    android:host="app.filmoly.com"
+                    android:host="app.filmaniak.com"
                     android:pathPrefix="/user" />
             </intent-filter>
         </activity>

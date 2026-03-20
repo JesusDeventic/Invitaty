@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 /// Cursor de mano para elementos interactuables en Windows/desktop.
 final _clickCursor = WidgetStateProperty.all<MouseCursor>(SystemMouseCursors.click);
 
-/// Colores de Filmoly según el logo: verde lima y gris antracita.
+/// Colores de Filmaniak según el logo: verde lima y gris antracita.
 class AppColors {
   /// Verde lima vibrante (elementos principales, botones, acentos)
   static const Color primary = Color(0xFFB8D936);

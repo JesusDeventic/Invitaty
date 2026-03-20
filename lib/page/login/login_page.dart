@@ -1,15 +1,15 @@
-import 'package:filmoly/api/filmoly_api.dart';
-import 'package:filmoly/core/api_error_messages.dart';
-import 'package:filmoly/core/user_preferences.dart';
-import 'package:filmoly/core/global_functions.dart';
-import 'package:filmoly/core/global_variables.dart';
-import 'package:filmoly/controller/recaptcha_controller.dart';
-import 'package:filmoly/generated/l10n.dart';
-import 'package:filmoly/model/user_model.dart';
-import 'package:filmoly/page/users/contact_page.dart';
-import 'package:filmoly/routes/app_routes.dart';
-import 'package:filmoly/widget/components_widgets.dart';
-import 'package:filmoly/providers/language_provider.dart';
+import 'package:filmaniak/api/filmaniak_api.dart';
+import 'package:filmaniak/core/api_error_messages.dart';
+import 'package:filmaniak/core/user_preferences.dart';
+import 'package:filmaniak/core/global_functions.dart';
+import 'package:filmaniak/core/global_variables.dart';
+import 'package:filmaniak/controller/recaptcha_controller.dart';
+import 'package:filmaniak/generated/l10n.dart';
+import 'package:filmaniak/model/user_model.dart';
+import 'package:filmaniak/page/users/contact_page.dart';
+import 'package:filmaniak/routes/app_routes.dart';
+import 'package:filmaniak/widget/components_widgets.dart';
+import 'package:filmaniak/providers/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
       _isButtonDisabled = true;
     });
     try {
-      final result = await FilmolyApi.login(
+      final result = await FilmaniakApi.login(
         login: _loginController.text.trim(),
         password: _passwordController.text,
       );
@@ -90,8 +90,8 @@ class _LoginPageState extends State<LoginPage> {
         final token = result['token'] as String?;
         final userJson = result['user'] as Map<String, dynamic>?;
         if (token != null && userJson != null) {
-          await FilmolyApi.saveToken(token);
-          globalCurrentUser = FilmolyUser.fromJson(userJson);
+          await FilmaniakApi.saveToken(token);
+          globalCurrentUser = FilmaniakUser.fromJson(userJson);
           await UserPreferences().setCachedUser(globalCurrentUser);
           if (_keepSession) {
             // Token ya guardado en saveToken

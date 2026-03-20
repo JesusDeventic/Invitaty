@@ -1,10 +1,10 @@
-import 'package:filmoly/core/global_functions.dart';
-import 'package:filmoly/core/global_variables.dart';
-import 'package:filmoly/generated/l10n.dart';
-import 'package:filmoly/main.dart';
-import 'package:filmoly/page/users/version_changelog_page.dart';
-import 'package:filmoly/providers/language_provider.dart';
-import 'package:filmoly/providers/theme_provider.dart';
+import 'package:filmaniak/core/global_functions.dart';
+import 'package:filmaniak/core/global_variables.dart';
+import 'package:filmaniak/generated/l10n.dart';
+import 'package:filmaniak/main.dart';
+import 'package:filmaniak/page/users/version_changelog_page.dart';
+import 'package:filmaniak/providers/language_provider.dart';
+import 'package:filmaniak/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

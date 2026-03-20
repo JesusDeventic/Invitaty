@@ -1,5 +1,5 @@
-import 'package:filmoly/generated/l10n.dart';
-import 'package:filmoly/widget/components_widgets.dart';
+import 'package:filmaniak/generated/l10n.dart';
+import 'package:filmaniak/widget/components_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -63,7 +63,7 @@ class _ContactPageState extends State<ContactPage> {
                               ),
                               const SizedBox(height: 8),
                               Text(
-                                'filmoly.com',
+                                'filmaniak.com',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 20,
@@ -140,7 +140,7 @@ class _ContactPageState extends State<ContactPage> {
                               ),
                             ),
                             Text(
-                              'filmoly.com',
+                              'filmaniak.com',
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontSize: 18,

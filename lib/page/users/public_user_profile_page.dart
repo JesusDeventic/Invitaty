@@ -1,10 +1,10 @@
-import 'package:filmoly/api/filmoly_api.dart';
-import 'package:filmoly/core/global_functions.dart';
-import 'package:filmoly/core/global_variables.dart';
-import 'package:filmoly/generated/l10n.dart';
-import 'package:filmoly/model/user_model.dart';
-import 'package:filmoly/page/messages/private_chat_page.dart';
-import 'package:filmoly/widget/components_widgets.dart';
+import 'package:filmaniak/api/filmaniak_api.dart';
+import 'package:filmaniak/core/global_functions.dart';
+import 'package:filmaniak/core/global_variables.dart';
+import 'package:filmaniak/generated/l10n.dart';
+import 'package:filmaniak/model/user_model.dart';
+import 'package:filmaniak/page/messages/private_chat_page.dart';
+import 'package:filmaniak/widget/components_widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -22,17 +22,17 @@ class PublicUserProfilePage extends StatefulWidget {
   });
 
   final String username;
-  final FilmolyUser? initialUser;
+  final FilmaniakUser? initialUser;
 
   @override
   State<PublicUserProfilePage> createState() => _PublicUserProfilePageState();
 }
 
 class _PublicUserProfilePageState extends State<PublicUserProfilePage> {
-  FilmolyUser? _user;
+  FilmaniakUser? _user;
   bool _isLoading = false;
 
-  Future<void> _showShareOptions(String link, FilmolyUser user) async {
+  Future<void> _showShareOptions(String link, FilmaniakUser user) async {
     if (link.isEmpty) return;
     if (!mounted) return;
 
@@ -128,7 +128,7 @@ class _PublicUserProfilePageState extends State<PublicUserProfilePage> {
     if (_user == null) {
       setState(() => _isLoading = true);
     }
-    final user = await FilmolyApi.getPublicUserByUsername(widget.username);
+    final user = await FilmaniakApi.getPublicUserByUsername(widget.username);
     if (!mounted) return;
     setState(() {
       _user = user ?? _user;
@@ -173,7 +173,7 @@ class _PublicUserProfilePageState extends State<PublicUserProfilePage> {
     }
 
     final user = _user!;
-    final publicUrl = FilmolyApi.buildPublicProfileUrl(user.username);
+    final publicUrl = FilmaniakApi.buildPublicProfileUrl(user.username);
     final website = user.websiteUrl.trim();
     final fullName = [user.firstName, user.lastName]
         .where((e) => e.trim().isNotEmpty)

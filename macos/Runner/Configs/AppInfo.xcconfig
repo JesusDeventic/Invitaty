@@ -5,10 +5,10 @@
 // 'flutter create' template.
 
 // The application's name. By default this is also the title of the Flutter window.
-PRODUCT_NAME = Filmoly
+PRODUCT_NAME = Filmaniak
 
 // The application's bundle identifier
-PRODUCT_BUNDLE_IDENTIFIER = com.deventic.filmoly
+PRODUCT_BUNDLE_IDENTIFIER = com.deventic.filmaniak
 
 // The copyright displayed in application information
 PRODUCT_COPYRIGHT = Copyright © 2026 com.deventic. All rights reserved.

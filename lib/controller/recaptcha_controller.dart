@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:g_recaptcha_v3/g_recaptcha_v3.dart';
-import 'package:filmoly/api/filmoly_api.dart';
-import 'package:filmoly/api/recaptcha_config_api.dart';
+import 'package:filmaniak/api/filmaniak_api.dart';
+import 'package:filmaniak/api/recaptcha_config_api.dart';
 
-/// Servicio para gestionar Google reCAPTCHA v3 en Filmoly (basado en Fitcron).
+/// Servicio para gestionar Google reCAPTCHA v3 en Filmaniak (basado en Fitcron).
 class RecaptchaService {
   static String _token = '';
   static bool _isReady = false;
@@ -81,7 +81,7 @@ class RecaptchaService {
 
     if (_token.isNotEmpty) {
       try {
-        final response = await FilmolyApi.verifyRecaptcha(_token);
+        final response = await FilmaniakApi.verifyRecaptcha(_token);
         recaptchaResponse = RecaptchaResponse.fromMap(response);
       } catch (e) {
         debugPrint('Error en la verificación de reCAPTCHA.');

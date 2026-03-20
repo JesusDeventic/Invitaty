@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:filmoly/api/firebase_web_config.dart';
-import 'package:filmoly/core/global_functions.dart';
+import 'package:filmaniak/api/firebase_web_config.dart';
+import 'package:filmaniak/core/global_functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show Color, debugPrint;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /// Servicio centralizado de notificaciones push (Android / iOS / Web),
 /// basado en la implementación de Fitcron.
-class FilmolyMessagingService {
+class FilmaniakMessagingService {
   FirebaseMessaging? _firebaseMessaging;
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -18,17 +18,17 @@ class FilmolyMessagingService {
     try {
       // Inicializar Firebase (web con opciones explícitas, nativo con config por defecto)
       if (kIsWeb) {
-        if (FilmolyFirebaseWebConfig.webFirebaseOptions.apiKey.isEmpty ||
-            FilmolyFirebaseWebConfig.webFirebaseOptions.appId.isEmpty ||
-            FilmolyFirebaseWebConfig.webFirebaseOptions.messagingSenderId.isEmpty ||
-            FilmolyFirebaseWebConfig.webFirebaseOptions.projectId.isEmpty) {
+        if (FilmaniakFirebaseWebConfig.webFirebaseOptions.apiKey.isEmpty ||
+            FilmaniakFirebaseWebConfig.webFirebaseOptions.appId.isEmpty ||
+            FilmaniakFirebaseWebConfig.webFirebaseOptions.messagingSenderId.isEmpty ||
+            FilmaniakFirebaseWebConfig.webFirebaseOptions.projectId.isEmpty) {
           debugPrint(
-            'FCM Web no configurado: rellena FilmolyFirebaseWebConfig.webFirebaseOptions/webVapidKey',
+            'FCM Web no configurado: rellena FilmaniakFirebaseWebConfig.webFirebaseOptions/webVapidKey',
           );
           return;
         }
         await Firebase.initializeApp(
-          options: FilmolyFirebaseWebConfig.webFirebaseOptions,
+          options: FilmaniakFirebaseWebConfig.webFirebaseOptions,
         );
       } else {
         await Firebase.initializeApp();
@@ -69,7 +69,7 @@ class FilmolyMessagingService {
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
           debugPrint('Mensaje FCM en primer plano: ${message.messageId}');
 
-          final title = message.notification?.title ?? 'Filmoly';
+          final title = message.notification?.title ?? 'Filmaniak';
           final body = message.notification?.body ?? 'Nueva notificación';
 
           await _showNotification(
@@ -82,7 +82,7 @@ class FilmolyMessagingService {
 
       // Segundo plano
       FirebaseMessaging.onBackgroundMessage(
-        _filmolyFirebaseMessagingBackgroundHandler,
+        _filmaniakFirebaseMessagingBackgroundHandler,
       );
 
       // App abierta desde notificación
@@ -99,7 +99,7 @@ class FilmolyMessagingService {
         }
       });
     } catch (e) {
-      debugPrint('Error inicializando FilmolyMessagingService: $e');
+      debugPrint('Error inicializando FilmaniakMessagingService: $e');
     }
   }
 
@@ -111,14 +111,14 @@ class FilmolyMessagingService {
     if (kIsWeb) return; // Web usa el service worker
 
     const androidDetails = AndroidNotificationDetails(
-      'filmoly_channel',
-      'Filmoly Notifications',
-      channelDescription: 'Canal de notificaciones de Filmoly',
+      'filmaniak_channel',
+      'Filmaniak Notifications',
+      channelDescription: 'Canal de notificaciones de Filmaniak',
       importance: Importance.max,
       priority: Priority.high,
       showWhen: true,
       icon: 'ic_notification',
-      color: Color(0xFFB8D936), // Verde Filmoly
+      color: Color(0xFFB8D936), // Verde Filmaniak
     );
 
     const iosDetails = DarwinNotificationDetails(
@@ -143,14 +143,14 @@ class FilmolyMessagingService {
 }
 
 @pragma('vm:entry-point')
-Future<void> _filmolyFirebaseMessagingBackgroundHandler(
+Future<void> _filmaniakFirebaseMessagingBackgroundHandler(
   RemoteMessage message,
 ) async {
   try {
     await Firebase.initializeApp();
     debugPrint('Mensaje FCM en segundo plano: ${message.messageId}');
   } catch (e) {
-    debugPrint('Error en background handler FCM Filmoly: $e');
+    debugPrint('Error en background handler FCM Filmaniak: $e');
   }
 }
 

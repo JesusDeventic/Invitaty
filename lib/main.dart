@@ -1,11 +1,11 @@
 import 'dart:io';
-import 'package:filmoly/api/filmoly_messaging_service.dart';
-import 'package:filmoly/core/global_functions.dart';
-import 'package:filmoly/generated/l10n.dart';
-import 'package:filmoly/providers/language_provider.dart';
-import 'package:filmoly/providers/theme_provider.dart';
-import 'package:filmoly/routes/app_router.dart';
-import 'package:filmoly/styles/colors.dart';
+import 'package:filmaniak/api/filmaniak_messaging_service.dart';
+import 'package:filmaniak/core/global_functions.dart';
+import 'package:filmaniak/generated/l10n.dart';
+import 'package:filmaniak/providers/language_provider.dart';
+import 'package:filmaniak/providers/theme_provider.dart';
+import 'package:filmaniak/routes/app_router.dart';
+import 'package:filmaniak/styles/colors.dart';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -25,7 +25,7 @@ void main() async {
   // Inicializar notificaciones push solo en Android / iOS / Web
   if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
     try {
-      final messaging = FilmolyMessagingService();
+      final messaging = FilmaniakMessagingService();
       await messaging.initialize();
     } catch (e) {
       debugPrint('Error inicializando notificaciones de Firebase: $e');
@@ -37,19 +37,19 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
       ],
-      child: const FilmolyApp(),
+      child: const FilmaniakApp(),
     ),
   );
 }
 
-class FilmolyApp extends StatefulWidget {
-  const FilmolyApp({super.key});
+class FilmaniakApp extends StatefulWidget {
+  const FilmaniakApp({super.key});
 
   @override
-  State<FilmolyApp> createState() => _FilmolyAppState();
+  State<FilmaniakApp> createState() => _FilmaniakAppState();
 }
 
-class _FilmolyAppState extends State<FilmolyApp> {
+class _FilmaniakAppState extends State<FilmaniakApp> {
   late final GoRouter _router = createAppRouter(navigatorKey);
   final AppLinks _appLinks = AppLinks();
 
@@ -146,17 +146,17 @@ class _FilmolyAppState extends State<FilmolyApp> {
 //      - Actualizar `webVapidKey`
 //
 // 4) Backend WordPress / REST
-//    - Cambiar `filmolyBaseUrl` en `lib/api/filmoly_api.dart`.
+//    - Cambiar `filmaniakBaseUrl` en `lib/api/filmaniak_api.dart`.
 //    - Revisar rutas/prefijos en `wordpress_backend/*.php`:
-//      - Namespace REST (`filmoly/v1/...`)
-//      - Funciones/prefijos (`filmoly_...`) si quieres renombrar.
+//      - Namespace REST (`filmaniak/v1/...`)
+//      - Funciones/prefijos (`filmaniak_...`) si quieres renombrar.
 //
 // 5) Secretos y configuracion sensible (wp-config.php)
 //    - NO hardcodear claves en snippets o plugins.
 //    - Definir en `wp-config.php` al menos:
-//      - `FILMOLY_FIREBASE_PROJECT_ID`
-//      - `FILMOLY_FIREBASE_SERVICE_ACCOUNT_PATH`
-//      - `FILMOLY_RECAPTCHA_SECRET_KEY`
+//      - `FILMANIAK_FIREBASE_PROJECT_ID`
+//      - `FILMANIAK_FIREBASE_SERVICE_ACCOUNT_PATH`
+//      - `FILMANIAK_RECAPTCHA_SECRET_KEY`
 //    - Verificar que `wordpress_backend/recaptcha.php` y `notificaciones.php`
 //      lean esas constantes.
 //

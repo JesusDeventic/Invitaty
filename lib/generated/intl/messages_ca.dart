@@ -23,7 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(seconds) =>
       "Usuari o contrasenya incorrectes. Per favor espera ${seconds} segons abans de tornar-ho a intentar";
 
-  static String m1(username) => "Perfil de @${username} a Filmoly";
+  static String m1(username) => "Perfil de @${username} a Filmaniak";
 
   static String m2(username) => "QR per @${username}";
 
@@ -36,10 +36,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionYes": MessageLookupByLibrary.simpleMessage("Sí"),
     "ageChipPrefix": MessageLookupByLibrary.simpleMessage("Edat: "),
     "andLabel": MessageLookupByLibrary.simpleMessage("i"),
-    "appName": MessageLookupByLibrary.simpleMessage("Filmoly"),
+    "appName": MessageLookupByLibrary.simpleMessage("Filmaniak"),
     "appVersion10Code": MessageLookupByLibrary.simpleMessage("v1.0.0"),
     "appVersion10Description": MessageLookupByLibrary.simpleMessage(
-      "· Versió inicial de Filmoly.\n· Login, registre i recuperació de contrasenya.\n· Connexió amb La Retroteca (WordPress).",
+      "· Versió inicial de Filmaniak.\n· Login, registre i recuperació de contrasenya.\n· Connexió amb La Retroteca (WordPress).",
     ),
     "appVersionChangeLogTitle": MessageLookupByLibrary.simpleMessage(
       "Registre de canvis",
@@ -91,10 +91,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Vols desar els canvis realitzats?",
     ),
     "dialogErrorAppVersion": MessageLookupByLibrary.simpleMessage(
-      "Hi ha una nova versió de Filmoly disponible.\nActualitza l\'app per continuar.",
+      "Hi ha una nova versió de Filmaniak disponible.\nActualitza l\'app per continuar.",
     ),
     "dialogErrorServerConnection": MessageLookupByLibrary.simpleMessage(
-      "No s\'ha pogut connectar amb el servidor de Filmoly.",
+      "No s\'ha pogut connectar amb el servidor de Filmaniak.",
     ),
     "dialogErrorServerMaintenance": MessageLookupByLibrary.simpleMessage(
       "L\'aplicació està en manteniment en aquest moment. Torna-ho a provar més tard.",
@@ -155,9 +155,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
       "És una aplicació amb una base de dades de cinema i sèries, amb una sèrie d\'eines que permeten als usuaris interactuar amb altres membres, crear llistes, afegir valoracions i ressenyes entre altres funcionalitats.",
     ),
-    "faq1Question": MessageLookupByLibrary.simpleMessage("Què és Filmoly?"),
+    "faq1Question": MessageLookupByLibrary.simpleMessage("Què és Filmaniak?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "No, Filmoly no és una aplicació de streaming, només funciona com a base de dades amb funcionalitats diverses sobre aquestes dades.",
+      "No, Filmaniak no és una aplicació de streaming, només funciona com a base de dades amb funcionalitats diverses sobre aquestes dades.",
     ),
     "faq2Question": MessageLookupByLibrary.simpleMessage(
       "Es poden veure pel·lícules i sèries?",
@@ -282,7 +282,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "socialWhatsappLabel": MessageLookupByLibrary.simpleMessage("WhatsApp"),
     "statusChipPrefix": MessageLookupByLibrary.simpleMessage("Estat: "),
-    "subjectSupport": MessageLookupByLibrary.simpleMessage("Contacte Filmoly"),
+    "subjectSupport": MessageLookupByLibrary.simpleMessage(
+      "Contacte Filmaniak",
+    ),
     "success": MessageLookupByLibrary.simpleMessage("Èxit"),
     "termsAndConditionsLabel": MessageLookupByLibrary.simpleMessage(
       "Termes i condicions",

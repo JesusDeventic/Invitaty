@@ -1,4 +1,4 @@
-import 'package:filmoly/generated/l10n.dart';
+import 'package:filmaniak/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 /// Página de FAQs (misma estructura que Fitcron FAQPage).

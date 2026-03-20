@@ -1,6 +1,6 @@
 {
   "@@locale": "fr",
-  "appName": "Filmoly",
+  "appName": "Filmaniak",
   "signIn": "Sign in",
   "signUp": "Sign up",
   "userOrEmail": "Username or email",
@@ -39,7 +39,7 @@
   "logout": "Log out",
   "appVersionChangeLogTitle": "Changelog",
   "appVersion10Code": "v1.0.0",
-  "appVersion10Description": "· Initial release of Filmoly.\n· Login, register and password recovery.\n· Connection with La Retroteca (WordPress).",
+  "appVersion10Description": "· Initial release of Filmaniak.\n· Login, register and password recovery.\n· Connection with La Retroteca (WordPress).",
   "languageArabic": "Arabic",
   "languageCatalan": "Catalan",
   "languageChinese": "Chinese",

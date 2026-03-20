@@ -23,10 +23,10 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "andLabel": MessageLookupByLibrary.simpleMessage("i"),
-    "appName": MessageLookupByLibrary.simpleMessage("Filmoly"),
+    "appName": MessageLookupByLibrary.simpleMessage("Filmaniak"),
     "appVersion10Code": MessageLookupByLibrary.simpleMessage("v1.0.0"),
     "appVersion10Description": MessageLookupByLibrary.simpleMessage(
-      "· Initial release of Filmoly.\n· Login, register and password recovery.\n· Connection with La Retroteca (WordPress).",
+      "· Initial release of Filmaniak.\n· Login, register and password recovery.\n· Connection with La Retroteca (WordPress).",
     ),
     "appVersionChangeLogTitle": MessageLookupByLibrary.simpleMessage(
       "Changelog",

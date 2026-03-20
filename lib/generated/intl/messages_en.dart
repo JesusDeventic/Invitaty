@@ -23,7 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(seconds) =>
       "Incorrect username or password. Please wait ${seconds} seconds before trying again";
 
-  static String m1(username) => "Profile of @${username} on Filmoly";
+  static String m1(username) => "Profile of @${username} on Filmaniak";
 
   static String m2(username) => "QR for @${username}";
 
@@ -36,10 +36,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionYes": MessageLookupByLibrary.simpleMessage("Yes"),
     "ageChipPrefix": MessageLookupByLibrary.simpleMessage("Age: "),
     "andLabel": MessageLookupByLibrary.simpleMessage("and"),
-    "appName": MessageLookupByLibrary.simpleMessage("Filmoly"),
+    "appName": MessageLookupByLibrary.simpleMessage("Filmaniak"),
     "appVersion10Code": MessageLookupByLibrary.simpleMessage("v1.0.0"),
     "appVersion10Description": MessageLookupByLibrary.simpleMessage(
-      "· Initial release of Filmoly.\n· Login, register and password recovery.\n· Connection with La Retroteca (WordPress).",
+      "· Initial release of Filmaniak.\n· Login, register and password recovery.\n· Connection with La Retroteca (WordPress).",
     ),
     "appVersionChangeLogTitle": MessageLookupByLibrary.simpleMessage(
       "Changelog",
@@ -101,10 +101,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Password",
     ),
     "dialogErrorAppVersion": MessageLookupByLibrary.simpleMessage(
-      "A new version of Filmoly is available.\nPlease update the app to continue.",
+      "A new version of Filmaniak is available.\nPlease update the app to continue.",
     ),
     "dialogErrorServerConnection": MessageLookupByLibrary.simpleMessage(
-      "Could not connect to the Filmoly server.",
+      "Could not connect to the Filmaniak server.",
     ),
     "dialogErrorServerMaintenance": MessageLookupByLibrary.simpleMessage(
       "The application is currently in maintenance mode. Please try again later.",
@@ -174,9 +174,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
       "It is an app with a database of films and TV series, with a set of tools that let users interact with other members, create lists, add ratings and reviews, among other features.",
     ),
-    "faq1Question": MessageLookupByLibrary.simpleMessage("What is Filmoly?"),
+    "faq1Question": MessageLookupByLibrary.simpleMessage("What is Filmaniak?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "No, Filmoly is not a streaming app; it only works as a database with various features around that data.",
+      "No, Filmaniak is not a streaming app; it only works as a database with various features around that data.",
     ),
     "faq2Question": MessageLookupByLibrary.simpleMessage(
       "Can I watch films and series?",
@@ -361,7 +361,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "socialWhatsappLabel": MessageLookupByLibrary.simpleMessage("WhatsApp"),
     "statusChipPrefix": MessageLookupByLibrary.simpleMessage("Status: "),
-    "subjectSupport": MessageLookupByLibrary.simpleMessage("Filmoly contact"),
+    "subjectSupport": MessageLookupByLibrary.simpleMessage("Filmaniak contact"),
     "success": MessageLookupByLibrary.simpleMessage("Success"),
     "termsAndConditionsLabel": MessageLookupByLibrary.simpleMessage(
       "Terms and conditions",

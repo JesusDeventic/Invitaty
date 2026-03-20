@@ -1,6 +1,6 @@
 <?php
 /**
- * Filmoly Update User Endpoint
+ * Filmaniak Update User Endpoint
  */
 
 if (!defined('ABSPATH')) {
@@ -16,41 +16,41 @@ require_once ABSPATH . 'wp-admin/includes/image.php';
  * AVATAR HELPERS (fallback a Gravatar si no hay avatar propio)
  * =========================================================
  */
-if (!function_exists('filmoly_avatar_path')) {
-    function filmoly_avatar_path($user_id) {
+if (!function_exists('filmaniak_avatar_path')) {
+    function filmaniak_avatar_path($user_id) {
         $upload_dir = wp_upload_dir();
         return $upload_dir['basedir'] . '/app_avatars/' . (int) $user_id . '.webp';
     }
 }
 
-if (!function_exists('filmoly_avatar_url')) {
-    function filmoly_avatar_url($user_id) {
+if (!function_exists('filmaniak_avatar_url')) {
+    function filmaniak_avatar_url($user_id) {
         $upload_dir = wp_upload_dir();
         return $upload_dir['baseurl'] . '/app_avatars/' . (int) $user_id . '.webp';
     }
 }
 
-if (!function_exists('filmoly_get_user_avatar_url')) {
-    function filmoly_get_user_avatar_url($user_id) {
-        $path = filmoly_avatar_path($user_id);
+if (!function_exists('filmaniak_get_user_avatar_url')) {
+    function filmaniak_get_user_avatar_url($user_id) {
+        $path = filmaniak_avatar_path($user_id);
         if (file_exists($path)) {
             // Cache-buster automático usando la fecha de modificación del archivo
-            return add_query_arg('v', (string) filemtime($path), filmoly_avatar_url($user_id));
+            return add_query_arg('v', (string) filemtime($path), filmaniak_avatar_url($user_id));
         }
         return get_avatar_url($user_id);
     }
 }
 
-if (!function_exists('filmoly_delete_old_avatar_if_exists')) {
-    function filmoly_delete_old_avatar_if_exists($user_id) {
-        $path = filmoly_avatar_path($user_id);
+if (!function_exists('filmaniak_delete_old_avatar_if_exists')) {
+    function filmaniak_delete_old_avatar_if_exists($user_id) {
+        $path = filmaniak_avatar_path($user_id);
         if (file_exists($path)) {
             @unlink($path);
         }
     }
 }
 
-function filmoly_upload_dir_app_avatars($dirs) {
+function filmaniak_upload_dir_app_avatars($dirs) {
     // Directorio plano sin subcarpetas por año/mes
     $dirs['subdir'] = '/app_avatars';
     $dirs['path']   = $dirs['basedir'] . '/app_avatars';
@@ -64,15 +64,15 @@ function filmoly_upload_dir_app_avatars($dirs) {
  * =========================================================
  */
 add_action('rest_api_init', function () {
-    register_rest_route('filmoly/v1', '/user/update', [
+    register_rest_route('filmaniak/v1', '/user/update', [
         'methods' => 'POST',
-        'callback' => 'filmoly_update_user',
+        'callback' => 'filmaniak_update_user',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route('filmoly/v1', '/user/public/(?P<username>[A-Za-z0-9._-]+)', [
+    register_rest_route('filmaniak/v1', '/user/public/(?P<username>[A-Za-z0-9._-]+)', [
         'methods' => 'GET',
-        'callback' => 'filmoly_get_public_user_by_username',
+        'callback' => 'filmaniak_get_public_user_by_username',
         'permission_callback' => '__return_true',
     ]);
 });
@@ -82,7 +82,7 @@ add_action('rest_api_init', function () {
  * HELPERS
  * =========================================================
  */
-function filmoly_get_full_user_data($user_id) {
+function filmaniak_get_full_user_data($user_id) {
     global $wpdb;
 
     $user = get_userdata($user_id);
@@ -91,11 +91,11 @@ function filmoly_get_full_user_data($user_id) {
         return null;
     }
 
-    $retroteca_vip = get_user_meta($user->ID, 'filmoly_retroteca_vip', false);
+    $retroteca_vip = get_user_meta($user->ID, 'filmaniak_retroteca_vip', false);
     $retroteca_vip = ($retroteca_vip === '') ? 1 : $retroteca_vip;
 
-    // Último login desde wp_filmoly_sessions (MAX created_at)
-    $sessions_table = $wpdb->prefix . 'filmoly_sessions';
+    // Último login desde wp_filmaniak_sessions (MAX created_at)
+    $sessions_table = $wpdb->prefix . 'filmaniak_sessions';
     $last_login = $wpdb->get_var($wpdb->prepare(
         "SELECT MAX(created_at) FROM {$sessions_table} WHERE user_id = %d",
         $user->ID
@@ -111,24 +111,24 @@ function filmoly_get_full_user_data($user_id) {
         'last_name' => get_user_meta($user->ID, 'last_name', true) ?: '',
         'user_registered' => $user->user_registered,
         'description' => $user->description ?: '',
-        'avatar_url' => function_exists('filmoly_get_user_avatar_url')
-            ? filmoly_get_user_avatar_url($user->ID)
+        'avatar_url' => function_exists('filmaniak_get_user_avatar_url')
+            ? filmaniak_get_user_avatar_url($user->ID)
             : get_avatar_url($user->ID),
-        'language' => get_user_meta($user->ID, 'filmoly_language', true) ?: 'es',
-        'start_day_week' => get_user_meta($user->ID, 'filmoly_start_day_week', true) ?: 'monday',
-        'date_format' => get_user_meta($user->ID, 'filmoly_date_format', true) ?: 'dd/MM/yyyy',
-        'country' => get_user_meta($user->ID, 'filmoly_country', true) ?: '',
-        'birthdate' => get_user_meta($user->ID, 'filmoly_birthdate', true) ?: '',
-        'filmoly_retroteca_vip' => (bool) $retroteca_vip,
-        'marketing_consent' => (bool) get_user_meta($user->ID, 'filmoly_marketing_consent', true),
-        'account_status' => get_user_meta($user->ID, 'filmoly_account_status', true) ?: 'active',
-        'filmoly_last_login' => $last_login ?: '',
-        'filmoly_review_status' => get_user_meta($user->ID, 'filmoly_review_status', true) ?: 'none',
-        'filmoly_review_prompted_at' => get_user_meta($user->ID, 'filmoly_review_prompted_at', true) ?: '',
+        'language' => get_user_meta($user->ID, 'filmaniak_language', true) ?: 'es',
+        'start_day_week' => get_user_meta($user->ID, 'filmaniak_start_day_week', true) ?: 'monday',
+        'date_format' => get_user_meta($user->ID, 'filmaniak_date_format', true) ?: 'dd/MM/yyyy',
+        'country' => get_user_meta($user->ID, 'filmaniak_country', true) ?: '',
+        'birthdate' => get_user_meta($user->ID, 'filmaniak_birthdate', true) ?: '',
+        'filmaniak_retroteca_vip' => (bool) $retroteca_vip,
+        'marketing_consent' => (bool) get_user_meta($user->ID, 'filmaniak_marketing_consent', true),
+        'account_status' => get_user_meta($user->ID, 'filmaniak_account_status', true) ?: 'active',
+        'filmaniak_last_login' => $last_login ?: '',
+        'filmaniak_review_status' => get_user_meta($user->ID, 'filmaniak_review_status', true) ?: 'none',
+        'filmaniak_review_prompted_at' => get_user_meta($user->ID, 'filmaniak_review_prompted_at', true) ?: '',
     ];
 }
 
-function filmoly_sanitize_profile_url($raw_url) {
+function filmaniak_sanitize_profile_url($raw_url) {
     $raw_url = trim((string) $raw_url);
     if ($raw_url === '') {
         return '';
@@ -146,7 +146,7 @@ function filmoly_sanitize_profile_url($raw_url) {
     return $url;
 }
 
-function filmoly_get_public_user_by_username(WP_REST_Request $request) {
+function filmaniak_get_public_user_by_username(WP_REST_Request $request) {
     $raw_username = (string) $request->get_param('username');
     $username = sanitize_user(wp_unslash($raw_username), true);
 
@@ -159,12 +159,12 @@ function filmoly_get_public_user_by_username(WP_REST_Request $request) {
         return new WP_Error('user_not_found', 'Usuario no encontrado.', ['status' => 404]);
     }
 
-    $account_status = get_user_meta($user->ID, 'filmoly_account_status', true) ?: 'active';
+    $account_status = get_user_meta($user->ID, 'filmaniak_account_status', true) ?: 'active';
     if ($account_status !== 'active') {
         return new WP_Error('user_not_available', 'Perfil no disponible.', ['status' => 404]);
     }
 
-    $data = filmoly_get_full_user_data($user->ID);
+    $data = filmaniak_get_full_user_data($user->ID);
     if (!$data) {
         return new WP_Error('user_not_found', 'Usuario no encontrado.', ['status' => 404]);
     }
@@ -175,7 +175,7 @@ function filmoly_get_public_user_by_username(WP_REST_Request $request) {
     ], 200);
 }
 
-function filmoly_normalize_birthdate($raw_date) {
+function filmaniak_normalize_birthdate($raw_date) {
     $raw_date = trim((string) $raw_date);
 
     if ($raw_date === '') {
@@ -205,12 +205,12 @@ function filmoly_normalize_birthdate($raw_date) {
  * CALLBACK
  * =========================================================
  */
-function filmoly_update_user(WP_REST_Request $request) {
-    if (!function_exists('filmoly_auth_validate_token')) {
-        return new WP_Error('auth_not_available', 'La autenticación de Filmoly no está disponible.', ['status' => 500]);
+function filmaniak_update_user(WP_REST_Request $request) {
+    if (!function_exists('filmaniak_auth_validate_token')) {
+        return new WP_Error('auth_not_available', 'La autenticación de Filmaniak no está disponible.', ['status' => 500]);
     }
 
-    $user_id = filmoly_auth_validate_token($request);
+    $user_id = filmaniak_auth_validate_token($request);
 
     if (is_wp_error($user_id)) {
         return $user_id;
@@ -222,7 +222,7 @@ function filmoly_update_user(WP_REST_Request $request) {
         return new WP_Error('invalid_user', 'Usuario no válido.', ['status' => 404]);
     }
 
-    $account_status = get_user_meta($user_id, 'filmoly_account_status', true) ?: 'active';
+    $account_status = get_user_meta($user_id, 'filmaniak_account_status', true) ?: 'active';
     if ($account_status !== 'active') {
         return new WP_Error('account_not_active', 'La cuenta no está activa.', ['status' => 403]);
     }
@@ -265,7 +265,7 @@ function filmoly_update_user(WP_REST_Request $request) {
     }
 
     if (isset($_POST['user_url'])) {
-        $user_url = filmoly_sanitize_profile_url(wp_unslash($_POST['user_url']));
+        $user_url = filmaniak_sanitize_profile_url(wp_unslash($_POST['user_url']));
         if ($user_url === false) {
             return new WP_Error('invalid_url', 'La URL de la web/blog no es válida.', ['status' => 400]);
         }
@@ -286,45 +286,45 @@ function filmoly_update_user(WP_REST_Request $request) {
 
     /**
      * =========================================================
-     * USERMETA FILMOLY
+     * USERMETA FILMANIAK
      * =========================================================
      */
 
     if (isset($_POST['language'])) {
-        update_user_meta($user_id, 'filmoly_language', sanitize_text_field(wp_unslash($_POST['language'])));
+        update_user_meta($user_id, 'filmaniak_language', sanitize_text_field(wp_unslash($_POST['language'])));
     }
 
     if (isset($_POST['start_day_week'])) {
         $start_day_week = sanitize_text_field(wp_unslash($_POST['start_day_week']));
 
         if (in_array($start_day_week, ['monday', 'sunday'], true)) {
-            update_user_meta($user_id, 'filmoly_start_day_week', $start_day_week);
+            update_user_meta($user_id, 'filmaniak_start_day_week', $start_day_week);
         }
     }
 
     if (isset($_POST['date_format'])) {
-        update_user_meta($user_id, 'filmoly_date_format', sanitize_text_field(wp_unslash($_POST['date_format'])));
+        update_user_meta($user_id, 'filmaniak_date_format', sanitize_text_field(wp_unslash($_POST['date_format'])));
     }
 
     if (isset($_POST['country'])) {
-        update_user_meta($user_id, 'filmoly_country', strtoupper(sanitize_text_field(wp_unslash($_POST['country']))));
+        update_user_meta($user_id, 'filmaniak_country', strtoupper(sanitize_text_field(wp_unslash($_POST['country']))));
     }
 
     if (isset($_POST['birthdate'])) {
-        $normalized_birthdate = filmoly_normalize_birthdate(wp_unslash($_POST['birthdate']));
+        $normalized_birthdate = filmaniak_normalize_birthdate(wp_unslash($_POST['birthdate']));
 
         if ($normalized_birthdate === false) {
             return new WP_Error('invalid_birthdate', 'La fecha de nacimiento no tiene un formato válido.', ['status' => 400]);
         }
 
-        update_user_meta($user_id, 'filmoly_birthdate', $normalized_birthdate);
+        update_user_meta($user_id, 'filmaniak_birthdate', $normalized_birthdate);
     }
 
     if (isset($_POST['marketing_consent'])) {
         $marketing_consent = filter_var(wp_unslash($_POST['marketing_consent']), FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
 
         if ($marketing_consent !== null) {
-            update_user_meta($user_id, 'filmoly_marketing_consent', $marketing_consent ? 1 : 0);
+            update_user_meta($user_id, 'filmaniak_marketing_consent', $marketing_consent ? 1 : 0);
         }
     }
 
@@ -341,7 +341,7 @@ function filmoly_update_user(WP_REST_Request $request) {
     }
 
     if ($delete_avatar) {
-        filmoly_delete_old_avatar_if_exists($user_id);
+        filmaniak_delete_old_avatar_if_exists($user_id);
     }
 
     if (!empty($_FILES['avatar']) && !empty($_FILES['avatar']['tmp_name'])) {
@@ -366,15 +366,15 @@ function filmoly_update_user(WP_REST_Request $request) {
         $upload_dir = wp_upload_dir();
         wp_mkdir_p($upload_dir['basedir'] . '/app_avatars');
 
-        add_filter('upload_dir', 'filmoly_upload_dir_app_avatars');
+        add_filter('upload_dir', 'filmaniak_upload_dir_app_avatars');
         $uploaded = wp_handle_upload($file, $overrides);
-        remove_filter('upload_dir', 'filmoly_upload_dir_app_avatars');
+        remove_filter('upload_dir', 'filmaniak_upload_dir_app_avatars');
 
         if (isset($uploaded['error'])) {
             return new WP_Error('upload_failed', $uploaded['error'], ['status' => 400]);
         }
 
-        $final_path = filmoly_avatar_path($user_id);
+        $final_path = filmaniak_avatar_path($user_id);
 
         // Convertir a WebP si viene png/jpg; si falla se usa el archivo original
         $src_file = $uploaded['file'];
@@ -397,6 +397,6 @@ function filmoly_update_user(WP_REST_Request $request) {
     return new WP_REST_Response([
         'success' => true,
         'message' => 'Usuario actualizado correctamente.',
-        'user' => filmoly_get_full_user_data($user_id),
+        'user' => filmaniak_get_full_user_data($user_id),
     ], 200);
 }
