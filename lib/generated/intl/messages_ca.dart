@@ -181,15 +181,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Expandir"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "És una aplicació amb una base de dades de pel·lícules, sèries i altre contingut audiovisual, amb eines perquè els usuaris interactuïn amb altres membres, creïn llistes, afegeixin valoracions i ressenyes, i més.",
+      "És una aplicació per crear invitacions per a tota mena d\'esdeveniments. Permet escollir plantilles i personalitzar la invitació, compartir-la a les xarxes socials, rebre notificacions de confirmació i fer el seguiment de les assistències.",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("Què és Invitaty?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "No, Invitaty no és una aplicació de streaming; només funciona com a base de dades amb funcionalitats sobre el contingut.",
+      "No, pots utilitzar Invitaty per dissenyar les teves invitacions, però per poder publicar-les necessites fer un pagament per cada una.",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage(
-      "Es poden veure pel·lícules i sèries?",
-    ),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("És gratuït?"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "Pots eliminar el teu usuari des dels ajustos del compte a l\'app. Això elimina tot el relacionat amb el teu usuari. Aquesta acció és irreversible.",
     ),
@@ -217,6 +215,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "S\'han desat els ajustos correctament.",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("Anar a l\'inici"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage(
       "Correu electrònic no vàlid",
     ),

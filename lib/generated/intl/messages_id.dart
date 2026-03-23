@@ -175,15 +175,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Luaskan"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "Ini adalah aplikasi dengan database film, serial, dan konten audiovisual lainnya, serta fitur untuk berinteraksi dengan anggota lain, daftar, penilaian, dan ulasan.",
+      "Ini adalah aplikasi untuk membuat undangan untuk berbagai jenis acara. Anda dapat memilih template, menyesuaikan undangan, membagikannya di media sosial, menerima notifikasi konfirmasi, dan memantau kehadiran.",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("Apa itu Invitaty?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "Tidak, Invitaty bukan aplikasi streaming; ini hanya database dengan berbagai fitur terkait konten.",
+      "Tidak, Anda dapat menggunakan Invitaty untuk mendesain undangan Anda, tetapi untuk mempublikasikannya Anda perlu melakukan pembayaran untuk setiap undangan.",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage(
-      "Bisakah menonton film dan serial?",
-    ),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("Apakah gratis?"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "Anda dapat menghapus akun di pengaturan akun dalam aplikasi. Semua data terkait akan dihapus. Tindakan ini tidak dapat dibatalkan.",
     ),
@@ -209,6 +207,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Pengaturan berhasil disimpan",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("Ke beranda"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("Email tidak valid"),
     "keepSession": MessageLookupByLibrary.simpleMessage("Tetap masuk"),
     "language": MessageLookupByLibrary.simpleMessage("Bahasa"),

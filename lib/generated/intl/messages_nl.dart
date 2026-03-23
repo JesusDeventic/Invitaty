@@ -179,15 +179,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Uitvouwen"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "Het is een app met een database van films, series en andere audiovisuele content, met functies om met andere leden te communiceren, lijsten te maken, beoordelingen en recensies, en meer.",
+      "Het is een app om uitnodigingen te maken voor allerlei soorten evenementen. Je kunt templates kiezen, de uitnodiging personaliseren, delen op social media, bevestigingsmeldingen ontvangen en de aanwezigheid bijhouden.",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("Wat is Invitaty?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "Nee, Invitaty is geen streaming-app; het is alleen een database met diverse functies rond de content.",
+      "Nee, je kunt Invitaty gebruiken om je uitnodigingen te ontwerpen, maar om ze te publiceren moet je voor elke uitnodiging apart betalen.",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage(
-      "Kan ik films en series kijken?",
-    ),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("Is het gratis?"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "Je kunt je account verwijderen in de accountinstellingen in de app. Alles wat aan je account gekoppeld is, wordt verwijderd. Deze actie kan niet ongedaan worden gemaakt.",
     ),
@@ -217,6 +215,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Instellingen opgeslagen",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("Naar start"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("Ongeldige e-mail"),
     "keepSession": MessageLookupByLibrary.simpleMessage("Ingelogd blijven"),
     "language": MessageLookupByLibrary.simpleMessage("Taal"),

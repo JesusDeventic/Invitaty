@@ -4,9 +4,7 @@ import 'package:invitaty/api/invitaty_api.dart';
 import 'package:invitaty/core/global_functions.dart';
 import 'package:invitaty/core/global_variables.dart';
 import 'package:invitaty/generated/l10n.dart';
-import 'package:invitaty/page/messages/private_conversations_page.dart';
 import 'package:invitaty/page/users/account_profile_page.dart';
-import 'package:invitaty/page/users/public_user_profile_page.dart';
 import 'package:invitaty/page/users/contact_page.dart';
 import 'package:invitaty/page/users/general_settings_page.dart';
 import 'package:invitaty/page/users/faq_page.dart';
@@ -25,18 +23,14 @@ class HomePlaceholderPage extends StatefulWidget {
 
 class _HomePlaceholderPageState extends State<HomePlaceholderPage> {
   int _unreadNotificationsCount = 0;
-  int _unreadMessagesCount = 0;
-  bool _collapseMenu = false;
   Timer? _unreadTimer;
 
   @override
   void initState() {
     super.initState();
     _refreshUnreadNotifications();
-    _refreshUnreadMessages();
     _unreadTimer = Timer.periodic(const Duration(seconds: 30), (_) {
       if (!mounted) return;
-      _refreshUnreadMessages();
       _refreshUnreadNotifications();
     });
   }
@@ -45,11 +39,6 @@ class _HomePlaceholderPageState extends State<HomePlaceholderPage> {
   void dispose() {
     _unreadTimer?.cancel();
     super.dispose();
-  }
-
-  Future<void> _refreshUnreadMessages() async {
-    final count = await InvitatyApi.getUnreadMessagesCount();
-    if (mounted) setState(() => _unreadMessagesCount = count);
   }
 
   Future<void> _refreshUnreadNotifications() async {
@@ -63,77 +52,6 @@ class _HomePlaceholderPageState extends State<HomePlaceholderPage> {
       width: 1,
       margin: const EdgeInsets.symmetric(horizontal: 8),
       color: Theme.of(context).colorScheme.outline,
-    );
-  }
-
-  Widget _buildPrivateChatsButton() {
-    final isDesktop = MediaQuery.of(context).size.width > 800;
-    return Tooltip(
-      message: S.current.privateMessages,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(50),
-        mouseCursor: SystemMouseCursors.click,
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const PrivateConversationsPage(),
-            ),
-          ).then((_) => _refreshUnreadMessages());
-        },
-        child: Padding(
-          padding: isDesktop ? const EdgeInsets.all(8) : const EdgeInsets.all(2),
-          child: Container(
-            width: isDesktop ? null : 50,
-            height: 50,
-            alignment: Alignment.center,
-            child: Stack(
-              clipBehavior: Clip.none,
-              children: [
-                Icon(
-                  _unreadMessagesCount > 0
-                      ? Icons.mail_rounded
-                      : Icons.mail_outline_rounded,
-                  color: _unreadMessagesCount > 0
-                      ? Theme.of(context).colorScheme.secondary
-                      : Theme.of(context).colorScheme.onSurface,
-                  size: 34,
-                ),
-                if (_unreadMessagesCount > 0)
-                  Positioned(
-                    right: -4,
-                    top: -4,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.error,
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      constraints: const BoxConstraints(
-                        minWidth: 14,
-                        minHeight: 14,
-                      ),
-                      child: Text(
-                        _unreadMessagesCount > 9
-                            ? '9+'
-                            : _unreadMessagesCount.toString(),
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.onError,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
-        ),
-      ),
     );
   }
 
@@ -275,20 +193,10 @@ class _HomePlaceholderPageState extends State<HomePlaceholderPage> {
               children: [
                 Expanded(
                   child: InkWell(
-                    onTap: () {
-                      Navigator.pop(dialogContext);
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PublicUserProfilePage(
-                            username: globalCurrentUser.username,
-                            initialUser: globalCurrentUser,
-                          ),
-                        ),
-                      );
-                    },
+                    // Menú sin acceso al perfil público en esta app.
+                    onTap: null,
                     borderRadius: BorderRadius.circular(8),
-                    mouseCursor: SystemMouseCursors.click,
+                    mouseCursor: SystemMouseCursors.basic,
                     child: Row(
                       children: [
                         userAvatar(
@@ -315,15 +223,7 @@ class _HomePlaceholderPageState extends State<HomePlaceholderPage> {
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
                               ),
-                              Text(
-                                S.current.showMyProfile,
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onPrimary.withValues(alpha: 0.8),
-                                  fontSize: 12,
-                                ),
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 1,
-                              ),
+                              const SizedBox.shrink(),
                             ],
                           ),
                         ),
@@ -563,8 +463,6 @@ class _HomePlaceholderPageState extends State<HomePlaceholderPage> {
           ),
         ),
         actions: [
-          _buildPrivateChatsButton(),
-          if (isDesktop) _buildDesktopAppBarDivider(),
           _buildNotificationIcon(),
           if (isDesktop) _buildDesktopAppBarDivider(),
           _buildUserProfile(),
@@ -578,173 +476,7 @@ class _HomePlaceholderPageState extends State<HomePlaceholderPage> {
         ),
       ),
         body: SafeArea(
-          child: isDesktop ? _buildDesktopBody() : _buildMobileBody(),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDesktopBody() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildSidebar(),
-        Expanded(
           child: _buildMainContent(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMobileBody() {
-    return _buildMainContent();
-  }
-
-  Widget _buildSidebar() {
-    final theme = Theme.of(context);
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 200),
-      width: _collapseMenu ? 70 : 250,
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            right: BorderSide(
-              color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
-              width: 0.5,
-            ),
-          ),
-        ),
-        child: Card(
-          margin: EdgeInsets.zero,
-          shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-          color: theme.colorScheme.primary,
-          surfaceTintColor: theme.colorScheme.primary,
-          child: Column(
-            children: [
-              Expanded(
-                child: ListView(
-                  padding: EdgeInsets.zero,
-                  children: [
-                    SizedBox(
-                      height: 48,
-                      child: ListTile(
-                        selected: true,
-                        selectedTileColor: Colors.transparent,
-                        selectedColor: theme.colorScheme.secondary,
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 16),
-                        visualDensity: VisualDensity.standard,
-                        minVerticalPadding: 0,
-                        title: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            AnimatedOpacity(
-                              duration: const Duration(milliseconds: 200),
-                              opacity: _collapseMenu ? 0.0 : 1.0,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.home_rounded,
-                                    color: theme.colorScheme.secondary,
-                                    size: 32,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: Text(
-                                      S.current.menuHome,
-                                      style: TextStyle(
-                                        color: theme.colorScheme.secondary,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            AnimatedOpacity(
-                              duration: const Duration(milliseconds: 200),
-                              opacity: _collapseMenu ? 1.0 : 0.0,
-                              child: Icon(
-                                Icons.home_rounded,
-                                color: theme.colorScheme.secondary,
-                                size: 32,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Divider(height: 1),
-              SizedBox(
-                height: 40,
-                child: Tooltip(
-                  message: _collapseMenu
-                      ? S.current.expandMenu
-                      : S.current.collapseMenu,
-                  child: TextButton(
-                    style: TextButton.styleFrom(
-                      padding: EdgeInsets.zero,
-                      alignment: Alignment.centerLeft,
-                    ),
-                    onPressed: () {
-                      unFocusGlobal();
-                      setState(() => _collapseMenu = !_collapseMenu);
-                    },
-                    child: AnimatedCrossFade(
-                      duration: const Duration(milliseconds: 200),
-                      crossFadeState: _collapseMenu
-                          ? CrossFadeState.showFirst
-                          : CrossFadeState.showSecond,
-                      firstChild: Center(
-                        child: Icon(
-                          Icons.chevron_right,
-                          color: theme.colorScheme.onPrimary,
-                          size: 20,
-                        ),
-                      ),
-                      secondChild: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.chevron_left,
-                            color: theme.colorScheme.onPrimary,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 8),
-                          Flexible(
-                            child: Text(
-                              S.current.collapseMenu,
-                              style: TextStyle(
-                                color: theme.colorScheme.onPrimary,
-                                fontSize: 12,
-                              ),
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
-                      layoutBuilder: (topChild, topKey, bottomChild, bottomKey) {
-                        return Stack(
-                          clipBehavior: Clip.none,
-                          alignment: Alignment.centerLeft,
-                          children: [
-                            Positioned.fill(key: bottomKey, child: bottomChild),
-                            Positioned.fill(key: topKey, child: topChild),
-                          ],
-                        );
-                      },
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
         ),
       ),
     );
@@ -755,27 +487,19 @@ class _HomePlaceholderPageState extends State<HomePlaceholderPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            '${S.current.welcome}, ${globalCurrentUser.displayName.isNotEmpty ? globalCurrentUser.displayName : globalCurrentUser.username}',
-            style: Theme.of(context).textTheme.titleLarge,
-            textAlign: TextAlign.center,
+          emptyDataWidget(
+            context,
+            Icons.event_note_rounded,
+            S.current.homeEmptyInvitationsTitle,
+            S.current.homeEmptyInvitationsSubtitle,
           ),
-          const SizedBox(height: 24),
-          Text(
-            S.current.appName,
-            style: Theme.of(context).textTheme.headlineSmall,
-          ),
-          const SizedBox(height: 32),
-          // TODO: botón de prueba — eliminar en producción
-          OutlinedButton.icon(
-            icon: const Icon(Icons.person_search_rounded),
-            label: const Text('Ver perfil de puzzleman'),
-            onPressed: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (_) => const PublicUserProfilePage(username: 'puzzleman'),
-              ),
-            ),
+          const SizedBox(height: 20),
+          ElevatedButton.icon(
+            onPressed: () {
+              showCustomSnackBar('Próximamente: crear invitación');
+            },
+            icon: const Icon(Icons.add_rounded),
+            label: Text(S.current.homeCreateInvitationButton),
           ),
         ],
       ),

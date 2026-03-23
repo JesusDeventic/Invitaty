@@ -175,20 +175,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Extinde"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "Este o aplicație cu o bază de date de filme, seriale și alte conținuturi audiovizuale, cu instrumente pentru interacțiunea cu alți membri, liste, evaluări și recenzii.",
+      "Este o aplicație pentru a crea invitații pentru tot felul de evenimente. Vă permite să alegeți șabloane și să personalizați invitația, să o partajați pe rețelele sociale, să primiți notificări de confirmare și să urmăriți prezența.",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("Ce este Invitaty?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "Nu, Invitaty nu este o aplicație de streaming; este doar o bază de date cu diverse funcții legate de conținut.",
+      "Nu, poți folosi Invitaty pentru a-ți proiecta invitațiile, dar pentru a le publica trebuie să efectuezi o plată pentru fiecare.",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage(
-      "Pot viziona filme și seriale?",
-    ),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("Este gratuit?"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "Poți șterge contul din setările contului din aplicație. Se elimină tot ce este asociat contului tău. Această acțiune este ireversibilă.",
     ),
     "faq3Question": MessageLookupByLibrary.simpleMessage(
-      "Cum îmi șterg contul?",
+      "Cum îmi pot șterge contul?",
     ),
     "fieldRequired": MessageLookupByLibrary.simpleMessage(
       "Acest câmp este obligatoriu",
@@ -209,6 +207,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Setări salvate cu succes",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("Mergi la acasă"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("E-mail invalid"),
     "keepSession": MessageLookupByLibrary.simpleMessage(
       "Păstrează-mă conectat",

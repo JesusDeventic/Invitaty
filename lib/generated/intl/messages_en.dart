@@ -167,15 +167,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Expand"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "It is an app with a database of films, series and other audiovisual content, with tools that let users interact with other members, create lists, add ratings and reviews, and more.",
+      "It\'s an app to create invitations for all kinds of events. It lets you choose templates and personalize the invitation, share it on social media, receive confirmation notifications, and track attendance.",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("What is Invitaty?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "No, Invitaty is not a streaming app; it only works as a database with various features around that content.",
+      "No, you can use Invitaty to design your invitations, but to publish them you need to make a payment for each one.",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage(
-      "Can I watch films and series?",
-    ),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("Is it free?"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "You can delete your user from account settings in the app. This removes everything related to your user. This action cannot be undone.",
     ),
@@ -201,6 +199,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Settings saved successfully.",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("Go to home"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("Invalid email"),
     "keepSession": MessageLookupByLibrary.simpleMessage("Keep me signed in"),
     "language": MessageLookupByLibrary.simpleMessage("Language"),

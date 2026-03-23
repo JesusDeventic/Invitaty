@@ -181,20 +181,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Развернуть"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "Это приложение с базой фильмов, сериалов и другого аудиовизуального контента, инструментами для общения с участниками, списками, оценками и отзывами.",
+      "Это приложение для создания приглашений на любые мероприятия. Оно позволяет выбрать шаблоны, настроить приглашение, поделиться им в социальных сетях, получать уведомления о подтверждении и отслеживать посещаемость.",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("Что такое Invitaty?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "Нет, Invitaty — не стриминговое приложение; это база данных с различными функциями вокруг контента.",
+      "Нет, вы можете использовать Invitaty, чтобы оформить свои приглашения, но чтобы их опубликовать, вам нужно оплачивать каждое из них.",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage(
-      "Можно ли смотреть фильмы и сериалы?",
-    ),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("Это бесплатно?"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "Удалить аккаунт можно в настройках аккаунта в приложении. Будут удалены все связанные данные. Это действие необратимо.",
     ),
     "faq3Question": MessageLookupByLibrary.simpleMessage(
-      "Как удалить аккаунт?",
+      "Как удалить свой аккаунт?",
     ),
     "fieldRequired": MessageLookupByLibrary.simpleMessage(
       "Это поле обязательно",
@@ -215,6 +213,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Настройки сохранены",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("На главную"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("Неверный email"),
     "keepSession": MessageLookupByLibrary.simpleMessage("Оставаться в системе"),
     "language": MessageLookupByLibrary.simpleMessage("Язык"),

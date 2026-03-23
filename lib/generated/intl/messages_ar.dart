@@ -175,15 +175,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("توسيع"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "تطبيق يحتوي على قاعدة بيانات للأفلام والمسلسلات والمحتوى السمعي البصري، مع أدوات للتفاعل مع الأعضاء والقوائم والتقييمات والمراجعات وغيرها.",
+      "إنها تطبيق لإنشاء دعوات لجميع أنواع الفعاليات. تتيح لك اختيار القوالب وتخصيص الدعوة ومشاركتها على وسائل التواصل الاجتماعي، وتلقي إشعارات التأكيد وتتبع الحضور.",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("ما هو Invitaty؟"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "لا، Invitaty ليس تطبيق بث؛ إنه قاعدة بيانات فقط مع ميزات متنوعة حول المحتوى.",
+      "لا، يمكنك استخدام Invitaty لتصميم دعواتك، ولكن لكي تتمكن من نشرها تحتاج إلى إجراء دفعة مقابل كل دعوة على حدة.",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage(
-      "هل يمكن مشاهدة الأفلام والمسلسلات؟",
-    ),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("هل هو مجاني؟"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "يمكنك حذف حسابك من إعدادات الحساب داخل التطبيق. سيُزال كل ما يتعلق بحسابك. لا يمكن التراجع عن هذا الإجراء.",
     ),
@@ -203,6 +201,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "تم حفظ الإعدادات",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("الانتقال إلى الرئيسية"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage(
       "بريد إلكتروني غير صالح",
     ),

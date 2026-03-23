@@ -153,27 +153,25 @@ Widget userAvatar(
   required String username,
   double size = 40,
 }) {
-  return Container(
-    width: size,
-    height: size,
-    decoration: BoxDecoration(
-      shape: BoxShape.circle,
-      border: Border.all(
-        color: Theme.of(context).colorScheme.secondary,
-        width: 1,
-      ),
+  // Para evitar "halos" de color (píxeles rosados) en imágenes con alpha,
+  // recortamos con `ClipOval` y evitamos el borde del `Container`.
+  return ClipOval(
+    child: SizedBox(
+      width: size,
+      height: size,
+      child: avatarUrl.isNotEmpty
+          ? Image.network(
+              avatarUrl,
+              fit: BoxFit.cover,
+              filterQuality: FilterQuality.high,
+              errorBuilder: (_, __, ___) => _buildInitialAvatar(
+                context,
+                username,
+                size,
+              ),
+            )
+          : _buildInitialAvatar(context, username, size),
     ),
-    clipBehavior: Clip.antiAlias,
-    child: avatarUrl.isNotEmpty
-        ? Image.network(
-            avatarUrl,
-            fit: BoxFit.cover,
-            width: size,
-            height: size,
-            errorBuilder: (_, __, ___) => _buildInitialAvatar(
-                context, username, size),
-          )
-        : _buildInitialAvatar(context, username, size),
   );
 }
 

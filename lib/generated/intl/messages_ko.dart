@@ -145,17 +145,17 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("펼치기"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "영화·드라마 등 데이터베이스와 다른 회원과의 소통, 목록, 평점, 리뷰 등 기능을 제공하는 앱입니다.",
+      "다양한 종류의 이벤트를 위한 초대장을 만드는 앱입니다. 템플릿을 선택하고 초대장을 개인화한 뒤, 소셜 미디어에 공유하고 확인 알림을 받으며 참석 현황을 추적할 수 있습니다.",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("Invitaty이란?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "아니요. Invitaty은 스트리밍 앱이 아니라 콘텐츠 관련 기능이 있는 데이터베이스입니다.",
+      "아니요. Invitaty로 초대장을 디자인할 수는 있지만, 공개하려면 초대장마다 결제를 해야 합니다.",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage("영화와 드라마를 볼 수 있나요?"),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("무료인가요?"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "앱의 계정 설정에서 삭제할 수 있습니다. 관련 데이터가 모두 삭제되며 되돌릴 수 없습니다.",
     ),
-    "faq3Question": MessageLookupByLibrary.simpleMessage("계정을 삭제하려면?"),
+    "faq3Question": MessageLookupByLibrary.simpleMessage("어떻게 계정을 삭제하나요?"),
     "fieldRequired": MessageLookupByLibrary.simpleMessage("필수 항목입니다"),
     "forgotPassword": MessageLookupByLibrary.simpleMessage("비밀번호를 잊으셨나요?"),
     "generalSettings": MessageLookupByLibrary.simpleMessage("일반 설정"),
@@ -171,6 +171,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "설정이 저장되었습니다",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("홈으로"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("유효하지 않은 이메일"),
     "keepSession": MessageLookupByLibrary.simpleMessage("로그인 상태 유지"),
     "language": MessageLookupByLibrary.simpleMessage("언어"),

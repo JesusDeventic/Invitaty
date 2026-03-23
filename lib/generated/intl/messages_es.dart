@@ -179,15 +179,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Expandir"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "Es una aplicación con una base de datos de películas, series y otro tipo de contenido audiovisual, que dispone de herramientas que permiten a los usuarios interactuar con otros miembros, crear listas, añadir valoraciones y reseñas entre otras funcionalidades.",
+      "Es una aplicación para realizar invitaciones a todo tipo de eventos. Permite escoger plantillas y personalizar la invitación, compartirla por redes sociales, recibir notificaciones de confirmación y realizar el seguimiento de las asistencias.",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("¿Qué es Invitaty?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "No, Invitaty no es una aplicación de streaming, tan solo funciona como base de datos con funcionalidades diversas sobre el contenido.",
+      "No, puedes usar Invitaty para diseñar tus invitaciones, pero para poder publicarlas necesitas realizar un pago por cada una de ellas.",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage(
-      "¿Se pueden ver películas y series?",
-    ),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("¿Es gratis?"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "Puedes eliminar tu usuario desde los ajustes de la cuenta en la propia App. Esto elimina todo lo relacionado y asociado a tu usuario. Esta acción es irreversible.",
     ),
@@ -217,6 +215,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Ajustes guardados correctamente",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("Ir a inicio"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Crear invitación",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Pulsa Crear invitación para empezar",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "Aún no tienes invitaciones creadas",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("Email no válido"),
     "keepSession": MessageLookupByLibrary.simpleMessage(
       "Mantener sesión iniciada",

@@ -122,13 +122,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "errorProcessingImage": MessageLookupByLibrary.simpleMessage("无法处理图片"),
     "expandMenu": MessageLookupByLibrary.simpleMessage("展开"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "这是一款包含电影、剧集及其他视听内容数据库的应用，提供与其他会员互动、列表、评分与评论等功能。",
+      "这是一款用于制作各种活动邀请函的应用。它让你选择模板、个性化邀请函内容、在社交媒体上分享、接收确认通知，并跟踪出席情况。",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("Invitaty 是什么？"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "不可以，Invitaty 不是流媒体应用；它仅作为围绕内容的数据库并提供多种功能。",
+      "不可以。你可以使用 Invitaty 来设计邀请函，但要发布它们，你需要为每一份分别付款。",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage("可以观看电影和剧集吗？"),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("免费吗？"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "您可在应用内的账户设置中删除账户，这将删除与账户相关的所有数据。此操作无法撤销。",
     ),
@@ -146,6 +146,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "generalSettingsSaveSuccess": MessageLookupByLibrary.simpleMessage("设置已保存"),
     "goToHome": MessageLookupByLibrary.simpleMessage("前往首页"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("电子邮箱无效"),
     "keepSession": MessageLookupByLibrary.simpleMessage("保持登录"),
     "language": MessageLookupByLibrary.simpleMessage("语言"),

@@ -181,20 +181,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Розгорнути"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "Це додаток із базою фільмів, серіалів та іншого аудіовізуального контенту, з інструментами для взаємодії з учасниками, списками, оцінками та відгуками.",
+      "Це застосунок для створення запрошень для будь-яких подій. Він дозволяє вибирати шаблони та налаштовувати запрошення, ділитися ним у соцмережах, отримувати сповіщення про підтвердження та відстежувати відвідуваність.",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("Що таке Invitaty?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "Ні, Invitaty — не стримінговий сервіс; це лише база даних з різними функціями щодо контенту.",
+      "Ні, ви можете використовувати Invitaty для створення запрошень, але щоб їх опублікувати, вам потрібно сплатити за кожне з них.",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage(
-      "Чи можна дивитися фільми та серіали?",
-    ),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("Це безкоштовно?"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "Видалити обліковий запис можна в налаштуваннях облікового запису в додатку. Усе пов\'язане з обліковим записом буде видалено. Цю дію неможливо скасувати.",
     ),
     "faq3Question": MessageLookupByLibrary.simpleMessage(
-      "Як видалити обліковий запис?",
+      "Як видалити мій акаунт?",
     ),
     "fieldRequired": MessageLookupByLibrary.simpleMessage(
       "Це поле обов\'язкове",
@@ -217,6 +215,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Налаштування збережено",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("На головну"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("Невірний email"),
     "keepSession": MessageLookupByLibrary.simpleMessage("Залишатися в системі"),
     "language": MessageLookupByLibrary.simpleMessage("Мова"),

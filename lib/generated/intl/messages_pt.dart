@@ -177,15 +177,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Expandir"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "É um aplicativo com um banco de dados de filmes, séries e outros conteúdos audiovisuais, com ferramentas para interagir com outros membros, criar listas, avaliações e resenhas, entre outras funções.",
+      "É um aplicativo para criar convites para todo tipo de evento. Permite escolher modelos e personalizar o convite, compartilhá-lo nas redes sociais, receber notificações de confirmação e acompanhar a presença.",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("O que é o Invitaty?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "Não, o Invitaty não é um app de streaming; é apenas um banco de dados com diversas funcionalidades sobre o conteúdo.",
+      "Não, você pode usar o Invitaty para criar seus convites, mas para publicá-los você precisa fazer um pagamento por cada um.",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage(
-      "Dá para assistir a filmes e séries?",
-    ),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("É gratuito?"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "Você pode excluir sua conta nas configurações da conta no próprio app. Isso remove tudo relacionado à sua conta. Esta ação é irreversível.",
     ),
@@ -213,6 +211,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Configurações salvas com sucesso",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("Ir ao início"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("E-mail inválido"),
     "keepSession": MessageLookupByLibrary.simpleMessage(
       "Manter sessão iniciada",

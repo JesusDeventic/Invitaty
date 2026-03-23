@@ -165,19 +165,21 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Rozwiń"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "To aplikacja z bazą filmów, seriali i innych treści audiowizualnych oraz narzędziami do interakcji z innymi użytkownikami, tworzenia list, ocen i recenzji.",
+      "To aplikacja do tworzenia zaproszeń na wszelkiego rodzaju wydarzenia. Umożliwia wybór szablonów i personalizowanie zaproszenia, udostępnianie w mediach społecznościowych, otrzymywanie powiadomień o potwierdzeniu oraz śledzenie obecności.",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("Czym jest Invitaty?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "Nie, Invitaty nie jest aplikacją streamingową — to tylko baza danych z różnymi funkcjami dotyczącymi treści.",
+      "Nie, możesz używać Invitaty do projektowania zaproszeń, ale aby je opublikować, musisz uiścić płatność za każde z nich.",
     ),
     "faq2Question": MessageLookupByLibrary.simpleMessage(
-      "Czy można oglądać filmy i seriale?",
+      "Czy to jest darmowe?",
     ),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "Możesz usunąć konto w ustawieniach konta w aplikacji. Usunięte zostaną wszystkie powiązane dane. Tej operacji nie można cofnąć.",
     ),
-    "faq3Question": MessageLookupByLibrary.simpleMessage("Jak usunąć konto?"),
+    "faq3Question": MessageLookupByLibrary.simpleMessage(
+      "Jak usunąć moje konto?",
+    ),
     "fieldRequired": MessageLookupByLibrary.simpleMessage(
       "To pole jest wymagane",
     ),
@@ -202,6 +204,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage(
       "Przejdź do strony głównej",
+    ),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
     ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage(
       "Nieprawidłowy e-mail",

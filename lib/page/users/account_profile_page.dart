@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:country_picker/country_picker.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:invitaty/api/invitaty_api.dart';
@@ -246,6 +244,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
         child: Image.memory(
           _newAvatarBytes!,
           fit: BoxFit.cover,
+          filterQuality: FilterQuality.high,
           width: 120,
           height: 120,
         ),
@@ -397,133 +396,8 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
               ),
             ],
           ),
-          const SizedBox(height: 16),
-
-          TextFormField(
-            enabled: _isEditing,
-            minLines: 1,
-            maxLines: 5,
-            maxLength: 500,
-            textCapitalization: TextCapitalization.sentences,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.description_rounded),
-              labelText: S.current.userDescription,
-            ),
-            controller: _descriptionController,
-          ),
-          const SizedBox(height: 8),
-
-
-          TextFormField(
-            enabled: _isEditing,
-            controller: _websiteController,
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.link_rounded),
-              labelText: S.current.webBlogLabel,
-              hintText: S.current.webBlogHint,
-            ),
-            keyboardType: TextInputType.url,
-          ),
-          const SizedBox(height: 16),
-
-          TextFormField(
-            enabled: _isEditing,
-            decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.public_rounded),
-              labelText: S.current.textfieldUserCountryLabel,
-              suffixIcon: _countryCode != null
-                  ? _isEditing
-                      ? Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              Country.parse(_countryCode!).flagEmoji,
-                              style: const TextStyle(fontSize: 24),
-                            ),
-                            IconButton(
-                              tooltip: S.current.removeCountryTooltip,
-                              icon: const Icon(Icons.close_rounded, size: 20),
-                              onPressed: () {
-                                setState(() {
-                                  _countryCode = null;
-                                  _countryController.text = '';
-                                });
-                              },
-                            ),
-                          ],
-                        )
-                      : Text(
-                          Country.parse(_countryCode!).flagEmoji,
-                          style: const TextStyle(fontSize: 24),
-                        )
-                  : null,
-            ),
-            controller: _countryController,
-            readOnly: true,
-            onTap: _isEditing
-                ? () {
-                    showCountryPicker(
-                      context: context,
-                      favorite: _countryCode != null ? [_countryCode!] : [],
-                      showPhoneCode: false,
-                      onSelect: (Country country) {
-                        setState(() {
-                          _countryCode = country.countryCode;
-                          _countryController.text = country.displayNameNoCountryCode;
-                        });
-                      },
-                    );
-                  }
-                : null,
-          ),
-          const SizedBox(height: 16),
-
-          
-
-          TextFormField(
-            enabled: _isEditing,
-            style: const TextStyle(color: Colors.transparent),
-            decoration: InputDecoration(
-              labelText: S.current.textfieldUserBirthdayLabel,
-              prefixIcon: const Icon(Icons.cake_rounded),
-              prefixText: formatDate(_birthdateController.text),
-              suffixIcon: _isEditing && _birthdateController.text.trim().isNotEmpty
-                  ? IconButton(
-                      tooltip: S.current.removeBirthdateTooltip,
-                      icon: const Icon(Icons.close_rounded, size: 20),
-                      onPressed: () {
-                        setState(() {
-                          _birthdateController.text = '';
-                        });
-                      },
-                    )
-                  : null,
-              suffixText: _birthdateController.text.isEmpty
-                  ? ''
-                  : '${formatAgeFromBirthday(
-                    formatDate(_birthdateController.text),
-                    inputFormat: globalCurrentUser.dateFormat,
-                  )} ${S.current.userYears}',
-            ),
-            controller: _birthdateController,
-            readOnly: true,
-            onTap: _isEditing
-                ? () async {
-                    final selected = await showDatePicker(
-                      context: context,
-                      initialDate: DateTime(DateTime.now().year - 25),
-                      firstDate: DateTime(1900),
-                      lastDate: DateTime(DateTime.now().year - 14),
-                    );
-                    if (selected != null) {
-                      setState(() {
-                        _birthdateController.text =
-                            '${selected.year}-${selected.month.toString().padLeft(2, '0')}-${selected.day.toString().padLeft(2, '0')}';
-                      });
-                    }
-                  }
-                : null,
-          ),
+          // Ocultamos campos de edición: descripción, página web, país y fecha de nacimiento.
+          // (No borramos la lógica: se mantienen los controllers y el guardado en `_saveUser`.)
           const SizedBox(height: 16),
 
           SwitchListTile(

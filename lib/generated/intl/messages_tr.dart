@@ -173,15 +173,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Genişlet"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "Filmler, diziler ve diğer görsel-işitsel içerikler için bir veritabanı sunan; üyelerle etkileşim, listeler, puanlar ve incelemeler gibi özellikler içeren bir uygulamadır.",
+      "Bu, her türlü etkinlik için davetiye oluşturmanıza yardımcı olan bir uygulamadır. Şablon seçmenize ve davetiyenizi kişiselleştirmenize, sosyal medyada paylaşmanıza, onay bildirimleri almanıza ve katılımı takip etmenize olanak tanır.",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("Invitaty nedir?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "Hayır, Invitaty bir yayın uygulaması değildir; yalnızca içerikle ilgili çeşitli özelliklere sahip bir veritabanıdır.",
+      "Hayır, davetiyelerinizi tasarlamak için Invitaty\'yi kullanabilirsiniz; ancak yayınlayabilmek için her biri için ödeme yapmanız gerekir.",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage(
-      "Film ve dizi izlenebilir mi?",
-    ),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("Ücretsiz mi?"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "Hesabınızı uygulamadaki hesap ayarlarından silebilirsiniz. Hesabınızla ilişkili her şey kaldırılır. Bu işlem geri alınamaz.",
     ),
@@ -205,6 +203,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Ayarlar kaydedildi",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("Ana sayfaya git"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("Geçersiz e-posta"),
     "keepSession": MessageLookupByLibrary.simpleMessage("Oturumu açık tut"),
     "language": MessageLookupByLibrary.simpleMessage("Dil"),

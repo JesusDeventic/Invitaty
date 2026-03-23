@@ -181,17 +181,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Développer"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "C\'est une application avec une base de données de films, séries et autres contenus audiovisuels, avec des outils pour interagir avec d\'autres membres, créer des listes, noter et laisser des avis, entre autres.",
+      "C\'est une application qui permet de créer des invitations pour toutes sortes d\'événements. Elle vous permet de choisir des modèles et de personnaliser l\'invitation, de la partager sur les réseaux sociaux, de recevoir des notifications de confirmation et de suivre les présences.",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage(
       "Qu\'est-ce que Invitaty ?",
     ),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "Non, Invitaty n\'est pas une application de streaming ; il s\'agit uniquement d\'une base de données avec diverses fonctionnalités autour du contenu.",
+      "Non, vous pouvez utiliser Invitaty pour concevoir vos invitations, mais pour les publier, vous devez effectuer un paiement pour chacune d\'elles.",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage(
-      "Peut-on regarder des films et des séries ?",
-    ),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("Est-ce gratuit ?"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "Vous pouvez supprimer votre compte dans les paramètres du compte dans l\'application. Cela supprime tout ce qui est lié à votre compte. Cette action est irréversible.",
     ),
@@ -221,6 +219,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Paramètres enregistrés avec succès",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("Aller à l\'accueil"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("E-mail invalide"),
     "keepSession": MessageLookupByLibrary.simpleMessage("Rester connecté"),
     "language": MessageLookupByLibrary.simpleMessage("Langue"),

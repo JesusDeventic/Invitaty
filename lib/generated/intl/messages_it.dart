@@ -177,15 +177,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Espandi"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "È un\'app con un database di film, serie e altri contenuti audiovisivi, con strumenti per interagire con altri membri, creare liste, valutazioni e recensioni, tra le altre funzioni.",
+      "È un\'app per creare inviti per tutti i tipi di eventi. Ti permette di scegliere modelli e personalizzare l\'invito, condividerlo sui social, ricevere notifiche di conferma e tenere traccia delle presenze.",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("Cos\'è Invitaty?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "No, Invitaty non è un\'app di streaming; è solo un database con varie funzionalità sui contenuti.",
+      "No, puoi usare Invitaty per progettare i tuoi inviti, ma per poterli pubblicare devi effettuare un pagamento per ciascuno di essi.",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage(
-      "Si possono guardare film e serie?",
-    ),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("È gratis?"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "Puoi eliminare il tuo account dalle impostazioni dell\'account nell\'app. Vengono rimossi tutti i dati associati. Questa azione è irreversibile.",
     ),
@@ -215,6 +213,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Impostazioni salvate correttamente",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("Vai alla home"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("Email non valida"),
     "keepSession": MessageLookupByLibrary.simpleMessage("Resta connesso"),
     "language": MessageLookupByLibrary.simpleMessage("Lingua"),

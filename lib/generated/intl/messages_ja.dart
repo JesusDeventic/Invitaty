@@ -147,17 +147,17 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("展開"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "映画・ドラマなどのデータベースと、他のメンバーとの交流、リスト、評価、レビューなどの機能を備えたアプリです。",
+      "これは、あらゆる種類のイベントの招待状を作成するためのアプリです。テンプレートを選んで招待状をカスタマイズし、SNSで共有し、確認通知を受け取り、参加状況を追跡できます。",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("Invitaty とは？"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "いいえ。Invitaty はストリーミングアプリではなく、コンテンツに関する各種機能を持つデータベースです。",
+      "いいえ。Invitatyを使って招待状をデザインできますが、公開するには1件ごとにお支払いが必要です。",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage("映画やドラマを視聴できますか？"),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("無料ですか？"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "アプリ内のアカウント設定から削除できます。関連データはすべて削除されます。取り消せません。",
     ),
-    "faq3Question": MessageLookupByLibrary.simpleMessage("アカウントを削除するには？"),
+    "faq3Question": MessageLookupByLibrary.simpleMessage("どうやってアカウントを削除しますか？"),
     "fieldRequired": MessageLookupByLibrary.simpleMessage("この項目は必須です"),
     "forgotPassword": MessageLookupByLibrary.simpleMessage("パスワードをお忘れですか？"),
     "generalSettings": MessageLookupByLibrary.simpleMessage("一般設定"),
@@ -173,6 +173,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "設定を保存しました",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("ホームへ"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("メールが無効です"),
     "keepSession": MessageLookupByLibrary.simpleMessage("ログイン状態を保持"),
     "language": MessageLookupByLibrary.simpleMessage("言語"),

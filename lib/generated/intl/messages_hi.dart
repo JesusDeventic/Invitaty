@@ -169,15 +169,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("विस्तार करें"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "यह फ़िल्में, सीरीज़ और अन्य ऑडियोविज़ुअल सामग्री का डेटाबेस है, जिसमें सदस्यों के साथ बातचीत, सूचियाँ, रेटिंग और समीक्षाएँ जैसी सुविधाएँ हैं।",
+      "यह एक ऐसा ऐप है जो हर तरह के कार्यक्रमों के लिए आमंत्रण बनाने में मदद करता है। आप टेम्पलेट चुन सकते हैं, आमंत्रण को पर्सनलाइज़ कर सकते हैं, इसे सोशल मीडिया पर शेयर कर सकते हैं, कन्फर्मेशन नोटिफिकेशन पा सकते हैं और उपस्थिति का ट्रैक रख सकते हैं।",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("Invitaty क्या है?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "नहीं, Invitaty स्ट्रीमिंग ऐप नहीं है; यह केवल सामग्री के बारे में विभिन्न सुविधाओं वाला डेटाबेस है।",
+      "नहीं, आप अपने आमंत्रण डिज़ाइन करने के लिए Invitaty का उपयोग कर सकते हैं, लेकिन उन्हें प्रकाशित करने के लिए आपको हर एक के लिए भुगतान करना होगा।",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage(
-      "क्या फ़िल्में और सीरीज़ देख सकते हैं?",
-    ),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("क्या यह मुफ्त है?"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "आप ऐप में खाता सेटिंग्स से अपना खाता हटा सकते हैं। सब कुछ हट जाएगा। यह क्रिया पूर्ववत नहीं की जा सकती।",
     ),
@@ -203,6 +201,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "सेटिंग्स सहेजी गईं",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("होम पर जाएँ"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("अमान्य ईमेल"),
     "keepSession": MessageLookupByLibrary.simpleMessage("मुझे साइन इन रखें"),
     "language": MessageLookupByLibrary.simpleMessage("भाषा"),

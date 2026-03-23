@@ -179,15 +179,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Expandera"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
-      "Det är en app med en databas över filmer, serier och annat audiovisuellt innehåll, med verktyg för att interagera med andra medlemmar, listor, betyg och recensioner med mera.",
+      "Det är en app för att skapa inbjudningar för alla typer av evenemang. Du kan välja mallar och anpassa inbjudan, dela den i sociala medier, få bekräftelseaviseringar och följa deltagandet.",
     ),
     "faq1Question": MessageLookupByLibrary.simpleMessage("Vad är Invitaty?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "Nej, Invitaty är inte en streamingapp; det är bara en databas med olika funktioner kring innehållet.",
+      "Nej, du kan använda Invitaty för att designa dina inbjudningar, men för att kunna publicera dem måste du betala för varje enskild.",
     ),
-    "faq2Question": MessageLookupByLibrary.simpleMessage(
-      "Kan man titta på filmer och serier?",
-    ),
+    "faq2Question": MessageLookupByLibrary.simpleMessage("Är det gratis?"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
       "Du kan ta bort ditt konto under kontoinställningar i appen. Allt kopplat till kontot tas bort. Detta kan inte ångras.",
     ),
@@ -215,6 +213,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Inställningar sparade",
     ),
     "goToHome": MessageLookupByLibrary.simpleMessage("Gå till hem"),
+    "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
+      "Create invitation",
+    ),
+    "homeEmptyInvitationsSubtitle": MessageLookupByLibrary.simpleMessage(
+      "Tap Create invitation to get started.",
+    ),
+    "homeEmptyInvitationsTitle": MessageLookupByLibrary.simpleMessage(
+      "No invitations created yet.",
+    ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("Ogiltig e-post"),
     "keepSession": MessageLookupByLibrary.simpleMessage("Håll mig inloggad"),
     "language": MessageLookupByLibrary.simpleMessage("Språk"),

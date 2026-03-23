@@ -884,6 +884,36 @@ class S {
     return Intl.message('Home', name: 'menuHome', desc: '', args: []);
   }
 
+  /// `No invitations created yet.`
+  String get homeEmptyInvitationsTitle {
+    return Intl.message(
+      'No invitations created yet.',
+      name: 'homeEmptyInvitationsTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tap Create invitation to get started.`
+  String get homeEmptyInvitationsSubtitle {
+    return Intl.message(
+      'Tap Create invitation to get started.',
+      name: 'homeEmptyInvitationsSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Create invitation`
+  String get homeCreateInvitationButton {
+    return Intl.message(
+      'Create invitation',
+      name: 'homeCreateInvitationButton',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Collapse`
   String get collapseMenu {
     return Intl.message('Collapse', name: 'collapseMenu', desc: '', args: []);
@@ -1134,30 +1164,30 @@ class S {
     );
   }
 
-  /// `It is an app with a database of films, series and other audiovisual content, with tools that let users interact with other members, create lists, add ratings and reviews, and more.`
+  /// `It's an app to create invitations for all kinds of events. It lets you choose templates and personalize the invitation, share it on social media, receive confirmation notifications, and track attendance.`
   String get faq1Answer {
     return Intl.message(
-      'It is an app with a database of films, series and other audiovisual content, with tools that let users interact with other members, create lists, add ratings and reviews, and more.',
+      'It\'s an app to create invitations for all kinds of events. It lets you choose templates and personalize the invitation, share it on social media, receive confirmation notifications, and track attendance.',
       name: 'faq1Answer',
       desc: '',
       args: [],
     );
   }
 
-  /// `Can I watch films and series?`
+  /// `Is it free?`
   String get faq2Question {
     return Intl.message(
-      'Can I watch films and series?',
+      'Is it free?',
       name: 'faq2Question',
       desc: '',
       args: [],
     );
   }
 
-  /// `No, Invitaty is not a streaming app; it only works as a database with various features around that content.`
+  /// `No, you can use Invitaty to design your invitations, but to publish them you need to make a payment for each one.`
   String get faq2Answer {
     return Intl.message(
-      'No, Invitaty is not a streaming app; it only works as a database with various features around that content.',
+      'No, you can use Invitaty to design your invitations, but to publish them you need to make a payment for each one.',
       name: 'faq2Answer',
       desc: '',
       args: [],
