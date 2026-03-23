@@ -23,7 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(seconds) =>
       "उपयोगकर्ता नाम या पासवर्ड गलत है।\nकृपया पुनः प्रयास करने से पहले ${seconds} सेकंड प्रतीक्षा करें";
 
-  static String m1(username) => "Filmaniak पर @${username} की प्रोफ़ाइल";
+  static String m1(username) => "Invitaty पर @${username} की प्रोफ़ाइल";
 
   static String m2(username) => "@${username} का QR";
 
@@ -33,10 +33,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionNo": MessageLookupByLibrary.simpleMessage("नहीं"),
     "actionYes": MessageLookupByLibrary.simpleMessage("हाँ"),
     "andLabel": MessageLookupByLibrary.simpleMessage("और"),
-    "appName": MessageLookupByLibrary.simpleMessage("Filmaniak"),
+    "appName": MessageLookupByLibrary.simpleMessage("Invitaty"),
     "appVersion10Code": MessageLookupByLibrary.simpleMessage("v1.0.0"),
     "appVersion10Description": MessageLookupByLibrary.simpleMessage(
-      "·Filmaniak का प्रारंभिक संस्करण।",
+      "·Invitaty का प्रारंभिक संस्करण।",
     ),
     "appVersionChangeLogTitle": MessageLookupByLibrary.simpleMessage(
       "परिवर्तन लॉग",
@@ -99,10 +99,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "पासवर्ड",
     ),
     "dialogErrorAppVersion": MessageLookupByLibrary.simpleMessage(
-      "Filmaniak का नया संस्करण उपलब्ध है।\nजारी रखने के लिए ऐप अपडेट करें",
+      "Invitaty का नया संस्करण उपलब्ध है।\nजारी रखने के लिए ऐप अपडेट करें",
     ),
     "dialogErrorServerConnection": MessageLookupByLibrary.simpleMessage(
-      "Filmaniak सर्वर से कनेक्ट नहीं हो सका",
+      "Invitaty सर्वर से कनेक्ट नहीं हो सका",
     ),
     "dialogErrorServerMaintenance": MessageLookupByLibrary.simpleMessage(
       "ऐप इस समय रखरखाव में है। बाद में प्रयास करें",
@@ -171,9 +171,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
       "यह फ़िल्में, सीरीज़ और अन्य ऑडियोविज़ुअल सामग्री का डेटाबेस है, जिसमें सदस्यों के साथ बातचीत, सूचियाँ, रेटिंग और समीक्षाएँ जैसी सुविधाएँ हैं।",
     ),
-    "faq1Question": MessageLookupByLibrary.simpleMessage("Filmaniak क्या है?"),
+    "faq1Question": MessageLookupByLibrary.simpleMessage("Invitaty क्या है?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "नहीं, Filmaniak स्ट्रीमिंग ऐप नहीं है; यह केवल सामग्री के बारे में विभिन्न सुविधाओं वाला डेटाबेस है।",
+      "नहीं, Invitaty स्ट्रीमिंग ऐप नहीं है; यह केवल सामग्री के बारे में विभिन्न सुविधाओं वाला डेटाबेस है।",
     ),
     "faq2Question": MessageLookupByLibrary.simpleMessage(
       "क्या फ़िल्में और सीरीज़ देख सकते हैं?",
@@ -391,7 +391,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "socialWhatsappLabel": MessageLookupByLibrary.simpleMessage("WhatsApp"),
     "statusLabel": MessageLookupByLibrary.simpleMessage("स्थिति"),
-    "subjectSupport": MessageLookupByLibrary.simpleMessage("Filmaniak संपर्क"),
+    "subjectSupport": MessageLookupByLibrary.simpleMessage("Invitaty संपर्क"),
     "termsAndConditionsLabel": MessageLookupByLibrary.simpleMessage(
       "नियम व शर्तें",
     ),

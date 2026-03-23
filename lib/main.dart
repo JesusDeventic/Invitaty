@@ -1,11 +1,11 @@
-import 'dart:io';
-import 'package:filmaniak/api/filmaniak_messaging_service.dart';
-import 'package:filmaniak/core/global_functions.dart';
-import 'package:filmaniak/generated/l10n.dart';
-import 'package:filmaniak/providers/language_provider.dart';
-import 'package:filmaniak/providers/theme_provider.dart';
-import 'package:filmaniak/routes/app_router.dart';
-import 'package:filmaniak/styles/colors.dart';
+﻿import 'dart:io';
+import 'package:invitaty/api/invitaty_messaging_service.dart';
+import 'package:invitaty/core/global_functions.dart';
+import 'package:invitaty/generated/l10n.dart';
+import 'package:invitaty/providers/language_provider.dart';
+import 'package:invitaty/providers/theme_provider.dart';
+import 'package:invitaty/routes/app_router.dart';
+import 'package:invitaty/styles/colors.dart';
 import 'package:app_links/app_links.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -19,13 +19,13 @@ final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  // Cargar versión de la app SIEMPRE al arrancar (como en Fitcron),
-  // para que esté disponible incluso tras reload en Web.
+  // Cargar versiÃ³n de la app SIEMPRE al arrancar,
+  // para que estÃ© disponible incluso tras reload en Web.
   await loadAppVersion();
   // Inicializar notificaciones push solo en Android / iOS / Web
   if (kIsWeb || Platform.isAndroid || Platform.isIOS) {
     try {
-      final messaging = FilmaniakMessagingService();
+      final messaging = InvitatyMessagingService();
       await messaging.initialize();
     } catch (e) {
       debugPrint('Error inicializando notificaciones de Firebase: $e');
@@ -37,19 +37,19 @@ void main() async {
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
         ChangeNotifierProvider(create: (_) => LanguageProvider()),
       ],
-      child: const FilmaniakApp(),
+      child: const InvitatyApp(),
     ),
   );
 }
 
-class FilmaniakApp extends StatefulWidget {
-  const FilmaniakApp({super.key});
+class InvitatyApp extends StatefulWidget {
+  const InvitatyApp({super.key});
 
   @override
-  State<FilmaniakApp> createState() => _FilmaniakAppState();
+  State<InvitatyApp> createState() => _InvitatyAppState();
 }
 
-class _FilmaniakAppState extends State<FilmaniakApp> {
+class _InvitatyAppState extends State<InvitatyApp> {
   late final GoRouter _router = createAppRouter(navigatorKey);
   final AppLinks _appLinks = AppLinks();
 
@@ -59,7 +59,7 @@ class _FilmaniakAppState extends State<FilmaniakApp> {
   void initState() {
     super.initState();
 
-    // `app_links` no está implementado en Windows.
+    // `app_links` no estÃ¡ implementado en Windows.
     // Para deep links nativos solo lo activamos en Android/iOS.
     if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
       _handleInitialUri();
@@ -153,13 +153,13 @@ class _FilmaniakAppState extends State<FilmaniakApp> {
 //      - `ios/Runner/GoogleService-Info.plist`
 //    - iOS (imprescindible para que arranque y haya push):
 //      - En Xcode, el `GoogleService-Info.plist` debe estar en el target Runner
-//        (Build Phases → Copy Bundle Resources). Si solo está en disco, falla
+//        (Build Phases â†’ Copy Bundle Resources). Si solo estÃ¡ en disco, falla
 //        `FirebaseApp.configure()` en `ios/Runner/AppDelegate.swift`.
 //      - `ios/Runner/Runner.entitlements`: `aps-environment` (development en
 //        debug; production para TestFlight/App Store).
-//      - En Firebase Console → Project settings → Cloud Messaging → Apple:
+//      - En Firebase Console â†’ Project settings â†’ Cloud Messaging â†’ Apple:
 //        subir la clave APNs (.p8) de Apple Developer (Keys). Una misma clave
-//        vale para varias apps del mismo equipo; sirve para que FCM envíe a
+//        vale para varias apps del mismo equipo; sirve para que FCM envÃ­e a
 //        Apple (no sustituye al plist en la app).
 //    - Web: `lib/api/firebase_web_config.dart` (FirebaseOptions + `webVapidKey`).
 //    - Android/iOS en Dart: `Firebase.initializeApp()` sin opciones; el plist
@@ -168,17 +168,17 @@ class _FilmaniakAppState extends State<FilmaniakApp> {
 //      `use_modular_headers!` en el target Runner si usas los pods actuales.
 //
 // 4) Backend WordPress / REST
-//    - Cambiar `filmaniakBaseUrl` en `lib/api/filmaniak_api.dart`.
+//    - Cambiar `invitatyBaseUrl` en `lib/api/invitaty_api.dart`.
 //    - Revisar rutas/prefijos en `wordpress_backend/*.php`:
-//      - Namespace REST (`filmaniak/v1/...`)
-//      - Funciones/prefijos (`filmaniak_...`) si quieres renombrar.
+//      - Namespace REST (`invitaty/v1/...`)
+//      - Funciones/prefijos (`invitaty_...` en PHP: internas; usermeta sigue igual salvo que migres BD).
 //
 // 5) Secretos y configuracion sensible (wp-config.php)
 //    - NO hardcodear claves en snippets o plugins.
 //    - Definir en `wp-config.php` al menos:
-//      - `FILMANIAK_FIREBASE_PROJECT_ID`
-//      - `FILMANIAK_FIREBASE_SERVICE_ACCOUNT_PATH`
-//      - `FILMANIAK_RECAPTCHA_SECRET_KEY`
+//      - `INVITATY_FIREBASE_PROJECT_ID`
+//      - `INVITATY_FIREBASE_SERVICE_ACCOUNT_PATH`
+//      - `INVITATY_RECAPTCHA_SECRET_KEY`
 //    - Verificar que `wordpress_backend/recaptcha.php` y `notificaciones.php`
 //      lean esas constantes.
 //
@@ -193,7 +193,7 @@ class _FilmaniakAppState extends State<FilmaniakApp> {
 //    - Backend: `wordpress_backend/notificaciones.php`,
 //      `wordpress_backend/WebPage_NotificacionesPush.php`.
 //    - Tras cambiar bundle ID / Firebase, comprobar registro de token en BD y
-//      envío por idioma (topics). En iOS, si no hay token, revisar plist en el
+//      envÃ­o por idioma (topics). En iOS, si no hay token, revisar plist en el
 //      target, entitlements APNs y clave .p8 en la consola de Firebase.
 //
 // 8) Localizacion y generacion de codigo

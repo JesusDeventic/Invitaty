@@ -1,17 +1,17 @@
-<?php
+﻿<?php
 if (!defined('ABSPATH')) {
     exit;
 }
 
 add_action('rest_api_init', function () {
-    register_rest_route('filmaniak/v1', '/verify-recaptcha', array(
+    register_rest_route('invitaty/v1', '/verify-recaptcha', array(
         'methods'             => 'POST',
-        'callback'            => 'filmaniak_verify_recaptcha',
+        'callback'            => 'invitaty_verify_recaptcha',
         'permission_callback' => '__return_true',
     ));
 });
 
-function filmaniak_verify_recaptcha(WP_REST_Request $request) {
+function invitaty_verify_recaptcha(WP_REST_Request $request) {
     $token = $request->get_param('token');
 
     if (empty($token)) {
@@ -23,15 +23,15 @@ function filmaniak_verify_recaptcha(WP_REST_Request $request) {
     }
 
     // Rellena en `wp-config.php`:
-    // define('FILMANIAK_RECAPTCHA_SECRET_KEY', 'tu_secret_key');
-    $secret_key = defined('FILMANIAK_RECAPTCHA_SECRET_KEY')
-        ? (string) FILMANIAK_RECAPTCHA_SECRET_KEY
+    // define('INVITATY_RECAPTCHA_SECRET_KEY', 'tu_secret_key');
+    $secret_key = defined('INVITATY_RECAPTCHA_SECRET_KEY')
+        ? (string) INVITATY_RECAPTCHA_SECRET_KEY
         : '';
 
     if ($secret_key === '') {
         return new WP_Error(
             'recaptcha_secret_missing',
-            'Falta FILMANIAK_RECAPTCHA_SECRET_KEY en wp-config.php',
+            'Falta INVITATY_RECAPTCHA_SECRET_KEY en wp-config.php',
             array('status' => 500)
         );
     }

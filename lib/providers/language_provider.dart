@@ -1,9 +1,9 @@
-import 'package:filmaniak/api/filmaniak_api.dart';
-import 'package:filmaniak/core/global_functions.dart';
-import 'package:filmaniak/core/global_variables.dart';
-import 'package:filmaniak/core/user_preferences.dart';
-import 'package:filmaniak/generated/l10n.dart';
-import 'package:filmaniak/model/user_model.dart';
+import 'package:invitaty/api/invitaty_api.dart';
+import 'package:invitaty/core/global_functions.dart';
+import 'package:invitaty/core/global_variables.dart';
+import 'package:invitaty/core/user_preferences.dart';
+import 'package:invitaty/generated/l10n.dart';
+import 'package:invitaty/model/user_model.dart';
 import 'package:flutter/material.dart';
 
 /// Idioma de la app: SharedPreferences es la fuente de verdad (como Fitcron).
@@ -68,7 +68,7 @@ class LanguageProvider extends ChangeNotifier {
 
     // Persistir en backend para notificaciones (si hay sesión)
     if (globalUserToken.isNotEmpty && globalCurrentUser.username.isNotEmpty) {
-      final result = await FilmaniakApi.updateUser(
+      final result = await InvitatyApi.updateUser(
         userEmail: globalCurrentUser.email,
         language: _currentLanguage,
         dateFormat: globalCurrentUser.dateFormat,
@@ -77,7 +77,7 @@ class LanguageProvider extends ChangeNotifier {
       if (result['success'] == true) {
         final userJson = result['user'];
         if (userJson is Map<String, dynamic>) {
-          globalCurrentUser = FilmaniakUser.fromJson(userJson);
+          globalCurrentUser = InvitatyUser.fromJson(userJson);
           await _prefs.setCachedUser(globalCurrentUser);
         }
       }

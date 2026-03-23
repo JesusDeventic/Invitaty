@@ -22,7 +22,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m0(seconds) => "用户名或密码错误。\n请等待 ${seconds} 秒后再试";
 
-  static String m1(username) => "Filmaniak 上 @${username} 的资料";
+  static String m1(username) => "Invitaty 上 @${username} 的资料";
 
   static String m2(username) => "@${username} 的二维码";
 
@@ -32,10 +32,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionNo": MessageLookupByLibrary.simpleMessage("否"),
     "actionYes": MessageLookupByLibrary.simpleMessage("是"),
     "andLabel": MessageLookupByLibrary.simpleMessage("和"),
-    "appName": MessageLookupByLibrary.simpleMessage("Filmaniak"),
+    "appName": MessageLookupByLibrary.simpleMessage("Invitaty"),
     "appVersion10Code": MessageLookupByLibrary.simpleMessage("v1.0.0"),
     "appVersion10Description": MessageLookupByLibrary.simpleMessage(
-      "·Filmaniak 初始版本。",
+      "·Invitaty 初始版本。",
     ),
     "appVersionChangeLogTitle": MessageLookupByLibrary.simpleMessage("更新日志"),
     "back": MessageLookupByLibrary.simpleMessage("返回"),
@@ -72,10 +72,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "dialogDeleteAccountPassword": MessageLookupByLibrary.simpleMessage("密码"),
     "dialogErrorAppVersion": MessageLookupByLibrary.simpleMessage(
-      "Filmaniak 有新版本可用。\n请更新应用以继续",
+      "Invitaty 有新版本可用。\n请更新应用以继续",
     ),
     "dialogErrorServerConnection": MessageLookupByLibrary.simpleMessage(
-      "无法连接到 Filmaniak 服务器",
+      "无法连接到 Invitaty 服务器",
     ),
     "dialogErrorServerMaintenance": MessageLookupByLibrary.simpleMessage(
       "应用正在维护中，请稍后再试",
@@ -124,9 +124,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
       "这是一款包含电影、剧集及其他视听内容数据库的应用，提供与其他会员互动、列表、评分与评论等功能。",
     ),
-    "faq1Question": MessageLookupByLibrary.simpleMessage("Filmaniak 是什么？"),
+    "faq1Question": MessageLookupByLibrary.simpleMessage("Invitaty 是什么？"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "不可以，Filmaniak 不是流媒体应用；它仅作为围绕内容的数据库并提供多种功能。",
+      "不可以，Invitaty 不是流媒体应用；它仅作为围绕内容的数据库并提供多种功能。",
     ),
     "faq2Question": MessageLookupByLibrary.simpleMessage("可以观看电影和剧集吗？"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
@@ -276,7 +276,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "socialWhatsappLabel": MessageLookupByLibrary.simpleMessage("WhatsApp"),
     "statusLabel": MessageLookupByLibrary.simpleMessage("状态"),
-    "subjectSupport": MessageLookupByLibrary.simpleMessage("Filmaniak 联系"),
+    "subjectSupport": MessageLookupByLibrary.simpleMessage("Invitaty 联系"),
     "termsAndConditionsLabel": MessageLookupByLibrary.simpleMessage("服务条款"),
     "textUserSupportDescription": MessageLookupByLibrary.simpleMessage(
       "需要帮助？请通过任一渠道联系我们，我们会尽快回复。",

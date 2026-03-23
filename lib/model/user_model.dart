@@ -1,7 +1,7 @@
-/// Modelo de usuario devuelto por la API de Filmaniak (WordPress).
+﻿/// Modelo de usuario devuelto por la API de Invitaty (WordPress).
 ///
-/// Coincide con la estructura de `filmaniak_get_full_user_data()` en `usuario.php`.
-class FilmaniakUser {
+/// Coincide con la estructura de `invitaty_get_full_user_data()` en `usuario.php` (WordPress).
+class InvitatyUser {
   int id;
   String username;
   String email;
@@ -24,7 +24,7 @@ class FilmaniakUser {
   String reviewStatus;
   String reviewPromptedAt;
 
-  FilmaniakUser({
+  InvitatyUser({
     this.id = 0,
     this.username = '',
     this.email = '',
@@ -50,11 +50,11 @@ class FilmaniakUser {
 
   bool get isEmpty => id == 0 && username.isEmpty;
 
-  factory FilmaniakUser.fromJson(Map<String, dynamic> json) {
-    return FilmaniakUser(
+  factory InvitatyUser.fromJson(Map<String, dynamic> json) {
+    return InvitatyUser(
       id: (json['id'] as num?)?.toInt() ?? 0,
       username: (json['username'] as String?) ?? '',
-      // El backend usa `user_email`; admitimos también `email` por compatibilidad.
+      // El backend usa `user_email`; admitimos tambiÃ©n `email` por compatibilidad.
       email: (json['user_email'] as String?) ??
           (json['email'] as String?) ??
           '',
@@ -71,15 +71,15 @@ class FilmaniakUser {
       country: (json['country'] as String?) ?? '',
       birthdate: (json['birthdate'] as String?) ?? '',
       isRetrotecaVip:
-          (json['filmaniak_retroteca_vip'] as bool?) ?? false,
+          (json['invitaty_retroteca_vip'] as bool?) ?? false,
       marketingConsent:
           (json['marketing_consent'] as bool?) ?? false,
       accountStatus: (json['account_status'] as String?) ?? 'active',
-      lastLogin: (json['filmaniak_last_login'] as String?) ?? '',
+      lastLogin: (json['invitaty_last_login'] as String?) ?? '',
       reviewStatus:
-          (json['filmaniak_review_status'] as String?) ?? 'none',
+          (json['invitaty_review_status'] as String?) ?? 'none',
       reviewPromptedAt:
-          (json['filmaniak_review_prompted_at'] as String?) ?? '',
+          (json['invitaty_review_prompted_at'] as String?) ?? '',
     );
   }
 

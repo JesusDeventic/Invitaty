@@ -1,15 +1,15 @@
-import 'package:filmaniak/core/global_functions.dart';
-import 'package:filmaniak/core/global_variables.dart';
-import 'package:filmaniak/generated/l10n.dart';
-import 'package:filmaniak/page/home/home_placeholder_page.dart';
-import 'package:filmaniak/page/messages/private_conversations_page.dart';
-import 'package:filmaniak/page/messages/private_chat_page.dart';
-import 'package:filmaniak/page/users/account_profile_page.dart';
-import 'package:filmaniak/page/users/public_user_profile_page.dart';
-import 'package:filmaniak/page/home/splash_screen_page.dart';
-import 'package:filmaniak/page/login/forgot_password_page.dart';
-import 'package:filmaniak/page/login/login_page.dart';
-import 'package:filmaniak/page/login/register_page.dart';
+import 'package:invitaty/core/global_functions.dart';
+import 'package:invitaty/core/global_variables.dart';
+import 'package:invitaty/generated/l10n.dart';
+import 'package:invitaty/page/home/home_placeholder_page.dart';
+import 'package:invitaty/page/messages/private_conversations_page.dart';
+import 'package:invitaty/page/messages/private_chat_page.dart';
+import 'package:invitaty/page/users/account_profile_page.dart';
+import 'package:invitaty/page/users/public_user_profile_page.dart';
+import 'package:invitaty/page/home/splash_screen_page.dart';
+import 'package:invitaty/page/login/forgot_password_page.dart';
+import 'package:invitaty/page/login/login_page.dart';
+import 'package:invitaty/page/login/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

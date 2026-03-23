@@ -23,7 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(seconds) =>
       "اسم المستخدم أو كلمة المرور غير صحيحة.\nيرجى الانتظار ${seconds} ثانية قبل المحاولة مرة أخرى";
 
-  static String m1(username) => "ملف @${username} على Filmaniak";
+  static String m1(username) => "ملف @${username} على Invitaty";
 
   static String m2(username) => "رمز QR لـ @${username}";
 
@@ -33,10 +33,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionNo": MessageLookupByLibrary.simpleMessage("لا"),
     "actionYes": MessageLookupByLibrary.simpleMessage("نعم"),
     "andLabel": MessageLookupByLibrary.simpleMessage("و"),
-    "appName": MessageLookupByLibrary.simpleMessage("Filmaniak"),
+    "appName": MessageLookupByLibrary.simpleMessage("Invitaty"),
     "appVersion10Code": MessageLookupByLibrary.simpleMessage("v1.0.0"),
     "appVersion10Description": MessageLookupByLibrary.simpleMessage(
-      "·الإصدار الأول من Filmaniak.",
+      "·الإصدار الأول من Invitaty.",
     ),
     "appVersionChangeLogTitle": MessageLookupByLibrary.simpleMessage(
       "سجل التغييرات",
@@ -105,10 +105,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "كلمة المرور",
     ),
     "dialogErrorAppVersion": MessageLookupByLibrary.simpleMessage(
-      "يتوفر إصدار جديد من Filmaniak.\nحدّث التطبيق للمتابعة",
+      "يتوفر إصدار جديد من Invitaty.\nحدّث التطبيق للمتابعة",
     ),
     "dialogErrorServerConnection": MessageLookupByLibrary.simpleMessage(
-      "تعذر الاتصال بخادم Filmaniak",
+      "تعذر الاتصال بخادم Invitaty",
     ),
     "dialogErrorServerMaintenance": MessageLookupByLibrary.simpleMessage(
       "التطبيق قيد الصيانة حالياً. حاول لاحقاً",
@@ -177,9 +177,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
       "تطبيق يحتوي على قاعدة بيانات للأفلام والمسلسلات والمحتوى السمعي البصري، مع أدوات للتفاعل مع الأعضاء والقوائم والتقييمات والمراجعات وغيرها.",
     ),
-    "faq1Question": MessageLookupByLibrary.simpleMessage("ما هو Filmaniak؟"),
+    "faq1Question": MessageLookupByLibrary.simpleMessage("ما هو Invitaty؟"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "لا، Filmaniak ليس تطبيق بث؛ إنه قاعدة بيانات فقط مع ميزات متنوعة حول المحتوى.",
+      "لا، Invitaty ليس تطبيق بث؛ إنه قاعدة بيانات فقط مع ميزات متنوعة حول المحتوى.",
     ),
     "faq2Question": MessageLookupByLibrary.simpleMessage(
       "هل يمكن مشاهدة الأفلام والمسلسلات؟",
@@ -385,7 +385,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "socialWhatsappLabel": MessageLookupByLibrary.simpleMessage("واتساب"),
     "statusLabel": MessageLookupByLibrary.simpleMessage("الحالة"),
-    "subjectSupport": MessageLookupByLibrary.simpleMessage("اتصال Filmaniak"),
+    "subjectSupport": MessageLookupByLibrary.simpleMessage("اتصال Invitaty"),
     "termsAndConditionsLabel": MessageLookupByLibrary.simpleMessage(
       "الشروط والأحكام",
     ),

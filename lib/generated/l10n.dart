@@ -54,9 +54,9 @@ class S {
     return Localizations.of<S>(context, S);
   }
 
-  /// `Filmaniak`
+  /// `Invitaty`
   String get appName {
-    return Intl.message('Filmaniak', name: 'appName', desc: '', args: []);
+    return Intl.message('Invitaty', name: 'appName', desc: '', args: []);
   }
 
   /// `Sign in`
@@ -369,10 +369,10 @@ class S {
     return Intl.message('v1.0.0', name: 'appVersion10Code', desc: '', args: []);
   }
 
-  /// `·Initial release of Filmaniak.`
+  /// `·Initial release of Invitaty.`
   String get appVersion10Description {
     return Intl.message(
-      '·Initial release of Filmaniak.',
+      '·Initial release of Invitaty.',
       name: 'appVersion10Description',
       desc: '',
       args: [],
@@ -939,20 +939,20 @@ class S {
     return Intl.message('Error', name: 'dialogErrorTitle', desc: '', args: []);
   }
 
-  /// `Could not connect to the Filmaniak server.`
+  /// `Could not connect to the Invitaty server.`
   String get dialogErrorServerConnection {
     return Intl.message(
-      'Could not connect to the Filmaniak server.',
+      'Could not connect to the Invitaty server.',
       name: 'dialogErrorServerConnection',
       desc: '',
       args: [],
     );
   }
 
-  /// `A new version of Filmaniak is available.\nUpdate the app to continue.`
+  /// `A new version of Invitaty is available.\nUpdate the app to continue.`
   String get dialogErrorAppVersion {
     return Intl.message(
-      'A new version of Filmaniak is available.\nUpdate the app to continue.',
+      'A new version of Invitaty is available.\nUpdate the app to continue.',
       name: 'dialogErrorAppVersion',
       desc: '',
       args: [],
@@ -1114,20 +1114,20 @@ class S {
     );
   }
 
-  /// `Filmaniak contact`
+  /// `Invitaty contact`
   String get subjectSupport {
     return Intl.message(
-      'Filmaniak contact',
+      'Invitaty contact',
       name: 'subjectSupport',
       desc: '',
       args: [],
     );
   }
 
-  /// `What is Filmaniak?`
+  /// `What is Invitaty?`
   String get faq1Question {
     return Intl.message(
-      'What is Filmaniak?',
+      'What is Invitaty?',
       name: 'faq1Question',
       desc: '',
       args: [],
@@ -1154,10 +1154,10 @@ class S {
     );
   }
 
-  /// `No, Filmaniak is not a streaming app; it only works as a database with various features around that content.`
+  /// `No, Invitaty is not a streaming app; it only works as a database with various features around that content.`
   String get faq2Answer {
     return Intl.message(
-      'No, Filmaniak is not a streaming app; it only works as a database with various features around that content.',
+      'No, Invitaty is not a streaming app; it only works as a database with various features around that content.',
       name: 'faq2Answer',
       desc: '',
       args: [],
@@ -1749,10 +1749,10 @@ class S {
     );
   }
 
-  /// `Profile of @{username} on Filmaniak`
+  /// `Profile of @{username} on Invitaty`
   String profileShareSubject(Object username) {
     return Intl.message(
-      'Profile of @$username on Filmaniak',
+      'Profile of @$username on Invitaty',
       name: 'profileShareSubject',
       desc: '',
       args: [username],

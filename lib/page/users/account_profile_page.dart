@@ -2,15 +2,15 @@ import 'dart:typed_data';
 
 import 'package:country_picker/country_picker.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:filmaniak/api/filmaniak_api.dart';
-import 'package:filmaniak/core/api_error_messages.dart';
-import 'package:filmaniak/core/user_preferences.dart';
-import 'package:filmaniak/core/global_functions.dart';
-import 'package:filmaniak/core/global_variables.dart';
-import 'package:filmaniak/generated/l10n.dart';
-import 'package:filmaniak/model/user_model.dart';
-import 'package:filmaniak/routes/app_routes.dart';
-import 'package:filmaniak/widget/components_widgets.dart';
+import 'package:invitaty/api/invitaty_api.dart';
+import 'package:invitaty/core/api_error_messages.dart';
+import 'package:invitaty/core/user_preferences.dart';
+import 'package:invitaty/core/global_functions.dart';
+import 'package:invitaty/core/global_variables.dart';
+import 'package:invitaty/generated/l10n.dart';
+import 'package:invitaty/model/user_model.dart';
+import 'package:invitaty/routes/app_routes.dart';
+import 'package:invitaty/widget/components_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -204,7 +204,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
       ),
     );
 
-    final result = await FilmaniakApi.updateUser(
+    final result = await InvitatyApi.updateUser(
       userEmail: _emailController.text.trim(),
       websiteUrl: _websiteController.text.trim(),
       displayName: _displayNameController.text.trim().isEmpty ? null : _displayNameController.text.trim(),
@@ -223,7 +223,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
     if (result['success'] == true) {
       final userJson = result['user'];
       if (userJson is Map<String, dynamic>) {
-        globalCurrentUser = FilmaniakUser.fromJson(userJson);
+        globalCurrentUser = InvitatyUser.fromJson(userJson);
         await UserPreferences().setCachedUser(globalCurrentUser);
       }
       showCustomSnackBar(S.current.messageUpdateSuccess, type: 1);
@@ -705,7 +705,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                         ),
                       );
 
-                      final result = await FilmaniakApi.changePassword(
+                      final result = await InvitatyApi.changePassword(
                         currentPassword: current,
                         newPassword: newPwd,
                       );
@@ -796,7 +796,7 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                         ),
                       );
 
-                      final result = await FilmaniakApi.deleteAccount(pwd);
+                      final result = await InvitatyApi.deleteAccount(pwd);
 
                       navigator.pop();
 

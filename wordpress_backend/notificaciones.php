@@ -1,23 +1,23 @@
-<?php
+﻿<?php
 if (!defined('ABSPATH')) {
     exit;
 }
 
-//require_once __DIR__ . '/filmaniak_translations.php'; // No hace falta porque estan en otro snippet
+//require_once __DIR__ . '/invitaty_translations.php'; // No hace falta porque estan en otro snippet
 
 /**
  * =========================================================
  * CREAR TABLA DE NOTIFICACIONES
  * =========================================================
- * Déjalo activo una vez para crear/actualizar la tabla.
+ * DÃ©jalo activo una vez para crear/actualizar la tabla.
  * Luego, si quieres, comentas el add_action de abajo.
  */
 
-function filmaniak_notifications_create_table() {
+function invitaty_notifications_create_table() {
     global $wpdb;
 
     $charset_collate = $wpdb->get_charset_collate();
-    $table_name = $wpdb->prefix . 'filmaniak_notifications';
+    $table_name = $wpdb->prefix . 'invitaty_notifications';
 
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
@@ -36,7 +36,7 @@ function filmaniak_notifications_create_table() {
 
     dbDelta($sql);
 }
-add_action('init', 'filmaniak_notifications_create_table');
+add_action('init', 'invitaty_notifications_create_table');
 
 /**
  * =========================================================
@@ -44,39 +44,39 @@ add_action('init', 'filmaniak_notifications_create_table');
  * =========================================================
  */
 add_action('rest_api_init', function () {
-    register_rest_route('filmaniak/v1', '/push/register-token', [
+    register_rest_route('invitaty/v1', '/push/register-token', [
         'methods' => 'POST',
-        'callback' => 'filmaniak_register_push_token',
+        'callback' => 'invitaty_register_push_token',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route('filmaniak/v1', '/push/unregister-token', [
+    register_rest_route('invitaty/v1', '/push/unregister-token', [
         'methods' => 'POST',
-        'callback' => 'filmaniak_unregister_push_token',
+        'callback' => 'invitaty_unregister_push_token',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route('filmaniak/v1', '/notifications/unread-count', [
+    register_rest_route('invitaty/v1', '/notifications/unread-count', [
         'methods' => 'GET',
-        'callback' => 'filmaniak_get_unread_notifications_count',
+        'callback' => 'invitaty_get_unread_notifications_count',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route('filmaniak/v1', '/notifications', [
+    register_rest_route('invitaty/v1', '/notifications', [
         'methods' => 'GET',
-        'callback' => 'filmaniak_get_notifications',
+        'callback' => 'invitaty_get_notifications',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route('filmaniak/v1', '/notifications/mark-read', [
+    register_rest_route('invitaty/v1', '/notifications/mark-read', [
         'methods' => 'POST',
-        'callback' => 'filmaniak_mark_notification_as_read',
+        'callback' => 'invitaty_mark_notification_as_read',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route('filmaniak/v1', '/notifications', [
+    register_rest_route('invitaty/v1', '/notifications', [
         'methods' => 'DELETE',
-        'callback' => 'filmaniak_delete_notifications',
+        'callback' => 'invitaty_delete_notifications',
         'permission_callback' => '__return_true',
     ]);
 });
@@ -86,21 +86,21 @@ add_action('rest_api_init', function () {
  * HELPERS GENERALES
  * =========================================================
  */
-function filmaniak_notifications_error($code, $message, $status = 400) {
+function invitaty_notifications_error($code, $message, $status = 400) {
     return new WP_Error($code, $message, ['status' => $status]);
 }
 
-function filmaniak_notifications_get_json_params(WP_REST_Request $request) {
+function invitaty_notifications_get_json_params(WP_REST_Request $request) {
     $params = $request->get_json_params();
     return is_array($params) ? $params : [];
 }
 
-function filmaniak_get_authenticated_user_id_or_error(WP_REST_Request $request) {
-    if (!function_exists('filmaniak_auth_validate_token')) {
-        return filmaniak_notifications_error('auth_not_available', 'La autenticación de Filmaniak no está disponible.', 500);
+function invitaty_get_authenticated_user_id_or_error(WP_REST_Request $request) {
+    if (!function_exists('invitaty_auth_validate_token')) {
+        return invitaty_notifications_error('auth_not_available', 'La autenticaciÃ³n de Invitaty no estÃ¡ disponible.', 500);
     }
 
-    return filmaniak_auth_validate_token($request);
+    return invitaty_auth_validate_token($request);
 }
 
 /**
@@ -108,43 +108,43 @@ function filmaniak_get_authenticated_user_id_or_error(WP_REST_Request $request) 
  * TOKENS FCM EN USERMETA
  * =========================================================
  */
-function filmaniak_get_user_fcm_tokens($user_id) {
-    $tokens = get_user_meta($user_id, 'filmaniak_fcm_tokens', true);
+function invitaty_get_user_fcm_tokens($user_id) {
+    $tokens = get_user_meta($user_id, 'invitaty_fcm_tokens', true);
     return is_array($tokens) ? $tokens : [];
 }
 
-function filmaniak_add_user_fcm_token($user_id, $fcm_token) {
-    $tokens = filmaniak_get_user_fcm_tokens($user_id);
+function invitaty_add_user_fcm_token($user_id, $fcm_token) {
+    $tokens = invitaty_get_user_fcm_tokens($user_id);
 
     if (!in_array($fcm_token, $tokens, true)) {
         $tokens[] = $fcm_token;
-        update_user_meta($user_id, 'filmaniak_fcm_tokens', $tokens);
+        update_user_meta($user_id, 'invitaty_fcm_tokens', $tokens);
     }
 
     return $tokens;
 }
 
-function filmaniak_remove_user_fcm_token($user_id, $fcm_token) {
-    $tokens = filmaniak_get_user_fcm_tokens($user_id);
+function invitaty_remove_user_fcm_token($user_id, $fcm_token) {
+    $tokens = invitaty_get_user_fcm_tokens($user_id);
 
     $tokens = array_values(array_filter($tokens, function ($token) use ($fcm_token) {
         return $token !== $fcm_token;
     }));
 
-    update_user_meta($user_id, 'filmaniak_fcm_tokens', $tokens);
+    update_user_meta($user_id, 'invitaty_fcm_tokens', $tokens);
 
     return $tokens;
 }
 
 /**
  * =========================================================
- * CREAR NOTIFICACIÓN INTERNA
+ * CREAR NOTIFICACIÃ“N INTERNA
  * =========================================================
  */
-function filmaniak_create_notification($user_id, $title, $message) {
+function invitaty_create_notification($user_id, $title, $message) {
     global $wpdb;
 
-    $table_name = $wpdb->prefix . 'filmaniak_notifications';
+    $table_name = $wpdb->prefix . 'invitaty_notifications';
 
     $wpdb->insert(
         $table_name,
@@ -166,21 +166,21 @@ function filmaniak_create_notification($user_id, $title, $message) {
  * PUSH - REGISTRAR / ELIMINAR TOKEN
  * =========================================================
  */
-function filmaniak_register_push_token(WP_REST_Request $request) {
-    $user_id = filmaniak_get_authenticated_user_id_or_error($request);
+function invitaty_register_push_token(WP_REST_Request $request) {
+    $user_id = invitaty_get_authenticated_user_id_or_error($request);
 
     if (is_wp_error($user_id)) {
         return $user_id;
     }
 
-    $params = filmaniak_notifications_get_json_params($request);
+    $params = invitaty_notifications_get_json_params($request);
     $fcm_token = sanitize_text_field($params['fcm_token'] ?? '');
 
     if ($fcm_token === '') {
-        return filmaniak_notifications_error('missing_fcm_token', 'El fcm_token es obligatorio.', 400);
+        return invitaty_notifications_error('missing_fcm_token', 'El fcm_token es obligatorio.', 400);
     }
 
-    filmaniak_add_user_fcm_token($user_id, $fcm_token);
+    invitaty_add_user_fcm_token($user_id, $fcm_token);
 
     return new WP_REST_Response([
         'success' => true,
@@ -188,21 +188,21 @@ function filmaniak_register_push_token(WP_REST_Request $request) {
     ], 200);
 }
 
-function filmaniak_unregister_push_token(WP_REST_Request $request) {
-    $user_id = filmaniak_get_authenticated_user_id_or_error($request);
+function invitaty_unregister_push_token(WP_REST_Request $request) {
+    $user_id = invitaty_get_authenticated_user_id_or_error($request);
 
     if (is_wp_error($user_id)) {
         return $user_id;
     }
 
-    $params = filmaniak_notifications_get_json_params($request);
+    $params = invitaty_notifications_get_json_params($request);
     $fcm_token = sanitize_text_field($params['fcm_token'] ?? '');
 
     if ($fcm_token === '') {
-        return filmaniak_notifications_error('missing_fcm_token', 'El fcm_token es obligatorio.', 400);
+        return invitaty_notifications_error('missing_fcm_token', 'El fcm_token es obligatorio.', 400);
     }
 
-    filmaniak_remove_user_fcm_token($user_id, $fcm_token);
+    invitaty_remove_user_fcm_token($user_id, $fcm_token);
 
     return new WP_REST_Response([
         'success' => true,
@@ -215,16 +215,16 @@ function filmaniak_unregister_push_token(WP_REST_Request $request) {
  * NOTIFICACIONES - RECUENTO
  * =========================================================
  */
-function filmaniak_get_unread_notifications_count(WP_REST_Request $request) {
+function invitaty_get_unread_notifications_count(WP_REST_Request $request) {
     global $wpdb;
 
-    $user_id = filmaniak_get_authenticated_user_id_or_error($request);
+    $user_id = invitaty_get_authenticated_user_id_or_error($request);
 
     if (is_wp_error($user_id)) {
         return $user_id;
     }
 
-    $table_name = $wpdb->prefix . 'filmaniak_notifications';
+    $table_name = $wpdb->prefix . 'invitaty_notifications';
 
     $count = $wpdb->get_var(
         $wpdb->prepare(
@@ -243,10 +243,10 @@ function filmaniak_get_unread_notifications_count(WP_REST_Request $request) {
  * NOTIFICACIONES - LISTADO
  * =========================================================
  */
-function filmaniak_get_notifications(WP_REST_Request $request) {
+function invitaty_get_notifications(WP_REST_Request $request) {
     global $wpdb;
 
-    $user_id = filmaniak_get_authenticated_user_id_or_error($request);
+    $user_id = invitaty_get_authenticated_user_id_or_error($request);
 
     if (is_wp_error($user_id)) {
         return $user_id;
@@ -256,7 +256,7 @@ function filmaniak_get_notifications(WP_REST_Request $request) {
     $per_page = max(1, min((int) ($request->get_param('per_page') ?: 20), 100));
     $offset = ($page - 1) * $per_page;
 
-    $table_name = $wpdb->prefix . 'filmaniak_notifications';
+    $table_name = $wpdb->prefix . 'invitaty_notifications';
 
     $total = (int) $wpdb->get_var(
         $wpdb->prepare(
@@ -295,22 +295,22 @@ function filmaniak_get_notifications(WP_REST_Request $request) {
 
 /**
  * =========================================================
- * NOTIFICACIONES - MARCAR COMO LEÍDA
+ * NOTIFICACIONES - MARCAR COMO LEÃDA
  * =========================================================
  */
-function filmaniak_mark_notification_as_read(WP_REST_Request $request) {
+function invitaty_mark_notification_as_read(WP_REST_Request $request) {
     global $wpdb;
 
-    $user_id = filmaniak_get_authenticated_user_id_or_error($request);
+    $user_id = invitaty_get_authenticated_user_id_or_error($request);
 
     if (is_wp_error($user_id)) {
         return $user_id;
     }
 
-    $params = filmaniak_notifications_get_json_params($request);
+    $params = invitaty_notifications_get_json_params($request);
     $notification_id = (int) ($params['notification_id'] ?? 0);
 
-    $table_name = $wpdb->prefix . 'filmaniak_notifications';
+    $table_name = $wpdb->prefix . 'invitaty_notifications';
 
     if ($notification_id === 0) {
         $wpdb->update(
@@ -323,7 +323,7 @@ function filmaniak_mark_notification_as_read(WP_REST_Request $request) {
 
         return new WP_REST_Response([
             'success' => true,
-            'message' => 'Todas las notificaciones marcadas como leídas.',
+            'message' => 'Todas las notificaciones marcadas como leÃ­das.',
         ], 200);
     }
 
@@ -336,7 +336,7 @@ function filmaniak_mark_notification_as_read(WP_REST_Request $request) {
     );
 
     if (!$notification) {
-        return filmaniak_notifications_error('notification_not_found', 'La notificación no existe o no pertenece al usuario.', 404);
+        return invitaty_notifications_error('notification_not_found', 'La notificaciÃ³n no existe o no pertenece al usuario.', 404);
     }
 
     $wpdb->update(
@@ -349,7 +349,7 @@ function filmaniak_mark_notification_as_read(WP_REST_Request $request) {
 
     return new WP_REST_Response([
         'success' => true,
-        'message' => 'Notificación marcada como leída.',
+        'message' => 'NotificaciÃ³n marcada como leÃ­da.',
     ], 200);
 }
 
@@ -358,17 +358,17 @@ function filmaniak_mark_notification_as_read(WP_REST_Request $request) {
  * NOTIFICACIONES - ELIMINAR
  * =========================================================
  */
-function filmaniak_delete_notifications(WP_REST_Request $request) {
+function invitaty_delete_notifications(WP_REST_Request $request) {
     global $wpdb;
 
-    $user_id = filmaniak_get_authenticated_user_id_or_error($request);
+    $user_id = invitaty_get_authenticated_user_id_or_error($request);
 
     if (is_wp_error($user_id)) {
         return $user_id;
     }
 
     $notification_id = (int) ($request->get_param('notification_id') ?: 0);
-    $table_name = $wpdb->prefix . 'filmaniak_notifications';
+    $table_name = $wpdb->prefix . 'invitaty_notifications';
 
     if ($notification_id === 0) {
         $wpdb->delete($table_name, ['user_id' => $user_id], ['%d']);
@@ -386,12 +386,12 @@ function filmaniak_delete_notifications(WP_REST_Request $request) {
     );
 
     if (!$deleted) {
-        return filmaniak_notifications_error('notification_not_found', 'La notificación no existe o no pertenece al usuario.', 404);
+        return invitaty_notifications_error('notification_not_found', 'La notificaciÃ³n no existe o no pertenece al usuario.', 404);
     }
 
     return new WP_REST_Response([
         'success' => true,
-        'message' => 'Notificación eliminada.',
+        'message' => 'NotificaciÃ³n eliminada.',
     ], 200);
 }
 
@@ -401,20 +401,20 @@ function filmaniak_delete_notifications(WP_REST_Request $request) {
  * =========================================================
  * Necesitas en wp-config.php:
  *
- * define('FILMANIAK_FIREBASE_PROJECT_ID', 'tu-project-id');
- * define('FILMANIAK_FIREBASE_SERVICE_ACCOUNT_PATH', ABSPATH . 'wp-content/filmaniak-firebase.json o ruta que sea');
+ * define('INVITATY_FIREBASE_PROJECT_ID', 'tu-project-id');
+ * define('INVITATY_FIREBASE_SERVICE_ACCOUNT_PATH', ABSPATH . 'wp-content/invitaty-firebase.json o ruta que sea');
  */
 
-function filmaniak_firebase_base64url_encode($data) {
+function invitaty_firebase_base64url_encode($data) {
     return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
 }
 
-function filmaniak_get_firebase_access_token() {
-    if (!defined('FILMANIAK_FIREBASE_SERVICE_ACCOUNT_PATH')) {
-        return new WP_Error('firebase_config_missing', 'FILMANIAK_FIREBASE_SERVICE_ACCOUNT_PATH no está definida.');
+function invitaty_get_firebase_access_token() {
+    if (!defined('INVITATY_FIREBASE_SERVICE_ACCOUNT_PATH')) {
+        return new WP_Error('firebase_config_missing', 'INVITATY_FIREBASE_SERVICE_ACCOUNT_PATH no estÃ¡ definida.');
     }
 
-    $path = FILMANIAK_FIREBASE_SERVICE_ACCOUNT_PATH;
+    $path = INVITATY_FIREBASE_SERVICE_ACCOUNT_PATH;
 
     if (!file_exists($path)) {
         return new WP_Error('firebase_service_account_missing', 'No se encuentra el JSON de la cuenta de servicio.');
@@ -427,7 +427,7 @@ function filmaniak_get_firebase_access_token() {
         empty($service_account['private_key']) ||
         empty($service_account['token_uri'])
     ) {
-        return new WP_Error('firebase_service_account_invalid', 'El JSON de la cuenta de servicio no es válido.');
+        return new WP_Error('firebase_service_account_invalid', 'El JSON de la cuenta de servicio no es vÃ¡lido.');
     }
 
     $now = time();
@@ -445,8 +445,8 @@ function filmaniak_get_firebase_access_token() {
         'exp' => $now + 3600,
     ];
 
-    $jwt_header = filmaniak_firebase_base64url_encode(wp_json_encode($header));
-    $jwt_claims = filmaniak_firebase_base64url_encode(wp_json_encode($claim_set));
+    $jwt_header = invitaty_firebase_base64url_encode(wp_json_encode($header));
+    $jwt_claims = invitaty_firebase_base64url_encode(wp_json_encode($claim_set));
     $unsigned_jwt = $jwt_header . '.' . $jwt_claims;
 
     $signature = '';
@@ -463,7 +463,7 @@ function filmaniak_get_firebase_access_token() {
         return new WP_Error('firebase_jwt_sign_failed', 'No se pudo firmar el JWT de Google.');
     }
 
-    $jwt = $unsigned_jwt . '.' . filmaniak_firebase_base64url_encode($signature);
+    $jwt = $unsigned_jwt . '.' . invitaty_firebase_base64url_encode($signature);
 
     $response = wp_remote_post($service_account['token_uri'], [
         'headers' => [
@@ -491,18 +491,18 @@ function filmaniak_get_firebase_access_token() {
     return $body['access_token'];
 }
 
-function filmaniak_send_push_to_token($fcm_token, $title, $message) {
-    if (!defined('FILMANIAK_FIREBASE_PROJECT_ID')) {
-        return new WP_Error('firebase_project_missing', 'FILMANIAK_FIREBASE_PROJECT_ID no está definida.');
+function invitaty_send_push_to_token($fcm_token, $title, $message) {
+    if (!defined('INVITATY_FIREBASE_PROJECT_ID')) {
+        return new WP_Error('firebase_project_missing', 'INVITATY_FIREBASE_PROJECT_ID no estÃ¡ definida.');
     }
 
-    $access_token = filmaniak_get_firebase_access_token();
+    $access_token = invitaty_get_firebase_access_token();
 
     if (is_wp_error($access_token)) {
         return $access_token;
     }
 
-    $endpoint = 'https://fcm.googleapis.com/v1/projects/' . FILMANIAK_FIREBASE_PROJECT_ID . '/messages:send';
+    $endpoint = 'https://fcm.googleapis.com/v1/projects/' . INVITATY_FIREBASE_PROJECT_ID . '/messages:send';
 
     $payload = [
         'message' => [
@@ -540,18 +540,18 @@ function filmaniak_send_push_to_token($fcm_token, $title, $message) {
     return $body;
 }
 
-function filmaniak_send_push_to_topic($topic, $title, $message) {
-    if (!defined('FILMANIAK_FIREBASE_PROJECT_ID')) {
-        return new WP_Error('firebase_project_missing', 'FILMANIAK_FIREBASE_PROJECT_ID no está definida.');
+function invitaty_send_push_to_topic($topic, $title, $message) {
+    if (!defined('INVITATY_FIREBASE_PROJECT_ID')) {
+        return new WP_Error('firebase_project_missing', 'INVITATY_FIREBASE_PROJECT_ID no estÃ¡ definida.');
     }
 
-    $access_token = filmaniak_get_firebase_access_token();
+    $access_token = invitaty_get_firebase_access_token();
 
     if (is_wp_error($access_token)) {
         return $access_token;
     }
 
-    $endpoint = 'https://fcm.googleapis.com/v1/projects/' . FILMANIAK_FIREBASE_PROJECT_ID . '/messages:send';
+    $endpoint = 'https://fcm.googleapis.com/v1/projects/' . INVITATY_FIREBASE_PROJECT_ID . '/messages:send';
 
     $payload = [
         'message' => [
@@ -593,8 +593,8 @@ function filmaniak_send_push_to_topic($topic, $title, $message) {
     return $body;
 }
 
-function filmaniak_send_push_to_user($user_id, $title, $message) {
-    $tokens = filmaniak_get_user_fcm_tokens($user_id);
+function invitaty_send_push_to_user($user_id, $title, $message) {
+    $tokens = invitaty_get_user_fcm_tokens($user_id);
 
     if (empty($tokens)) {
         return [
@@ -610,11 +610,11 @@ function filmaniak_send_push_to_user($user_id, $title, $message) {
     $results = [];
 
     foreach ($tokens as $token) {
-        $result = filmaniak_send_push_to_token($token, $title, $message);
+        $result = invitaty_send_push_to_token($token, $title, $message);
 
         if (is_wp_error($result)) {
             $failed++;
-            filmaniak_remove_user_fcm_token($user_id, $token);
+            invitaty_remove_user_fcm_token($user_id, $token);
 
             $results[] = [
                 'token' => $token,
@@ -640,13 +640,13 @@ function filmaniak_send_push_to_user($user_id, $title, $message) {
 
 /**
  * =========================================================
- * FUNCIÓN PRÁCTICA: CREA NOTIFICACIÓN + ENVÍA PUSH
+ * FUNCIÃ“N PRÃCTICA: CREA NOTIFICACIÃ“N + ENVÃA PUSH
  * =========================================================
  */
-function filmaniak_notify_user($user_id, $title, $message, $send_push = true) {
-    $notification_id = filmaniak_create_notification($user_id, $title, $message);
+function invitaty_notify_user($user_id, $title, $message, $send_push = true) {
+    $notification_id = invitaty_create_notification($user_id, $title, $message);
     $push_result = $send_push
-        ? filmaniak_send_push_to_user($user_id, $title, $message)
+        ? invitaty_send_push_to_user($user_id, $title, $message)
         : [
             'success' => true,
             'sent' => 0,
@@ -661,13 +661,13 @@ function filmaniak_notify_user($user_id, $title, $message, $send_push = true) {
 }
 
 /**
- * Envía notificación + push en el idioma del usuario (filmaniak_language).
- * Usa claves de filmaniak_translations.php. Ejemplo:
- *   filmaniak_notify_user_translated($user_id, 'notif_new_msg_title', 'notif_new_msg_body', ['name' => 'Juan']);
+ * EnvÃ­a notificaciÃ³n + push en el idioma del usuario (invitaty_language).
+ * Usa claves de invitaty_translations.php. Ejemplo:
+ *   invitaty_notify_user_translated($user_id, 'notif_new_msg_title', 'notif_new_msg_body', ['name' => 'Juan']);
  */
-function filmaniak_notify_user_translated($user_id, $title_key, $message_key, $replacements = [], $send_push = true) {
-    $locale = function_exists('filmaniak_get_user_language') ? filmaniak_get_user_language($user_id) : 'en';
-    $title = filmaniak_t($title_key, $locale, $replacements);
-    $message = filmaniak_t($message_key, $locale, $replacements);
-    return filmaniak_notify_user($user_id, $title, $message, $send_push);
+function invitaty_notify_user_translated($user_id, $title_key, $message_key, $replacements = [], $send_push = true) {
+    $locale = function_exists('invitaty_get_user_language') ? invitaty_get_user_language($user_id) : 'en';
+    $title = invitaty_t($title_key, $locale, $replacements);
+    $message = invitaty_t($message_key, $locale, $replacements);
+    return invitaty_notify_user($user_id, $title, $message, $send_push);
 }

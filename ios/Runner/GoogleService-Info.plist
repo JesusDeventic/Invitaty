@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyCr9V7d1RkcOagoIcu92nF-lK8WelHCs5Y</string>
+	<string>AIzaSyC2ezCr4UDqkW0Fyk6Rg-tTcatnXTtl5Fw</string>
 	<key>GCM_SENDER_ID</key>
-	<string>344135822235</string>
+	<string>819871040897</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.deventic.filmaniak</string>
+	<string>com.deventic.invitaty</string>
 	<key>PROJECT_ID</key>
-	<string>filmaniak-app</string>
+	<string>invitaty</string>
 	<key>STORAGE_BUCKET</key>
-	<string>filmaniak-app.firebasestorage.app</string>
+	<string>invitaty.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:344135822235:ios:ba2266d241b115078f4f3e</string>
+	<string>1:819871040897:ios:dda151a3080a00f8a2d480</string>
 </dict>
 </plist>

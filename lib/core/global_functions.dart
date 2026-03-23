@@ -1,22 +1,22 @@
 import 'dart:io';
 
-import 'package:filmaniak/api/filmaniak_api.dart';
-import 'package:filmaniak/api/firebase_web_config.dart';
-import 'package:filmaniak/core/global_variables.dart';
+import 'package:invitaty/api/invitaty_api.dart';
+import 'package:invitaty/api/firebase_web_config.dart';
+import 'package:invitaty/core/global_variables.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/intl.dart';
-import 'package:filmaniak/core/secure_storage.dart';
-import 'package:filmaniak/core/user_preferences.dart';
-import 'package:filmaniak/generated/l10n.dart';
+import 'package:invitaty/core/secure_storage.dart';
+import 'package:invitaty/core/user_preferences.dart';
+import 'package:invitaty/generated/l10n.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
-import 'package:filmaniak/main.dart';
-import 'package:filmaniak/providers/language_provider.dart';
+import 'package:invitaty/main.dart';
+import 'package:invitaty/providers/language_provider.dart';
 
-final _secureStorage = FilmaniakSecureStorage();
+final _secureStorage = InvitatySecureStorage();
 
 Future<void> loadAppVersion() async {
   final info = await PackageInfo.fromPlatform();
@@ -38,7 +38,7 @@ Future<void> logoutUser() async {
       // ignorar errores de FCM en logout
     }
   }
-  await FilmaniakApi.logoutAndClear();
+  await InvitatyApi.logoutAndClear();
   await UserPreferences().clearCachedUser();
 }
 
@@ -47,7 +47,7 @@ Future<bool> loginUser() async {
   final token = await _secureStorage.getToken();
   if (token == null || token.isEmpty) return false;
   try {
-    final user = await FilmaniakApi.validateToken(token);
+    final user = await InvitatyApi.validateToken(token);
     if (user == null) return false;
     globalUserToken = token;
     globalCurrentUser = user;
@@ -96,7 +96,7 @@ Future<void> syncPushConfig() async {
     String? fcmToken;
     try {
       fcmToken = kIsWeb
-          ? await fcm.getToken(vapidKey: FilmaniakFirebaseWebConfig.webVapidKey)
+          ? await fcm.getToken(vapidKey: InvitatyFirebaseWebConfig.webVapidKey)
           : await fcm.getToken();
     } catch (e) {
       final s = e.toString();
@@ -109,7 +109,7 @@ Future<void> syncPushConfig() async {
     }
     if (fcmToken == null || fcmToken.isEmpty) return;
 
-    final ok = await FilmaniakApi.registerPushToken(
+    final ok = await InvitatyApi.registerPushToken(
       token: globalUserToken,
       fcmToken: fcmToken,
     );

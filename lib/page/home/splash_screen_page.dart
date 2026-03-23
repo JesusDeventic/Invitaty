@@ -1,10 +1,10 @@
-import 'package:filmaniak/core/global_functions.dart';
-import 'package:filmaniak/core/global_variables.dart';
-import 'package:filmaniak/generated/l10n.dart';
-import 'package:filmaniak/routes/app_routes.dart';
-import 'package:filmaniak/controller/recaptcha_controller.dart';
+import 'package:invitaty/core/global_functions.dart';
+import 'package:invitaty/core/global_variables.dart';
+import 'package:invitaty/generated/l10n.dart';
+import 'package:invitaty/routes/app_routes.dart';
+import 'package:invitaty/controller/recaptcha_controller.dart';
 import 'dart:io';
-import 'package:filmaniak/api/filmaniak_api.dart';
+import 'package:invitaty/api/invitaty_api.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -49,7 +49,7 @@ class _SplashScreenPageState extends State<SplashScreenPage>
 
   Future<void> _checkServerStatusAndNavigate() async {
     try {
-      final status = await FilmaniakApi.getStatus();
+      final status = await InvitatyApi.getStatus();
       if (!mounted) return;
 
       if (status == null) {

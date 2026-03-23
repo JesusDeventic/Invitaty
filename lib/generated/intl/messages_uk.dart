@@ -23,7 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(seconds) =>
       "Невірне ім\'я користувача або пароль.\nЗачекайте ${seconds} секунд перед повторною спробою";
 
-  static String m1(username) => "Профіль @${username} у Filmaniak";
+  static String m1(username) => "Профіль @${username} у Invitaty";
 
   static String m2(username) => "QR для @${username}";
 
@@ -35,10 +35,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionNo": MessageLookupByLibrary.simpleMessage("Ні"),
     "actionYes": MessageLookupByLibrary.simpleMessage("Так"),
     "andLabel": MessageLookupByLibrary.simpleMessage("та"),
-    "appName": MessageLookupByLibrary.simpleMessage("Filmaniak"),
+    "appName": MessageLookupByLibrary.simpleMessage("Invitaty"),
     "appVersion10Code": MessageLookupByLibrary.simpleMessage("v1.0.0"),
     "appVersion10Description": MessageLookupByLibrary.simpleMessage(
-      "·Перший випуск Filmaniak.",
+      "·Перший випуск Invitaty.",
     ),
     "appVersionChangeLogTitle": MessageLookupByLibrary.simpleMessage(
       "Журнал змін",
@@ -111,10 +111,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Пароль",
     ),
     "dialogErrorAppVersion": MessageLookupByLibrary.simpleMessage(
-      "Доступна нова версія Filmaniak.\nОновіть додаток, щоб продовжити",
+      "Доступна нова версія Invitaty.\nОновіть додаток, щоб продовжити",
     ),
     "dialogErrorServerConnection": MessageLookupByLibrary.simpleMessage(
-      "Не вдалося підключитися до сервера Filmaniak",
+      "Не вдалося підключитися до сервера Invitaty",
     ),
     "dialogErrorServerMaintenance": MessageLookupByLibrary.simpleMessage(
       "Додаток на обслуговуванні. Спробуйте пізніше",
@@ -183,9 +183,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
       "Це додаток із базою фільмів, серіалів та іншого аудіовізуального контенту, з інструментами для взаємодії з учасниками, списками, оцінками та відгуками.",
     ),
-    "faq1Question": MessageLookupByLibrary.simpleMessage("Що таке Filmaniak?"),
+    "faq1Question": MessageLookupByLibrary.simpleMessage("Що таке Invitaty?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "Ні, Filmaniak — не стримінговий сервіс; це лише база даних з різними функціями щодо контенту.",
+      "Ні, Invitaty — не стримінговий сервіс; це лише база даних з різними функціями щодо контенту.",
     ),
     "faq2Question": MessageLookupByLibrary.simpleMessage(
       "Чи можна дивитися фільми та серіали?",
@@ -414,7 +414,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "socialWhatsappLabel": MessageLookupByLibrary.simpleMessage("WhatsApp"),
     "statusLabel": MessageLookupByLibrary.simpleMessage("Статус"),
     "subjectSupport": MessageLookupByLibrary.simpleMessage(
-      "Зв\'язок з Filmaniak",
+      "Зв\'язок з Invitaty",
     ),
     "termsAndConditionsLabel": MessageLookupByLibrary.simpleMessage(
       "Умови використання",

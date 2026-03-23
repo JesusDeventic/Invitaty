@@ -1,8 +1,8 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-/// Almacenamiento seguro del token de sesión (Filmaniak).
-class FilmaniakSecureStorage {
-  static const _keyToken = 'filmaniak_auth_token';
+/// Almacenamiento seguro del token de sesión (Invitaty).
+class InvitatySecureStorage {
+  static const _keyToken = 'invitaty_auth_token';
 
   final FlutterSecureStorage _storage = const FlutterSecureStorage(
     aOptions: AndroidOptions(encryptedSharedPreferences: true),

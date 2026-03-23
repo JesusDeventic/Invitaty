@@ -23,7 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(seconds) =>
       "Nume de utilizator sau parolă incorectă.\nAșteaptă ${seconds} secunde înainte de a încerca din nou";
 
-  static String m1(username) => "Profilul lui @${username} pe Filmaniak";
+  static String m1(username) => "Profilul lui @${username} pe Invitaty";
 
   static String m2(username) => "QR pentru @${username}";
 
@@ -33,10 +33,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionNo": MessageLookupByLibrary.simpleMessage("Nu"),
     "actionYes": MessageLookupByLibrary.simpleMessage("Da"),
     "andLabel": MessageLookupByLibrary.simpleMessage("și"),
-    "appName": MessageLookupByLibrary.simpleMessage("Filmaniak"),
+    "appName": MessageLookupByLibrary.simpleMessage("Invitaty"),
     "appVersion10Code": MessageLookupByLibrary.simpleMessage("v1.0.0"),
     "appVersion10Description": MessageLookupByLibrary.simpleMessage(
-      "·Versiunea inițială Filmaniak.",
+      "·Versiunea inițială Invitaty.",
     ),
     "appVersionChangeLogTitle": MessageLookupByLibrary.simpleMessage(
       "Jurnal modificări",
@@ -105,10 +105,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Parolă",
     ),
     "dialogErrorAppVersion": MessageLookupByLibrary.simpleMessage(
-      "Este disponibilă o versiune nouă Filmaniak.\nActualizează aplicația pentru a continua",
+      "Este disponibilă o versiune nouă Invitaty.\nActualizează aplicația pentru a continua",
     ),
     "dialogErrorServerConnection": MessageLookupByLibrary.simpleMessage(
-      "Nu s-a putut conecta la serverul Filmaniak",
+      "Nu s-a putut conecta la serverul Invitaty",
     ),
     "dialogErrorServerMaintenance": MessageLookupByLibrary.simpleMessage(
       "Aplicația este în mentenanță. Încearcă mai târziu",
@@ -177,9 +177,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
       "Este o aplicație cu o bază de date de filme, seriale și alte conținuturi audiovizuale, cu instrumente pentru interacțiunea cu alți membri, liste, evaluări și recenzii.",
     ),
-    "faq1Question": MessageLookupByLibrary.simpleMessage("Ce este Filmaniak?"),
+    "faq1Question": MessageLookupByLibrary.simpleMessage("Ce este Invitaty?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "Nu, Filmaniak nu este o aplicație de streaming; este doar o bază de date cu diverse funcții legate de conținut.",
+      "Nu, Invitaty nu este o aplicație de streaming; este doar o bază de date cu diverse funcții legate de conținut.",
     ),
     "faq2Question": MessageLookupByLibrary.simpleMessage(
       "Pot viziona filme și seriale?",
@@ -403,7 +403,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "socialWhatsappLabel": MessageLookupByLibrary.simpleMessage("WhatsApp"),
     "statusLabel": MessageLookupByLibrary.simpleMessage("Status"),
-    "subjectSupport": MessageLookupByLibrary.simpleMessage("Contact Filmaniak"),
+    "subjectSupport": MessageLookupByLibrary.simpleMessage("Contact Invitaty"),
     "termsAndConditionsLabel": MessageLookupByLibrary.simpleMessage(
       "Termeni și condiții",
     ),

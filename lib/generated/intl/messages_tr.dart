@@ -23,7 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(seconds) =>
       "Kullanıcı adı veya şifre hatalı.\nTekrar denemeden önce ${seconds} saniye bekleyin";
 
-  static String m1(username) => "Filmaniak\'ta @${username} profili";
+  static String m1(username) => "Invitaty\'ta @${username} profili";
 
   static String m2(username) => "@${username} için QR";
 
@@ -33,10 +33,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionNo": MessageLookupByLibrary.simpleMessage("Hayır"),
     "actionYes": MessageLookupByLibrary.simpleMessage("Evet"),
     "andLabel": MessageLookupByLibrary.simpleMessage("ve"),
-    "appName": MessageLookupByLibrary.simpleMessage("Filmaniak"),
+    "appName": MessageLookupByLibrary.simpleMessage("Invitaty"),
     "appVersion10Code": MessageLookupByLibrary.simpleMessage("v1.0.0"),
     "appVersion10Description": MessageLookupByLibrary.simpleMessage(
-      "·Filmaniak\'ın ilk sürümü.",
+      "·Invitaty\'ın ilk sürümü.",
     ),
     "appVersionChangeLogTitle": MessageLookupByLibrary.simpleMessage(
       "Değişiklik günlüğü",
@@ -103,10 +103,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Şifre",
     ),
     "dialogErrorAppVersion": MessageLookupByLibrary.simpleMessage(
-      "Filmaniak\'ın yeni bir sürümü var.\nDevam etmek için uygulamayı güncelleyin",
+      "Invitaty\'ın yeni bir sürümü var.\nDevam etmek için uygulamayı güncelleyin",
     ),
     "dialogErrorServerConnection": MessageLookupByLibrary.simpleMessage(
-      "Filmaniak sunucusuna bağlanılamadı",
+      "Invitaty sunucusuna bağlanılamadı",
     ),
     "dialogErrorServerMaintenance": MessageLookupByLibrary.simpleMessage(
       "Uygulama şu anda bakımda. Daha sonra tekrar deneyin",
@@ -175,9 +175,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
       "Filmler, diziler ve diğer görsel-işitsel içerikler için bir veritabanı sunan; üyelerle etkileşim, listeler, puanlar ve incelemeler gibi özellikler içeren bir uygulamadır.",
     ),
-    "faq1Question": MessageLookupByLibrary.simpleMessage("Filmaniak nedir?"),
+    "faq1Question": MessageLookupByLibrary.simpleMessage("Invitaty nedir?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "Hayır, Filmaniak bir yayın uygulaması değildir; yalnızca içerikle ilgili çeşitli özelliklere sahip bir veritabanıdır.",
+      "Hayır, Invitaty bir yayın uygulaması değildir; yalnızca içerikle ilgili çeşitli özelliklere sahip bir veritabanıdır.",
     ),
     "faq2Question": MessageLookupByLibrary.simpleMessage(
       "Film ve dizi izlenebilir mi?",
@@ -391,9 +391,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "socialWhatsappLabel": MessageLookupByLibrary.simpleMessage("WhatsApp"),
     "statusLabel": MessageLookupByLibrary.simpleMessage("Durum"),
-    "subjectSupport": MessageLookupByLibrary.simpleMessage(
-      "Filmaniak iletişim",
-    ),
+    "subjectSupport": MessageLookupByLibrary.simpleMessage("Invitaty iletişim"),
     "termsAndConditionsLabel": MessageLookupByLibrary.simpleMessage(
       "Şartlar ve koşullar",
     ),

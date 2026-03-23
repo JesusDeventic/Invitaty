@@ -1,15 +1,15 @@
 import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:filmaniak/api/firebase_web_config.dart';
-import 'package:filmaniak/core/global_functions.dart';
+import 'package:invitaty/api/firebase_web_config.dart';
+import 'package:invitaty/core/global_functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart' show Color, debugPrint;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /// Servicio centralizado de notificaciones push (Android / iOS / Web),
 /// alineado con Fitcron: Firebase sin opciones en nativo, opciones solo en Web.
-class FilmaniakMessagingService {
+class InvitatyMessagingService {
   FirebaseMessaging? _firebaseMessaging;
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
@@ -17,13 +17,13 @@ class FilmaniakMessagingService {
   Future<void> initialize() async {
     try {
       if (kIsWeb) {
-        final o = FilmaniakFirebaseWebConfig.webFirebaseOptions;
+        final o = InvitatyFirebaseWebConfig.webFirebaseOptions;
         if (o.apiKey.isEmpty ||
             o.appId.isEmpty ||
             o.messagingSenderId.isEmpty ||
             o.projectId.isEmpty) {
           debugPrint(
-            'FCM Web no configurado: rellena FilmaniakFirebaseWebConfig',
+            'FCM Web no configurado: rellena InvitatyFirebaseWebConfig',
           );
           return;
         }
@@ -64,7 +64,7 @@ class FilmaniakMessagingService {
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
           debugPrint('Mensaje FCM en primer plano: ${message.messageId}');
 
-          final title = message.notification?.title ?? 'Filmaniak';
+          final title = message.notification?.title ?? 'Invitaty';
           final body = message.notification?.body ?? 'Nueva notificación';
 
           await _showNotification(
@@ -76,7 +76,7 @@ class FilmaniakMessagingService {
       }
 
       FirebaseMessaging.onBackgroundMessage(
-        _filmaniakFirebaseMessagingBackgroundHandler,
+        _invitatyFirebaseMessagingBackgroundHandler,
       );
 
       FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
@@ -89,7 +89,7 @@ class FilmaniakMessagingService {
         } catch (_) {}
       });
     } catch (e) {
-      debugPrint('Error inicializando FilmaniakMessagingService: $e');
+      debugPrint('Error inicializando InvitatyMessagingService: $e');
     }
   }
 
@@ -101,9 +101,9 @@ class FilmaniakMessagingService {
     if (kIsWeb) return;
 
     const androidDetails = AndroidNotificationDetails(
-      'filmaniak_channel',
-      'Filmaniak Notifications',
-      channelDescription: 'Canal de notificaciones de Filmaniak',
+      'invitaty_channel',
+      'Invitaty Notifications',
+      channelDescription: 'Canal de notificaciones de Invitaty',
       importance: Importance.max,
       priority: Priority.high,
       showWhen: true,
@@ -133,19 +133,19 @@ class FilmaniakMessagingService {
 }
 
 @pragma('vm:entry-point')
-Future<void> _filmaniakFirebaseMessagingBackgroundHandler(
+Future<void> _invitatyFirebaseMessagingBackgroundHandler(
   RemoteMessage message,
 ) async {
   try {
     if (kIsWeb) {
       await Firebase.initializeApp(
-        options: FilmaniakFirebaseWebConfig.webFirebaseOptions,
+        options: InvitatyFirebaseWebConfig.webFirebaseOptions,
       );
     } else {
       await Firebase.initializeApp();
     }
     debugPrint('Mensaje FCM en segundo plano: ${message.messageId}');
   } catch (e) {
-    debugPrint('Error en background handler FCM Filmaniak: $e');
+    debugPrint('Error en background handler FCM Invitaty: $e');
   }
 }

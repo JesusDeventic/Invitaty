@@ -1,6 +1,6 @@
-// Service Worker para notificaciones push de Filmaniak (basado en Fitcron)
+// Service Worker para notificaciones push de Invitaty
 
-console.log('Filmaniak Service Worker cargado');
+console.log('Invitaty Service Worker cargado');
 
 self.addEventListener('install', (event) => {
   console.log('Service Worker instalado');
@@ -26,7 +26,7 @@ self.addEventListener('push', function (event) {
       vibrate: [200, 100, 200],
       requireInteraction: true,
       silent: false,
-      tag: data.fcmMessageId || 'filmaniak-default-tag',
+      tag: data.fcmMessageId || 'invitaty-default-tag',
       renotify: true,
       actions: [
         {
@@ -39,7 +39,7 @@ self.addEventListener('push', function (event) {
     event.waitUntil(
       self.registration
         .showNotification(
-          (data.notification && data.notification.title) || 'Filmaniak',
+          (data.notification && data.notification.title) || 'Invitaty',
           options,
         )
         .then(() => {

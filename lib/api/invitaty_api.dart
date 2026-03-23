@@ -1,58 +1,59 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:filmaniak/core/global_variables.dart';
-import 'package:filmaniak/core/secure_storage.dart';
-import 'package:filmaniak/model/user_model.dart';
-import 'package:filmaniak/model/app_status_model.dart';
-import 'package:filmaniak/model/private_message_model.dart';
+import 'package:invitaty/core/global_variables.dart';
+import 'package:invitaty/core/secure_storage.dart';
+import 'package:invitaty/model/user_model.dart';
+import 'package:invitaty/model/app_status_model.dart';
+import 'package:invitaty/model/private_message_model.dart';
 import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform;
 import 'package:http/http.dart' as http;
 
-/// Base URL del WordPress (La Retroteca).
-const String filmaniakBaseUrl = 'https://retroteca.org/wp-json/filmaniak/v1';
+/// Base URL del backend WordPress (REST namespace `invitaty/v1`).
+/// Ajusta el dominio al servidor donde despliegues los snippets PHP.
+const String invitatyBaseUrl = 'https://invitaty.com/wp-json/invitaty/v1';
 /// Base pública de la app Flutter Web para enlaces compartibles de perfil.
 /// Ajusta este valor al dominio real donde publiques la app web.
-const String filmaniakAppPublicBaseUrl = 'https://app.filmaniak.com';
+const String invitatyAppPublicBaseUrl = 'https://app.invitaty.com';
 
-final FilmaniakSecureStorage _secureStorage = FilmaniakSecureStorage();
+final InvitatySecureStorage _secureStorage = InvitatySecureStorage();
 
 /// User-Agent con app + dispositivo para que el backend lo guarde en user_agent.
-String _getFilmaniakUserAgent() {
+String _getInvitatyUserAgent() {
   final v = globalCurrentVersionApp.isNotEmpty ? globalCurrentVersionApp : '1.0.0';
-  if (kIsWeb) return 'Filmaniak/$v (Web)';
+  if (kIsWeb) return 'Invitaty/$v (Web)';
   switch (defaultTargetPlatform) {
     case TargetPlatform.android:
-      return 'Filmaniak/$v (Android)';
+      return 'Invitaty/$v (Android)';
     case TargetPlatform.iOS:
-      return 'Filmaniak/$v (iOS)';
+      return 'Invitaty/$v (iOS)';
     case TargetPlatform.windows:
-      return 'Filmaniak/$v (Windows)';
+      return 'Invitaty/$v (Windows)';
     case TargetPlatform.macOS:
-      return 'Filmaniak/$v (macOS)';
+      return 'Invitaty/$v (macOS)';
     case TargetPlatform.linux:
-      return 'Filmaniak/$v (Linux)';
+      return 'Invitaty/$v (Linux)';
     default:
-      return 'Filmaniak/$v';
+      return 'Invitaty/$v';
   }
 }
 
-class FilmaniakApi {
-  static const String _baseUrl = filmaniakBaseUrl;
+class InvitatyApi {
+  static const String _baseUrl = invitatyBaseUrl;
 
   static String buildPublicProfileUrl(String username) {
     final clean = username.trim();
     if (clean.isEmpty) return '';
     // Deep link para navegación dentro de la app web (y que también se puede
     // mapear a la app nativa con App Links / Universal Links).
-    return '$filmaniakAppPublicBaseUrl/user/${Uri.encodeComponent(clean)}';
+    return '$invitatyAppPublicBaseUrl/user/${Uri.encodeComponent(clean)}';
   }
 
   static Map<String, String> _headers({String? token}) {
     final map = <String, String>{
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'User-Agent': _getFilmaniakUserAgent(),
+      'User-Agent': _getInvitatyUserAgent(),
     };
     if (token != null && token.isNotEmpty) {
       map['Authorization'] = 'Bearer $token';
@@ -119,7 +120,7 @@ class FilmaniakApi {
   }
 
   /// GET /auth/me — valida token y devuelve usuario o null.
-  static Future<FilmaniakUser?> validateToken(String token) async {
+  static Future<InvitatyUser?> validateToken(String token) async {
     final url = Uri.parse('$_baseUrl/auth/me');
     final response = await http.get(
       url,
@@ -130,7 +131,7 @@ class FilmaniakApi {
     if (data == null || data['success'] != true) return null;
     final userJson = data['user'];
     if (userJson is! Map<String, dynamic>) return null;
-    return FilmaniakUser.fromJson(userJson);
+    return InvitatyUser.fromJson(userJson);
   }
 
   /// POST /auth/logout
@@ -193,13 +194,13 @@ class FilmaniakApi {
       await logout(globalUserToken);
     }
     globalUserToken = '';
-    globalCurrentUser = FilmaniakUser();
+    globalCurrentUser = InvitatyUser();
     await _secureStorage.removeToken();
   }
 
   /// Verifica un token de reCAPTCHA v3 contra el endpoint de WordPress.
   static Future<Map<String, dynamic>> verifyRecaptcha(String token) async {
-    final url = Uri.parse('$filmaniakBaseUrl/verify-recaptcha');
+    final url = Uri.parse('$invitatyBaseUrl/verify-recaptcha');
     final response = await http.post(
       url,
       headers: _headers(),
@@ -218,13 +219,13 @@ class FilmaniakApi {
   }
 
   /// GET /status — devuelve versión mínima y estado (mantenimiento).
-  static Future<FilmaniakAppStatus?> getStatus() async {
-    final url = Uri.parse('$filmaniakBaseUrl/status');
+  static Future<InvitatyAppStatus?> getStatus() async {
+    final url = Uri.parse('$invitatyBaseUrl/status');
     try {
       final response = await http.get(url, headers: _headers());
       if (response.statusCode != 200) return null;
       final data = jsonDecode(response.body) as Map<String, dynamic>? ?? {};
-      return FilmaniakAppStatus.fromJson(data);
+      return InvitatyAppStatus.fromJson(data);
     } catch (_) {
       return null;
     }
@@ -279,7 +280,7 @@ class FilmaniakApi {
     final url = Uri.parse('$_baseUrl/user/update');
     final request = http.MultipartRequest('POST', url);
     request.headers['Authorization'] = 'Bearer $token';
-    request.headers['User-Agent'] = _getFilmaniakUserAgent();
+    request.headers['User-Agent'] = _getInvitatyUserAgent();
     request.headers['Accept'] = 'application/json';
 
     request.fields['user_email'] = userEmail;
@@ -321,7 +322,7 @@ class FilmaniakApi {
   }
 
   /// GET /user/public/{username}
-  static Future<FilmaniakUser?> getPublicUserByUsername(String username) async {
+  static Future<InvitatyUser?> getPublicUserByUsername(String username) async {
     final clean = username.trim();
     if (clean.isEmpty) return null;
 
@@ -336,7 +337,7 @@ class FilmaniakApi {
       if (data['success'] != true) return null;
       final userJson = data['user'];
       if (userJson is! Map<String, dynamic>) return null;
-      return FilmaniakUser.fromJson(userJson);
+      return InvitatyUser.fromJson(userJson);
     } catch (_) {
       return null;
     }

@@ -23,7 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(seconds) =>
       "사용자 이름 또는 비밀번호가 올바르지 않습니다.\n${seconds}초 후 다시 시도하세요";
 
-  static String m1(username) => "Filmaniak의 @${username} 프로필";
+  static String m1(username) => "Invitaty의 @${username} 프로필";
 
   static String m2(username) => "@${username}의 QR";
 
@@ -33,10 +33,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionNo": MessageLookupByLibrary.simpleMessage("아니요"),
     "actionYes": MessageLookupByLibrary.simpleMessage("예"),
     "andLabel": MessageLookupByLibrary.simpleMessage("및"),
-    "appName": MessageLookupByLibrary.simpleMessage("Filmaniak"),
+    "appName": MessageLookupByLibrary.simpleMessage("Invitaty"),
     "appVersion10Code": MessageLookupByLibrary.simpleMessage("v1.0.0"),
     "appVersion10Description": MessageLookupByLibrary.simpleMessage(
-      "·Filmaniak 최초 버전.",
+      "·Invitaty 최초 버전.",
     ),
     "appVersionChangeLogTitle": MessageLookupByLibrary.simpleMessage("변경 로그"),
     "back": MessageLookupByLibrary.simpleMessage("뒤로"),
@@ -79,10 +79,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "dialogDeleteAccountPassword": MessageLookupByLibrary.simpleMessage("비밀번호"),
     "dialogErrorAppVersion": MessageLookupByLibrary.simpleMessage(
-      "Filmaniak의 새 버전이 있습니다.\n계속하려면 앱을 업데이트하세요",
+      "Invitaty의 새 버전이 있습니다.\n계속하려면 앱을 업데이트하세요",
     ),
     "dialogErrorServerConnection": MessageLookupByLibrary.simpleMessage(
-      "Filmaniak 서버에 연결할 수 없습니다",
+      "Invitaty 서버에 연결할 수 없습니다",
     ),
     "dialogErrorServerMaintenance": MessageLookupByLibrary.simpleMessage(
       "앱이 점검 중입니다. 나중에 다시 시도하세요",
@@ -147,9 +147,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
       "영화·드라마 등 데이터베이스와 다른 회원과의 소통, 목록, 평점, 리뷰 등 기능을 제공하는 앱입니다.",
     ),
-    "faq1Question": MessageLookupByLibrary.simpleMessage("Filmaniak이란?"),
+    "faq1Question": MessageLookupByLibrary.simpleMessage("Invitaty이란?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "아니요. Filmaniak은 스트리밍 앱이 아니라 콘텐츠 관련 기능이 있는 데이터베이스입니다.",
+      "아니요. Invitaty은 스트리밍 앱이 아니라 콘텐츠 관련 기능이 있는 데이터베이스입니다.",
     ),
     "faq2Question": MessageLookupByLibrary.simpleMessage("영화와 드라마를 볼 수 있나요?"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
@@ -325,7 +325,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "socialWhatsappLabel": MessageLookupByLibrary.simpleMessage("WhatsApp"),
     "statusLabel": MessageLookupByLibrary.simpleMessage("상태"),
-    "subjectSupport": MessageLookupByLibrary.simpleMessage("Filmaniak 문의"),
+    "subjectSupport": MessageLookupByLibrary.simpleMessage("Invitaty 문의"),
     "termsAndConditionsLabel": MessageLookupByLibrary.simpleMessage("이용약관"),
     "textUserSupportDescription": MessageLookupByLibrary.simpleMessage(
       "도움이 필요하신가요? 채널로 연락 주시면 최대한 빨리 답변드리겠습니다.",

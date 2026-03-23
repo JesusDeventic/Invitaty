@@ -1,7 +1,7 @@
-import 'package:filmaniak/api/filmaniak_api.dart';
-import 'package:filmaniak/core/global_functions.dart';
-import 'package:filmaniak/generated/l10n.dart';
-import 'package:filmaniak/widget/components_widgets.dart';
+import 'package:invitaty/api/invitaty_api.dart';
+import 'package:invitaty/core/global_functions.dart';
+import 'package:invitaty/generated/l10n.dart';
+import 'package:invitaty/widget/components_widgets.dart';
 import 'package:flutter/material.dart';
 
 class NotificationsPage extends StatefulWidget {
@@ -53,7 +53,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
       _shouldLoadMore = true;
     });
 
-    final response = await FilmaniakApi.getNotifications(page: 1, perPage: _perPage);
+    final response = await InvitatyApi.getNotifications(page: 1, perPage: _perPage);
     if (!mounted) return;
 
     final list = response['notifications'] as List<Map<String, dynamic>>;
@@ -91,7 +91,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
     final nextPage = _currentPage + 1;
     final response =
-        await FilmaniakApi.getNotifications(page: nextPage, perPage: _perPage);
+        await InvitatyApi.getNotifications(page: nextPage, perPage: _perPage);
     if (!mounted) return;
 
     final list = response['notifications'] as List<Map<String, dynamic>>;
@@ -110,7 +110,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   Future<void> _markNotificationAsRead(int notificationId) async {
     setState(() => _isProcessing = true);
-    final ok = await FilmaniakApi.markNotificationAsRead(notificationId);
+    final ok = await InvitatyApi.markNotificationAsRead(notificationId);
     if (!mounted) return;
 
     if (ok) {
@@ -138,7 +138,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   Future<void> _deleteAllNotifications() async {
     setState(() => _isProcessing = true);
-    final ok = await FilmaniakApi.deleteNotifications(notificationId: 0);
+    final ok = await InvitatyApi.deleteNotifications(notificationId: 0);
     if (!mounted) return;
     setState(() => _isProcessing = false);
 

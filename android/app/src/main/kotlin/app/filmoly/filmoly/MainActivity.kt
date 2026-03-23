@@ -1,4 +1,4 @@
-package com.deventic.filmaniak
+package com.deventic.invitaty
 
 import io.flutter.embedding.android.FlutterActivity
 

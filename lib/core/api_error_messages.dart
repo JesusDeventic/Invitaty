@@ -1,4 +1,4 @@
-import 'package:filmaniak/generated/l10n.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 /// Devuelve el mensaje de error localizado según el código del backend.
 /// Si el código no se reconoce, devuelve [S.current.errorAuthGeneric].

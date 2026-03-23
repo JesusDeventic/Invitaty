@@ -1,7 +1,7 @@
-<?php
-// Verificar que el usuario esté logueado y sea administrador
+﻿<?php
+// Verificar que el usuario estÃ© logueado y sea administrador
 if (!is_user_logged_in() || !current_user_can('administrator')) {
-    echo '<p style="color:red; padding:20px; border:1px solid #fcc; background:#fee; border-radius:4px; max-width:600px; margin:30px auto;">Acceso restringido. Debes iniciar sesión como administrador para ver esta página.</p>';
+    echo '<p style="color:red; padding:20px; border:1px solid #fcc; background:#fee; border-radius:4px; max-width:600px; margin:30px auto;">Acceso restringido. Debes iniciar sesiÃ³n como administrador para ver esta pÃ¡gina.</p>';
     return;
 }
 
@@ -19,42 +19,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $topic = sanitize_text_field($_POST['fcm_topic'] ?? '');
 
     if (!$title || !$body) {
-        $message_output = '<p style="color:red;">❗ Debes rellenar título y contenido.</p>';
+        $message_output = '<p style="color:red;">â— Debes rellenar tÃ­tulo y contenido.</p>';
     } elseif (empty($topic) && empty($username)) {
-        $message_output = '<p style="color:red;">❗ Debes rellenar "topic" o "username".</p>';
+        $message_output = '<p style="color:red;">â— Debes rellenar "topic" o "username".</p>';
     } else {
         if (!empty($topic)) {
             // Enviar a topic (HTTP v1)
-            $result = filmaniak_send_push_to_topic($topic, $title, $body);
+            $result = invitaty_send_push_to_topic($topic, $title, $body);
             if (is_wp_error($result)) {
-                $message_output = '<p style="color:red;">❌ Error enviando a topic <code>' . esc_html($topic) . '</code>: ' . esc_html($result->get_error_message()) . '</p>';
+                $message_output = '<p style="color:red;">âŒ Error enviando a topic <code>' . esc_html($topic) . '</code>: ' . esc_html($result->get_error_message()) . '</p>';
             } else {
-                $message_output = '<p style="color:green;">✅ Notificación enviada al topic <code>' . esc_html($topic) . '</code>.</p>';
+                $message_output = '<p style="color:green;">âœ… NotificaciÃ³n enviada al topic <code>' . esc_html($topic) . '</code>.</p>';
             }
         } else {
             // Buscar usuario por username y enviar individual
             $user = get_user_by('login', $username);
             if (!$user) {
-                $message_output = '<p style="color:red;">❌ Usuario no encontrado: ' . esc_html($username) . '</p>';
+                $message_output = '<p style="color:red;">âŒ Usuario no encontrado: ' . esc_html($username) . '</p>';
             } else {
-                // Admin tool: siempre crea notificación + manda push.
-                $result = filmaniak_notify_user((int)$user->ID, $title, $body, true);
+                // Admin tool: siempre crea notificaciÃ³n + manda push.
+                $result = invitaty_notify_user((int)$user->ID, $title, $body, true);
 
                 $push = $result['push'] ?? [];
                 $sent = (int)($push['sent'] ?? 0);
                 $failed = (int)($push['failed'] ?? 0);
 
-                $message_output = '<p style="color:green;">✅ Notificación creada y enviada. Enviadas: ' . esc_html((string)$sent) . ' — Fallidas: ' . esc_html((string)$failed) . '</p>';
+                $message_output = '<p style="color:green;">âœ… NotificaciÃ³n creada y enviada. Enviadas: ' . esc_html((string)$sent) . ' â€” Fallidas: ' . esc_html((string)$failed) . '</p>';
 
                 if (!empty($push['results']) && is_array($push['results'])) {
                     $message_output .= '<p><strong>Detalle:</strong><br>';
                     foreach ($push['results'] as $row) {
-                        $token_short = isset($row['token']) ? substr($row['token'], 0, 20) . '…' : '';
+                        $token_short = isset($row['token']) ? substr($row['token'], 0, 20) . 'â€¦' : '';
                         if (!empty($row['success'])) {
-                            $message_output .= '<span style="color:green;">✔</span> ' . esc_html($token_short) . '<br>';
+                            $message_output .= '<span style="color:green;">âœ”</span> ' . esc_html($token_short) . '<br>';
                         } else {
                             $err = isset($row['error']) ? (string)$row['error'] : 'Error desconocido';
-                            $message_output .= '<span style="color:red;">✖</span> ' . esc_html($token_short) . ' — ' . esc_html($err) . '<br>';
+                            $message_output .= '<span style="color:red;">âœ–</span> ' . esc_html($token_short) . ' â€” ' . esc_html($err) . '<br>';
                         }
                     }
                     $message_output .= '</p>';
@@ -69,12 +69,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         * {
             box-sizing: border-box;
         }
-        .filmaniak-push-wrapper {
+        .invitaty-push-wrapper {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             max-width: 600px;
             margin: 30px auto;
         }
-        .filmaniak-push-container {
+        .invitaty-push-container {
             /* sin fondo ni sombra para integrarse con el theme */
         }
         h3 {
@@ -152,15 +152,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 
-    <div class="filmaniak-push-wrapper">
-        <div class="filmaniak-push-container">
-            <h3>Enviar Notificación Push (Filmaniak, HTTP v1)</h3>
+    <div class="invitaty-push-wrapper">
+        <div class="invitaty-push-container">
+            <h3>Enviar NotificaciÃ³n Push (Invitaty, HTTP v1)</h3>
 
             <form method="post" id="notificationForm">
-                <label for="fcm_topic">Topic (por ejemplo: es / en) — vacío para enviar a un usuario:</label>
+                <label for="fcm_topic">Topic (por ejemplo: es / en) â€” vacÃ­o para enviar a un usuario:</label>
                 <input type="text" name="fcm_topic" id="fcm_topic" value="<?php echo esc_attr($topic); ?>">
 
-                <label for="fcm_title">Título:</label>
+                <label for="fcm_title">TÃ­tulo:</label>
                 <input type="text" name="fcm_title" id="fcm_title" value="<?php echo esc_attr($title); ?>" required>
 
                 <label for="fcm_body">Contenido:</label>
@@ -184,7 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <script>
-        // Ocultar/mostrar campo username según si hay topic
+        // Ocultar/mostrar campo username segÃºn si hay topic
         (function() {
             const topicInput = document.getElementById('fcm_topic');
             const userInput = document.getElementById('fcm_user');

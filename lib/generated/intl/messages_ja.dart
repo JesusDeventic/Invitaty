@@ -23,7 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(seconds) =>
       "ユーザー名またはパスワードが正しくありません。\n${seconds} 秒待ってから再試行してください";
 
-  static String m1(username) => "Filmaniak の @${username} のプロフィール";
+  static String m1(username) => "Invitaty の @${username} のプロフィール";
 
   static String m2(username) => "@${username} の QR";
 
@@ -33,10 +33,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionNo": MessageLookupByLibrary.simpleMessage("いいえ"),
     "actionYes": MessageLookupByLibrary.simpleMessage("はい"),
     "andLabel": MessageLookupByLibrary.simpleMessage("および"),
-    "appName": MessageLookupByLibrary.simpleMessage("Filmaniak"),
+    "appName": MessageLookupByLibrary.simpleMessage("Invitaty"),
     "appVersion10Code": MessageLookupByLibrary.simpleMessage("v1.0.0"),
     "appVersion10Description": MessageLookupByLibrary.simpleMessage(
-      "・Filmaniak の初版。",
+      "・Invitaty の初版。",
     ),
     "appVersionChangeLogTitle": MessageLookupByLibrary.simpleMessage("変更履歴"),
     "back": MessageLookupByLibrary.simpleMessage("戻る"),
@@ -83,10 +83,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "パスワード",
     ),
     "dialogErrorAppVersion": MessageLookupByLibrary.simpleMessage(
-      "Filmaniak の新しいバージョンがあります。\n続行するにはアプリを更新してください",
+      "Invitaty の新しいバージョンがあります。\n続行するにはアプリを更新してください",
     ),
     "dialogErrorServerConnection": MessageLookupByLibrary.simpleMessage(
-      "Filmaniak サーバーに接続できません",
+      "Invitaty サーバーに接続できません",
     ),
     "dialogErrorServerMaintenance": MessageLookupByLibrary.simpleMessage(
       "アプリはメンテナンス中です。後でもう一度お試しください",
@@ -149,9 +149,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
       "映画・ドラマなどのデータベースと、他のメンバーとの交流、リスト、評価、レビューなどの機能を備えたアプリです。",
     ),
-    "faq1Question": MessageLookupByLibrary.simpleMessage("Filmaniak とは？"),
+    "faq1Question": MessageLookupByLibrary.simpleMessage("Invitaty とは？"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "いいえ。Filmaniak はストリーミングアプリではなく、コンテンツに関する各種機能を持つデータベースです。",
+      "いいえ。Invitaty はストリーミングアプリではなく、コンテンツに関する各種機能を持つデータベースです。",
     ),
     "faq2Question": MessageLookupByLibrary.simpleMessage("映画やドラマを視聴できますか？"),
     "faq3Answer": MessageLookupByLibrary.simpleMessage(
@@ -329,7 +329,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "socialWhatsappLabel": MessageLookupByLibrary.simpleMessage("WhatsApp"),
     "statusLabel": MessageLookupByLibrary.simpleMessage("ステータス"),
-    "subjectSupport": MessageLookupByLibrary.simpleMessage("Filmaniak お問い合わせ"),
+    "subjectSupport": MessageLookupByLibrary.simpleMessage("Invitaty お問い合わせ"),
     "termsAndConditionsLabel": MessageLookupByLibrary.simpleMessage("利用規約"),
     "textUserSupportDescription": MessageLookupByLibrary.simpleMessage(
       "お困りですか？各チャネルからお問い合わせください。できるだけ早く返信します。",

@@ -1,10 +1,10 @@
-import 'package:filmaniak/core/global_functions.dart';
-import 'package:filmaniak/core/global_variables.dart';
-import 'package:filmaniak/generated/l10n.dart';
-import 'package:filmaniak/main.dart';
-import 'package:filmaniak/page/users/version_changelog_page.dart';
-import 'package:filmaniak/providers/language_provider.dart';
-import 'package:filmaniak/providers/theme_provider.dart';
+import 'package:invitaty/core/global_functions.dart';
+import 'package:invitaty/core/global_variables.dart';
+import 'package:invitaty/generated/l10n.dart';
+import 'package:invitaty/main.dart';
+import 'package:invitaty/page/users/version_changelog_page.dart';
+import 'package:invitaty/providers/language_provider.dart';
+import 'package:invitaty/providers/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';

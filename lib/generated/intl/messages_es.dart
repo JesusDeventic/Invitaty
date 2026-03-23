@@ -23,7 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(seconds) =>
       "Usuario o contraseña incorrectos.\nPor favor espera ${seconds} segundos para intentarlo de nuevo";
 
-  static String m1(username) => "Perfil de @${username} en Filmaniak";
+  static String m1(username) => "Perfil de @${username} en Invitaty";
 
   static String m2(username) => "QR de @${username}";
 
@@ -35,10 +35,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionNo": MessageLookupByLibrary.simpleMessage("No"),
     "actionYes": MessageLookupByLibrary.simpleMessage("Sí"),
     "andLabel": MessageLookupByLibrary.simpleMessage("y"),
-    "appName": MessageLookupByLibrary.simpleMessage("Filmaniak"),
+    "appName": MessageLookupByLibrary.simpleMessage("Invitaty"),
     "appVersion10Code": MessageLookupByLibrary.simpleMessage("v1.0.0"),
     "appVersion10Description": MessageLookupByLibrary.simpleMessage(
-      "·Versión inicial de Filmaniak.",
+      "·Versión inicial de Invitaty.",
     ),
     "appVersionChangeLogTitle": MessageLookupByLibrary.simpleMessage(
       "Registro de cambios",
@@ -109,10 +109,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Contraseña",
     ),
     "dialogErrorAppVersion": MessageLookupByLibrary.simpleMessage(
-      "Hay una nueva versión de Filmaniak disponible.\nActualiza la app para continuar",
+      "Hay una nueva versión de Invitaty disponible.\nActualiza la app para continuar",
     ),
     "dialogErrorServerConnection": MessageLookupByLibrary.simpleMessage(
-      "No se ha podido conectar con el servidor de Filmaniak",
+      "No se ha podido conectar con el servidor de Invitaty",
     ),
     "dialogErrorServerMaintenance": MessageLookupByLibrary.simpleMessage(
       "La aplicación está en mantenimiento en este momento. Vuelve a intentarlo más tarde",
@@ -181,9 +181,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
       "Es una aplicación con una base de datos de películas, series y otro tipo de contenido audiovisual, que dispone de herramientas que permiten a los usuarios interactuar con otros miembros, crear listas, añadir valoraciones y reseñas entre otras funcionalidades.",
     ),
-    "faq1Question": MessageLookupByLibrary.simpleMessage("¿Qué es Filmaniak?"),
+    "faq1Question": MessageLookupByLibrary.simpleMessage("¿Qué es Invitaty?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "No, Filmaniak no es una aplicación de streaming, tan solo funciona como base de datos con funcionalidades diversas sobre el contenido.",
+      "No, Invitaty no es una aplicación de streaming, tan solo funciona como base de datos con funcionalidades diversas sobre el contenido.",
     ),
     "faq2Question": MessageLookupByLibrary.simpleMessage(
       "¿Se pueden ver películas y series?",
@@ -417,9 +417,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "socialWhatsappLabel": MessageLookupByLibrary.simpleMessage("WhatsApp"),
     "statusLabel": MessageLookupByLibrary.simpleMessage("Estado"),
-    "subjectSupport": MessageLookupByLibrary.simpleMessage(
-      "Contacto Filmaniak",
-    ),
+    "subjectSupport": MessageLookupByLibrary.simpleMessage("Contacto Invitaty"),
     "termsAndConditionsLabel": MessageLookupByLibrary.simpleMessage(
       "Términos y condiciones",
     ),

@@ -1,10 +1,10 @@
-import 'package:filmaniak/api/filmaniak_api.dart';
-import 'package:filmaniak/generated/l10n.dart';
-import 'package:filmaniak/model/private_message_model.dart';
-import 'package:filmaniak/page/messages/private_chat_page.dart';
-import 'package:filmaniak/core/global_functions.dart';
-import 'package:filmaniak/core/global_variables.dart';
-import 'package:filmaniak/widget/components_widgets.dart';
+import 'package:invitaty/api/invitaty_api.dart';
+import 'package:invitaty/generated/l10n.dart';
+import 'package:invitaty/model/private_message_model.dart';
+import 'package:invitaty/page/messages/private_chat_page.dart';
+import 'package:invitaty/core/global_functions.dart';
+import 'package:invitaty/core/global_variables.dart';
+import 'package:invitaty/widget/components_widgets.dart';
 import 'package:flutter/material.dart';
 
 class PrivateConversationsPage extends StatefulWidget {
@@ -31,7 +31,7 @@ class _PrivateConversationsPageState extends State<PrivateConversationsPage> {
     if (refresh) {
       setState(() { _loading = true; _conversations.clear(); _hasMore = true; });
     }
-    final result = await FilmaniakApi.getConversations(limit: _pageSize, offset: 0);
+    final result = await InvitatyApi.getConversations(limit: _pageSize, offset: 0);
     if (!mounted) return;
     setState(() {
       _conversations.addAll(result);
@@ -43,7 +43,7 @@ class _PrivateConversationsPageState extends State<PrivateConversationsPage> {
   Future<void> _loadMore() async {
     if (_loadingMore || !_hasMore) return;
     setState(() => _loadingMore = true);
-    final result = await FilmaniakApi.getConversations(
+    final result = await InvitatyApi.getConversations(
       limit: _pageSize, offset: _conversations.length);
     if (!mounted) return;
     setState(() {

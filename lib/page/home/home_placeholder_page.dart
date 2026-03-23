@@ -1,18 +1,18 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:filmaniak/api/filmaniak_api.dart';
-import 'package:filmaniak/core/global_functions.dart';
-import 'package:filmaniak/core/global_variables.dart';
-import 'package:filmaniak/generated/l10n.dart';
-import 'package:filmaniak/page/messages/private_conversations_page.dart';
-import 'package:filmaniak/page/users/account_profile_page.dart';
-import 'package:filmaniak/page/users/public_user_profile_page.dart';
-import 'package:filmaniak/page/users/contact_page.dart';
-import 'package:filmaniak/page/users/general_settings_page.dart';
-import 'package:filmaniak/page/users/faq_page.dart';
-import 'package:filmaniak/page/users/notifications_page.dart';
-import 'package:filmaniak/routes/app_routes.dart';
-import 'package:filmaniak/widget/components_widgets.dart';
+import 'package:invitaty/api/invitaty_api.dart';
+import 'package:invitaty/core/global_functions.dart';
+import 'package:invitaty/core/global_variables.dart';
+import 'package:invitaty/generated/l10n.dart';
+import 'package:invitaty/page/messages/private_conversations_page.dart';
+import 'package:invitaty/page/users/account_profile_page.dart';
+import 'package:invitaty/page/users/public_user_profile_page.dart';
+import 'package:invitaty/page/users/contact_page.dart';
+import 'package:invitaty/page/users/general_settings_page.dart';
+import 'package:invitaty/page/users/faq_page.dart';
+import 'package:invitaty/page/users/notifications_page.dart';
+import 'package:invitaty/routes/app_routes.dart';
+import 'package:invitaty/widget/components_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -48,12 +48,12 @@ class _HomePlaceholderPageState extends State<HomePlaceholderPage> {
   }
 
   Future<void> _refreshUnreadMessages() async {
-    final count = await FilmaniakApi.getUnreadMessagesCount();
+    final count = await InvitatyApi.getUnreadMessagesCount();
     if (mounted) setState(() => _unreadMessagesCount = count);
   }
 
   Future<void> _refreshUnreadNotifications() async {
-    final count = await FilmaniakApi.getUnreadNotificationsCount();
+    final count = await InvitatyApi.getUnreadNotificationsCount();
     if (mounted) setState(() => _unreadNotificationsCount = count);
   }
 

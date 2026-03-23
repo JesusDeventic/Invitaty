@@ -1,4 +1,4 @@
-import 'package:filmaniak/generated/l10n.dart';
+import 'package:invitaty/generated/l10n.dart';
 import 'package:flutter/material.dart';
 
 /// Página de registro de versiones (mismo diseño que Fitcron).

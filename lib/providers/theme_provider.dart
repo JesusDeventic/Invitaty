@@ -1,4 +1,4 @@
-import 'package:filmaniak/core/user_preferences.dart';
+import 'package:invitaty/core/user_preferences.dart';
 import 'package:flutter/material.dart';
 
 class ThemeProvider extends ChangeNotifier {

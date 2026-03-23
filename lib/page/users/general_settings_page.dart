@@ -1,22 +1,22 @@
 import 'dart:io';
 
 import 'package:app_settings/app_settings.dart';
-import 'package:filmaniak/api/filmaniak_api.dart';
-import 'package:filmaniak/core/global_functions.dart';
-import 'package:filmaniak/core/global_variables.dart';
-import 'package:filmaniak/core/user_preferences.dart';
-import 'package:filmaniak/generated/l10n.dart';
-import 'package:filmaniak/model/user_model.dart';
-import 'package:filmaniak/providers/language_provider.dart';
-import 'package:filmaniak/providers/theme_provider.dart';
-import 'package:filmaniak/widget/components_widgets.dart';
+import 'package:invitaty/api/invitaty_api.dart';
+import 'package:invitaty/core/global_functions.dart';
+import 'package:invitaty/core/global_variables.dart';
+import 'package:invitaty/core/user_preferences.dart';
+import 'package:invitaty/generated/l10n.dart';
+import 'package:invitaty/model/user_model.dart';
+import 'package:invitaty/providers/language_provider.dart';
+import 'package:invitaty/providers/theme_provider.dart';
+import 'package:invitaty/widget/components_widgets.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-/// Ajustes generales de Filmaniak (idioma, tema, inicio de semana, formato fecha).
+/// Ajustes generales de Invitaty (idioma, tema, inicio de semana, formato fecha).
 class GeneralSettingsPage extends StatefulWidget {
   const GeneralSettingsPage({super.key});
 
@@ -151,7 +151,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage>
       return false;
     }
     try {
-      final result = await FilmaniakApi.updateUser(
+      final result = await InvitatyApi.updateUser(
         userEmail: globalCurrentUser.email,
         language: context.read<LanguageProvider>().currentLanguage,
         dateFormat: _dateFormat,
@@ -163,7 +163,7 @@ class _GeneralSettingsPageState extends State<GeneralSettingsPage>
       }
       final userJson = result['user'];
       if (userJson is Map<String, dynamic>) {
-        globalCurrentUser = FilmaniakUser.fromJson(userJson);
+        globalCurrentUser = InvitatyUser.fromJson(userJson);
         await _prefs.setCachedUser(globalCurrentUser);
       }
       showCustomSnackBar(S.current.generalSettingsSaveSuccess, type: 1);

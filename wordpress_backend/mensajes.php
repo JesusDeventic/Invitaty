@@ -1,7 +1,7 @@
-<?php
+﻿<?php
 /**
- * Filmaniak Private Messages API
- * Mensajería privada entre usuarios.
+ * Invitaty Private Messages API
+ * MensajerÃ­a privada entre usuarios.
  */
 
 if (!defined('ABSPATH')) {
@@ -10,12 +10,12 @@ if (!defined('ABSPATH')) {
 
 /**
  * =========================================================
- * INSTALACIÓN DE TABLA
+ * INSTALACIÃ“N DE TABLA
  * =========================================================
  */
-function filmaniak_messages_install_table() {
+function invitaty_messages_install_table() {
     global $wpdb;
-    $table = $wpdb->prefix . 'filmaniak_private_messages';
+    $table = $wpdb->prefix . 'invitaty_private_messages';
     $charset_collate = $wpdb->get_charset_collate();
 
     $sql = "CREATE TABLE IF NOT EXISTS {$table} (
@@ -36,7 +36,7 @@ function filmaniak_messages_install_table() {
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
     dbDelta($sql);
 }
-add_action('init', 'filmaniak_messages_install_table');
+add_action('init', 'invitaty_messages_install_table');
 
 /**
  * =========================================================
@@ -44,45 +44,45 @@ add_action('init', 'filmaniak_messages_install_table');
  * =========================================================
  */
 add_action('rest_api_init', function () {
-    register_rest_route('filmaniak/v1', '/messages/conversations', [
+    register_rest_route('invitaty/v1', '/messages/conversations', [
         'methods'             => 'GET',
-        'callback'            => 'filmaniak_msg_get_conversations',
+        'callback'            => 'invitaty_msg_get_conversations',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route('filmaniak/v1', '/messages', [
+    register_rest_route('invitaty/v1', '/messages', [
         'methods'             => 'GET',
-        'callback'            => 'filmaniak_msg_get_messages',
+        'callback'            => 'invitaty_msg_get_messages',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route('filmaniak/v1', '/messages/unread-count', [
+    register_rest_route('invitaty/v1', '/messages/unread-count', [
         'methods'             => 'GET',
-        'callback'            => 'filmaniak_msg_unread_count',
+        'callback'            => 'invitaty_msg_unread_count',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route('filmaniak/v1', '/messages/read-status', [
+    register_rest_route('invitaty/v1', '/messages/read-status', [
         'methods'             => 'GET',
-        'callback'            => 'filmaniak_msg_read_status',
+        'callback'            => 'invitaty_msg_read_status',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route('filmaniak/v1', '/messages/send', [
+    register_rest_route('invitaty/v1', '/messages/send', [
         'methods'             => 'POST',
-        'callback'            => 'filmaniak_msg_send',
+        'callback'            => 'invitaty_msg_send',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route('filmaniak/v1', '/messages/edit', [
+    register_rest_route('invitaty/v1', '/messages/edit', [
         'methods'             => 'POST',
-        'callback'            => 'filmaniak_msg_edit',
+        'callback'            => 'invitaty_msg_edit',
         'permission_callback' => '__return_true',
     ]);
 
-    register_rest_route('filmaniak/v1', '/messages/delete', [
+    register_rest_route('invitaty/v1', '/messages/delete', [
         'methods'             => 'POST',
-        'callback'            => 'filmaniak_msg_delete',
+        'callback'            => 'invitaty_msg_delete',
         'permission_callback' => '__return_true',
     ]);
 });
@@ -92,18 +92,18 @@ add_action('rest_api_init', function () {
  * HELPERS
  * =========================================================
  */
-function filmaniak_msg_validate(WP_REST_Request $request) {
-    return filmaniak_auth_validate_token($request);
+function invitaty_msg_validate(WP_REST_Request $request) {
+    return invitaty_auth_validate_token($request);
 }
 
-function filmaniak_msg_user_data(int $user_id): array {
+function invitaty_msg_user_data(int $user_id): array {
     $user = get_userdata($user_id);
     if (!$user) return ['id' => $user_id, 'username' => '', 'avatar_url' => ''];
     return [
         'id'         => $user_id,
         'username'   => $user->user_login,
-        'avatar_url' => function_exists('filmaniak_get_user_avatar_url')
-            ? filmaniak_get_user_avatar_url($user_id)
+        'avatar_url' => function_exists('invitaty_get_user_avatar_url')
+            ? invitaty_get_user_avatar_url($user_id)
             : get_avatar_url($user_id),
     ];
 }
@@ -111,21 +111,21 @@ function filmaniak_msg_user_data(int $user_id): array {
 /**
  * =========================================================
  * GET /messages/conversations
- * Lista de conversaciones con el último mensaje de cada una.
+ * Lista de conversaciones con el Ãºltimo mensaje de cada una.
  * =========================================================
  */
-function filmaniak_msg_get_conversations(WP_REST_Request $request) {
+function invitaty_msg_get_conversations(WP_REST_Request $request) {
     global $wpdb;
 
-    $user_id = filmaniak_msg_validate($request);
+    $user_id = invitaty_msg_validate($request);
     if (is_wp_error($user_id)) return $user_id;
 
     $limit  = max(1, min(50, (int) ($request->get_param('limit')  ?? 20)));
     $offset = max(0, (int) ($request->get_param('offset') ?? 0));
 
-    $table = $wpdb->prefix . 'filmaniak_private_messages';
+    $table = $wpdb->prefix . 'invitaty_private_messages';
 
-    // Obtener el último mensaje por conversación
+    // Obtener el Ãºltimo mensaje por conversaciÃ³n
     $rows = $wpdb->get_results($wpdb->prepare("
         SELECT m.*
         FROM {$table} m
@@ -145,14 +145,14 @@ function filmaniak_msg_get_conversations(WP_REST_Request $request) {
             ? (int) $row['recipient_id']
             : (int) $row['sender_id'];
 
-        // ¿hay mensajes no leídos del otro usuario?
+        // Â¿hay mensajes no leÃ­dos del otro usuario?
         $has_unread = (bool) $wpdb->get_var($wpdb->prepare("
             SELECT COUNT(*) FROM {$table}
             WHERE sender_id = %d AND recipient_id = %d AND is_read = 0 AND deleted_at IS NULL
         ", $other_id, $user_id));
 
         $conversations[] = [
-            'other_user'   => filmaniak_msg_user_data($other_id),
+            'other_user'   => invitaty_msg_user_data($other_id),
             'last_message' => [
                 'id'         => (int) $row['id'],
                 'sender_id'  => (int) $row['sender_id'],
@@ -172,13 +172,13 @@ function filmaniak_msg_get_conversations(WP_REST_Request $request) {
 /**
  * =========================================================
  * GET /messages?other_user_id=X[&before_id=Y|after_created=Z]
- * Mensajes de una conversación. Marca como leídos los del otro.
+ * Mensajes de una conversaciÃ³n. Marca como leÃ­dos los del otro.
  * =========================================================
  */
-function filmaniak_msg_get_messages(WP_REST_Request $request) {
+function invitaty_msg_get_messages(WP_REST_Request $request) {
     global $wpdb;
 
-    $user_id = filmaniak_msg_validate($request);
+    $user_id = invitaty_msg_validate($request);
     if (is_wp_error($user_id)) return $user_id;
 
     $other_id = (int) ($request->get_param('other_user_id') ?? 0);
@@ -187,7 +187,7 @@ function filmaniak_msg_get_messages(WP_REST_Request $request) {
     $before_id     = $request->get_param('before_id');
     $after_created = $request->get_param('after_created');
 
-    $table = $wpdb->prefix . 'filmaniak_private_messages';
+    $table = $wpdb->prefix . 'invitaty_private_messages';
 
     $where = $wpdb->prepare(
         "((sender_id = %d AND recipient_id = %d) OR (sender_id = %d AND recipient_id = %d))",
@@ -209,7 +209,7 @@ function filmaniak_msg_get_messages(WP_REST_Request $request) {
         ARRAY_A
     );
 
-    // Marcar como leídos los mensajes del otro dirigidos al usuario actual
+    // Marcar como leÃ­dos los mensajes del otro dirigidos al usuario actual
     $wpdb->query($wpdb->prepare(
         "UPDATE {$table} SET is_read = 1
          WHERE sender_id = %d AND recipient_id = %d AND is_read = 0",
@@ -237,13 +237,13 @@ function filmaniak_msg_get_messages(WP_REST_Request $request) {
  * GET /messages/unread-count
  * =========================================================
  */
-function filmaniak_msg_unread_count(WP_REST_Request $request) {
+function invitaty_msg_unread_count(WP_REST_Request $request) {
     global $wpdb;
 
-    $user_id = filmaniak_msg_validate($request);
+    $user_id = invitaty_msg_validate($request);
     if (is_wp_error($user_id)) return $user_id;
 
-    $table = $wpdb->prefix . 'filmaniak_private_messages';
+    $table = $wpdb->prefix . 'invitaty_private_messages';
     $count = (int) $wpdb->get_var($wpdb->prepare(
         "SELECT COUNT(*) FROM {$table} WHERE recipient_id = %d AND is_read = 0 AND deleted_at IS NULL",
         $user_id
@@ -255,19 +255,19 @@ function filmaniak_msg_unread_count(WP_REST_Request $request) {
 /**
  * =========================================================
  * GET /messages/read-status?other_user_id=X
- * ¿Fue leído mi último mensaje por el otro usuario?
+ * Â¿Fue leÃ­do mi Ãºltimo mensaje por el otro usuario?
  * =========================================================
  */
-function filmaniak_msg_read_status(WP_REST_Request $request) {
+function invitaty_msg_read_status(WP_REST_Request $request) {
     global $wpdb;
 
-    $user_id = filmaniak_msg_validate($request);
+    $user_id = invitaty_msg_validate($request);
     if (is_wp_error($user_id)) return $user_id;
 
     $other_id = (int) ($request->get_param('other_user_id') ?? 0);
     if (!$other_id) return new WP_Error('missing_param', 'Falta other_user_id.', ['status' => 400]);
 
-    $table = $wpdb->prefix . 'filmaniak_private_messages';
+    $table = $wpdb->prefix . 'invitaty_private_messages';
     $last = $wpdb->get_row($wpdb->prepare(
         "SELECT is_read FROM {$table}
          WHERE sender_id = %d AND recipient_id = %d
@@ -287,10 +287,10 @@ function filmaniak_msg_read_status(WP_REST_Request $request) {
  * Body: { recipient_id, message }
  * =========================================================
  */
-function filmaniak_msg_send(WP_REST_Request $request) {
+function invitaty_msg_send(WP_REST_Request $request) {
     global $wpdb;
 
-    $user_id = filmaniak_msg_validate($request);
+    $user_id = invitaty_msg_validate($request);
     if (is_wp_error($user_id)) return $user_id;
 
     $params       = $request->get_json_params() ?? [];
@@ -310,7 +310,7 @@ function filmaniak_msg_send(WP_REST_Request $request) {
         return new WP_Error('message_too_long', 'El mensaje no puede superar 2000 caracteres.', ['status' => 400]);
     }
 
-    $table = $wpdb->prefix . 'filmaniak_private_messages';
+    $table = $wpdb->prefix . 'invitaty_private_messages';
     $wpdb->insert($table, [
         'sender_id'    => $user_id,
         'recipient_id' => $recipient_id,
@@ -322,7 +322,7 @@ function filmaniak_msg_send(WP_REST_Request $request) {
     $inserted_id = (int) $wpdb->insert_id;
 
     // Push notification al destinatario
-    filmaniak_msg_send_push($recipient_id, $user_id, $message);
+    invitaty_msg_send_push($recipient_id, $user_id, $message);
 
     return new WP_REST_Response([
         'success' => true,
@@ -345,10 +345,10 @@ function filmaniak_msg_send(WP_REST_Request $request) {
  * Body: { id, message }
  * =========================================================
  */
-function filmaniak_msg_edit(WP_REST_Request $request) {
+function invitaty_msg_edit(WP_REST_Request $request) {
     global $wpdb;
 
-    $user_id = filmaniak_msg_validate($request);
+    $user_id = invitaty_msg_validate($request);
     if (is_wp_error($user_id)) return $user_id;
 
     $params  = $request->get_json_params() ?? [];
@@ -359,7 +359,7 @@ function filmaniak_msg_edit(WP_REST_Request $request) {
         return new WP_Error('missing_fields', 'Faltan campos obligatorios.', ['status' => 400]);
     }
 
-    $table = $wpdb->prefix . 'filmaniak_private_messages';
+    $table = $wpdb->prefix . 'invitaty_private_messages';
     $row   = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$table} WHERE id = %d", $msg_id), ARRAY_A);
 
     if (!$row) return new WP_Error('not_found', 'Mensaje no encontrado.', ['status' => 404]);
@@ -378,13 +378,13 @@ function filmaniak_msg_edit(WP_REST_Request $request) {
 /**
  * =========================================================
  * POST /messages/delete
- * Body: { id }   — soft delete
+ * Body: { id }   â€” soft delete
  * =========================================================
  */
-function filmaniak_msg_delete(WP_REST_Request $request) {
+function invitaty_msg_delete(WP_REST_Request $request) {
     global $wpdb;
 
-    $user_id = filmaniak_msg_validate($request);
+    $user_id = invitaty_msg_validate($request);
     if (is_wp_error($user_id)) return $user_id;
 
     $params = $request->get_json_params() ?? [];
@@ -392,7 +392,7 @@ function filmaniak_msg_delete(WP_REST_Request $request) {
 
     if (!$msg_id) return new WP_Error('missing_fields', 'Falta el id del mensaje.', ['status' => 400]);
 
-    $table = $wpdb->prefix . 'filmaniak_private_messages';
+    $table = $wpdb->prefix . 'invitaty_private_messages';
     $row   = $wpdb->get_row($wpdb->prepare("SELECT * FROM {$table} WHERE id = %d", $msg_id), ARRAY_A);
 
     if (!$row) return new WP_Error('not_found', 'Mensaje no encontrado.', ['status' => 404]);
@@ -412,43 +412,43 @@ function filmaniak_msg_delete(WP_REST_Request $request) {
  * PUSH NOTIFICATION AL DESTINATARIO
  * =========================================================
  */
-function filmaniak_msg_send_push(int $recipient_id, int $sender_id, string $message_text) {
+function invitaty_msg_send_push(int $recipient_id, int $sender_id, string $message_text) {
     $sender = get_userdata($sender_id);
     if (!$sender) return;
 
-    $tokens_meta = get_user_meta($recipient_id, 'filmaniak_fcm_tokens', true);
-    // Nota: el envío PUSH real está implementado en `notificaciones.php`.
+    $tokens_meta = get_user_meta($recipient_id, 'invitaty_fcm_tokens', true);
+    // Nota: el envÃ­o PUSH real estÃ¡ implementado en `notificaciones.php`.
     // Para mensajes privados NO queremos crear registro DB por cada mensaje:
     // solo el push (tipo Fitcron).
 
-    $locale = function_exists('filmaniak_get_user_language') ? filmaniak_get_user_language($recipient_id) : 'en';
+    $locale = function_exists('invitaty_get_user_language') ? invitaty_get_user_language($recipient_id) : 'en';
     $senderName = (string) $sender->user_login;
 
     $bodyText = mb_strlen($message_text) > 100
         ? mb_substr($message_text, 0, 97) . '...'
         : $message_text;
 
-    // Título traducido según idioma del destinatario.
-    $title = function_exists('filmaniak_t')
-        ? filmaniak_t('new_private_message_title', $locale, ['name' => $senderName])
+    // TÃ­tulo traducido segÃºn idioma del destinatario.
+    $title = function_exists('invitaty_t')
+        ? invitaty_t('new_private_message_title', $locale, ['name' => $senderName])
         : "Nuevo mensaje de " . $senderName;
 
     // Body por sistema de traducciones (aunque sea "{message}").
     $body = $bodyText;
 
-    if (function_exists('filmaniak_send_push_to_user')) {
-        filmaniak_send_push_to_user($recipient_id, $title, $body);
+    if (function_exists('invitaty_send_push_to_user')) {
+        invitaty_send_push_to_user($recipient_id, $title, $body);
         return;
     }
 
     // Fallback: si por orden de carga no existe lo anterior, intentamos usar
-    // la función de token (también definida en `notificaciones.php`).
-    if (function_exists('filmaniak_send_push_to_token')) {
+    // la funciÃ³n de token (tambiÃ©n definida en `notificaciones.php`).
+    if (function_exists('invitaty_send_push_to_token')) {
         if (is_array($tokens_meta)) {
             foreach ($tokens_meta as $token_data) {
                 $fcm_token = is_array($token_data) ? ($token_data['token'] ?? '') : (string) $token_data;
                 if (empty($fcm_token)) continue;
-                filmaniak_send_push_to_token($fcm_token, $title, $body);
+                invitaty_send_push_to_token($fcm_token, $title, $body);
             }
         }
     }

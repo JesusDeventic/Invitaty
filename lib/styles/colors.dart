@@ -2,25 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 /// Cursor de mano para elementos interactuables en Windows/desktop.
-final _clickCursor = WidgetStateProperty.all<MouseCursor>(SystemMouseCursors.click);
+final _clickCursor = WidgetStateProperty.all<MouseCursor>(
+  SystemMouseCursors.click,
+);
 
-/// Colores de Filmaniak según el logo: verde lima y gris antracita.
+/// Colores de Invitaty: rosa/magenta principal y gris antracita.
 class AppColors {
-  /// Verde lima vibrante (elementos principales, botones, acentos)
-  static const Color primary = Color(0xFFB8D936);
-  static const Color primaryLow = Color(0xFF9ACD32);
-  static const Color primaryAccent = Color(0xFFC8E65C);
+  /// Rosa principal (elementos principales, botones, acentos)
+  static const Color primary = Color(0xFFFF7BB5);
+
+  /// Variante oscura para estados/hover sutiles
+  static const Color primaryLow = Color(0xFFE85A9C);
+
+  /// Variante clara como acento (tambien se reutiliza como `secondary`)
+  static const Color primaryAccent = Color(0xFFFFB7D8);
+
   /// Gris antracita (fondos oscuros, texto, contraste)
   static const Color anthracite = Color(0xFF2C2C2E);
   static const Color anthraciteDark = Color(0xFF121212);
-  /// Secundario / apoyo
-  static const Color secondary = Color(0xFFE5A84B);
-  static const Color secondaryLow = Color(0xFFFFB84B);
+
+  /// Secundario / apoyo (si no había secundario, usamos un acento claro)
+  static const Color secondary = Color(0xFFFFB7D8);
+  static const Color secondaryLow = Color(0xFFE85A9C);
   static const Color red = Color(0xFFD50032);
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
   static const Color grey = Color(0xFF9E9E9E);
   static const Color surfaceLight = Color(0xFFFAFAFA);
+
   /// Superficie oscura (igual que Fitcron)
   static const Color surfaceDark = Color(0xFF121212);
 }
@@ -84,8 +93,8 @@ ThemeData themeFromColorScheme(ColorScheme colorScheme) {
         systemNavigationBarColor: colorScheme.surface,
         systemNavigationBarIconBrightness:
             colorScheme.brightness == Brightness.dark
-                ? Brightness.light
-                : Brightness.dark,
+            ? Brightness.light
+            : Brightness.dark,
       ),
     ),
     cardTheme: CardThemeData(
@@ -109,14 +118,10 @@ ThemeData themeFromColorScheme(ColorScheme colorScheme) {
     ),
     listTileTheme: ListTileThemeData(
       mouseCursor: _clickCursor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
     ),
     textButtonTheme: TextButtonThemeData(
-      style: ButtonStyle(
-        mouseCursor: _clickCursor,
-      ),
+      style: ButtonStyle(mouseCursor: _clickCursor),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
@@ -137,9 +142,7 @@ ThemeData themeFromColorScheme(ColorScheme colorScheme) {
           const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
         shape: WidgetStateProperty.all<OutlinedBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
     ),
@@ -154,7 +157,9 @@ ThemeData themeFromColorScheme(ColorScheme colorScheme) {
         }),
         side: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.disabled)) {
-            return BorderSide(color: colorScheme.primary.withValues(alpha: 0.3));
+            return BorderSide(
+              color: colorScheme.primary.withValues(alpha: 0.3),
+            );
           }
           return BorderSide(color: colorScheme.primary);
         }),
@@ -162,9 +167,7 @@ ThemeData themeFromColorScheme(ColorScheme colorScheme) {
           const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         ),
         shape: WidgetStateProperty.all<OutlinedBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
       ),
     ),
@@ -176,7 +179,7 @@ ThemeData themeFromColorScheme(ColorScheme colorScheme) {
     switchTheme: SwitchThemeData(
       // Evitamos que el thumb cambie a un color raro al pasar el ratón
       // (hover) en desktop/web.
-      trackOutlineColor: WidgetStateProperty.resolveWith<Color?>((states) {       
+      trackOutlineColor: WidgetStateProperty.resolveWith<Color?>((states) {
         if (states.contains(WidgetState.disabled)) {
           return colorScheme.onSurface.withValues(alpha: 0.1);
         } else if (states.contains(WidgetState.selected)) {
@@ -189,7 +192,7 @@ ThemeData themeFromColorScheme(ColorScheme colorScheme) {
           return colorScheme.onSurface.withValues(alpha: 0.3);
         } else if (states.contains(WidgetState.selected)) {
           return colorScheme.primary.withValues(alpha: 0.3);
-        }       
+        }
         return null; // fallback a Flutter por defecto
       }),
       thumbColor: WidgetStateProperty.resolveWith<Color?>((states) {
@@ -197,9 +200,9 @@ ThemeData themeFromColorScheme(ColorScheme colorScheme) {
           return colorScheme.primary.withValues(alpha: 0.3);
         } else if (states.contains(WidgetState.selected)) {
           return colorScheme.primary;
-        }        
+        }
         return null; // fallback a Flutter por defecto
-      }),      
+      }),
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       mouseCursor: _clickCursor,
@@ -213,10 +216,7 @@ ThemeData themeFromColorScheme(ColorScheme colorScheme) {
         fontWeight: FontWeight.w600,
         color: colorScheme.onSurface,
       ),
-      contentTextStyle: TextStyle(
-        fontSize: 16,
-        color: colorScheme.onSurface,
-      ),
+      contentTextStyle: TextStyle(fontSize: 16, color: colorScheme.onSurface),
     ),
     snackBarTheme: SnackBarThemeData(
       backgroundColor: colorScheme.inverseSurface,

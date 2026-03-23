@@ -2,16 +2,20 @@ import 'package:firebase_core/firebase_core.dart';
 
 /// Solo Web necesita `FirebaseOptions` explícitas; iOS/Android usan
 /// `GoogleService-Info.plist` / `google-services.json` (y en iOS `FirebaseApp.configure()`).
-class FilmaniakFirebaseWebConfig {
+///
+/// Clave VAPID: Firebase Console → Project settings → Cloud Messaging →
+/// Web Push certificates → Key pair (la pública empieza por `B` o `BC`).
+class InvitatyFirebaseWebConfig {
   static const FirebaseOptions webFirebaseOptions = FirebaseOptions(
-    apiKey: 'AIzaSyBiKIkRHFKH_cr2cwCUHAzu8vWKMtq_EkM',
-    appId: '1:344135822235:web:9462fbb5a6d29abf8f4f3e',
-    messagingSenderId: '344135822235',
-    projectId: 'filmaniak-app',
-    authDomain: 'filmaniak-app.firebaseapp.com',
-    storageBucket: 'filmaniak-app.firebasestorage.app',
+    apiKey: 'AIzaSyCnd4j4JaQuei9yL-JoUTwEZ9gXFbL9Nq0',
+    appId: '1:819871040897:web:08821cf7f781becca2d480',
+    messagingSenderId: '819871040897',
+    projectId: 'invitaty',
+    authDomain: 'invitaty.firebaseapp.com',
+    storageBucket: 'invitaty.firebasestorage.app',
   );
 
+  /// Web Push: misma clave que en Firebase → Cloud Messaging → Web Push certificates.
   static const String webVapidKey =
-      'BC-uxoWgohdFoUKoQumf5qlFQzaA6dpQYB4UcKlCNLl0-uIp1Ey-KuAF7RtAxQrxUSFxTCBxszUocEyUyoPLDSk';
+      'BCx6IzS45JM9dfm_EnsLabhc42uwWCXwD2t2oI8_kdXhJNkE4ywuzRNRxWttC05RSYgAXVboFAFzxI4VQnUDmak';
 }

@@ -1,5 +1,5 @@
-name: filmaniak
-description: "A new Flutter project."
+﻿name: invitaty
+description: "Invitaty â€” proyecto Flutter (clonado desde Invitaty)."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -113,7 +113,7 @@ flutter:
   # see https://flutter.dev/to/font-from-package
 
 # Generar l10n al cambiar ARBs: dart run intl_utils:generate
-# (O desde IDE: Ctrl+Shift+P → "Flutter Intl: Generate")
+# (O desde IDE: Ctrl+Shift+P â†’ "Flutter Intl: Generate")
 flutter_intl:
   enabled: true
   arb_dir: lib/l10n
@@ -125,7 +125,7 @@ flutter_launcher_icons:
   android: true
   ios: true
   remove_alpha_ios: true
-  background_color_ios: "#000000"
+  background_color_ios: "#ffffff"
   macos:
     generate: true
   windows:
@@ -135,7 +135,7 @@ flutter_launcher_icons:
   web:
     generate: true
     image_path: "assets/logo.png"
-    background_color: "#000000"
-    theme_color: "#000000"
-  adaptive_icon_background: "#000000"
+    background_color: "#ffffff"
+    theme_color: "#ffffff"
+  adaptive_icon_background: "#ffffff"
   adaptive_icon_foreground: "assets/logo.png"

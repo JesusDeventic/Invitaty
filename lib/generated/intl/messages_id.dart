@@ -23,7 +23,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m0(seconds) =>
       "Nama pengguna atau kata sandi salah.\nHarap tunggu ${seconds} detik sebelum mencoba lagi";
 
-  static String m1(username) => "Profil @${username} di Filmaniak";
+  static String m1(username) => "Profil @${username} di Invitaty";
 
   static String m2(username) => "QR @${username}";
 
@@ -33,10 +33,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionNo": MessageLookupByLibrary.simpleMessage("Tidak"),
     "actionYes": MessageLookupByLibrary.simpleMessage("Ya"),
     "andLabel": MessageLookupByLibrary.simpleMessage("dan"),
-    "appName": MessageLookupByLibrary.simpleMessage("Filmaniak"),
+    "appName": MessageLookupByLibrary.simpleMessage("Invitaty"),
     "appVersion10Code": MessageLookupByLibrary.simpleMessage("v1.0.0"),
     "appVersion10Description": MessageLookupByLibrary.simpleMessage(
-      "·Rilis awal Filmaniak.",
+      "·Rilis awal Invitaty.",
     ),
     "appVersionChangeLogTitle": MessageLookupByLibrary.simpleMessage(
       "Log perubahan",
@@ -105,10 +105,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Kata sandi",
     ),
     "dialogErrorAppVersion": MessageLookupByLibrary.simpleMessage(
-      "Versi baru Filmaniak tersedia.\nPerbarui aplikasi untuk melanjutkan",
+      "Versi baru Invitaty tersedia.\nPerbarui aplikasi untuk melanjutkan",
     ),
     "dialogErrorServerConnection": MessageLookupByLibrary.simpleMessage(
-      "Tidak dapat terhubung ke server Filmaniak",
+      "Tidak dapat terhubung ke server Invitaty",
     ),
     "dialogErrorServerMaintenance": MessageLookupByLibrary.simpleMessage(
       "Aplikasi sedang dalam pemeliharaan. Coba lagi nanti",
@@ -177,9 +177,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
       "Ini adalah aplikasi dengan database film, serial, dan konten audiovisual lainnya, serta fitur untuk berinteraksi dengan anggota lain, daftar, penilaian, dan ulasan.",
     ),
-    "faq1Question": MessageLookupByLibrary.simpleMessage("Apa itu Filmaniak?"),
+    "faq1Question": MessageLookupByLibrary.simpleMessage("Apa itu Invitaty?"),
     "faq2Answer": MessageLookupByLibrary.simpleMessage(
-      "Tidak, Filmaniak bukan aplikasi streaming; ini hanya database dengan berbagai fitur terkait konten.",
+      "Tidak, Invitaty bukan aplikasi streaming; ini hanya database dengan berbagai fitur terkait konten.",
     ),
     "faq2Question": MessageLookupByLibrary.simpleMessage(
       "Bisakah menonton film dan serial?",
@@ -401,7 +401,7 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "socialWhatsappLabel": MessageLookupByLibrary.simpleMessage("WhatsApp"),
     "statusLabel": MessageLookupByLibrary.simpleMessage("Status"),
-    "subjectSupport": MessageLookupByLibrary.simpleMessage("Kontak Filmaniak"),
+    "subjectSupport": MessageLookupByLibrary.simpleMessage("Kontak Invitaty"),
     "termsAndConditionsLabel": MessageLookupByLibrary.simpleMessage(
       "Syarat dan ketentuan",
     ),

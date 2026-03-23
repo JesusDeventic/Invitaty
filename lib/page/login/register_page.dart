@@ -1,15 +1,15 @@
-import 'package:filmaniak/api/filmaniak_api.dart';
-import 'package:filmaniak/core/api_error_messages.dart';
-import 'package:filmaniak/core/user_preferences.dart';
-import 'package:filmaniak/core/global_functions.dart';
-import 'package:filmaniak/core/global_variables.dart';
-import 'package:filmaniak/controller/recaptcha_controller.dart';
-import 'package:filmaniak/generated/l10n.dart';
-import 'package:filmaniak/model/user_model.dart';
-import 'package:filmaniak/page/users/contact_page.dart';
-import 'package:filmaniak/routes/app_routes.dart';
-import 'package:filmaniak/widget/components_widgets.dart';
-import 'package:filmaniak/providers/language_provider.dart';
+import 'package:invitaty/api/invitaty_api.dart';
+import 'package:invitaty/core/api_error_messages.dart';
+import 'package:invitaty/core/user_preferences.dart';
+import 'package:invitaty/core/global_functions.dart';
+import 'package:invitaty/core/global_variables.dart';
+import 'package:invitaty/controller/recaptcha_controller.dart';
+import 'package:invitaty/generated/l10n.dart';
+import 'package:invitaty/model/user_model.dart';
+import 'package:invitaty/page/users/contact_page.dart';
+import 'package:invitaty/routes/app_routes.dart';
+import 'package:invitaty/widget/components_widgets.dart';
+import 'package:invitaty/providers/language_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
@@ -73,7 +73,7 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() => _isLoading = true);
     try {
       final lang = context.read<LanguageProvider>().currentLanguage;
-      final result = await FilmaniakApi.register(
+      final result = await InvitatyApi.register(
         username: _usernameController.text.trim(),
         email: _emailController.text.trim(),
         password: _passwordController.text,
@@ -88,8 +88,8 @@ class _RegisterPageState extends State<RegisterPage> {
         final token = result['token'] as String;
         final userJson = result['user'] as Map<String, dynamic>?;
         if (userJson != null) {
-          await FilmaniakApi.saveToken(token);
-          globalCurrentUser = FilmaniakUser.fromJson(userJson);
+          await InvitatyApi.saveToken(token);
+          globalCurrentUser = InvitatyUser.fromJson(userJson);
           await UserPreferences().setCachedUser(globalCurrentUser);
           showCustomSnackBar(S.current.welcome);
           RecaptchaService.hideBadge();
@@ -269,7 +269,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () {
                                             launchUrl(
-                                              Uri.parse('https://deventic.com/terms-and-conditions/'),
+                                              Uri.parse('https://invitaty.com/terms-and-conditions/'),
                                               mode: LaunchMode.externalApplication,
                                             );
                                           },
@@ -283,7 +283,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                         recognizer: TapGestureRecognizer()
                                           ..onTap = () {
                                             launchUrl(
-                                              Uri.parse('https://deventic.com/privacy-policy/'),
+                                              Uri.parse('https://invitaty.com/privacy-policy/'),
                                               mode: LaunchMode.externalApplication,
                                             );
                                           },

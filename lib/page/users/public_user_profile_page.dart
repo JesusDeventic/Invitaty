@@ -1,10 +1,10 @@
-import 'package:filmaniak/api/filmaniak_api.dart';
-import 'package:filmaniak/core/global_functions.dart';
-import 'package:filmaniak/core/global_variables.dart';
-import 'package:filmaniak/generated/l10n.dart';
-import 'package:filmaniak/model/user_model.dart';
-import 'package:filmaniak/page/messages/private_chat_page.dart';
-import 'package:filmaniak/widget/components_widgets.dart';
+import 'package:invitaty/api/invitaty_api.dart';
+import 'package:invitaty/core/global_functions.dart';
+import 'package:invitaty/core/global_variables.dart';
+import 'package:invitaty/generated/l10n.dart';
+import 'package:invitaty/model/user_model.dart';
+import 'package:invitaty/page/messages/private_chat_page.dart';
+import 'package:invitaty/widget/components_widgets.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter/material.dart';
 import 'package:country_picker/country_picker.dart';
@@ -19,17 +19,17 @@ class PublicUserProfilePage extends StatefulWidget {
   });
 
   final String username;
-  final FilmaniakUser? initialUser;
+  final InvitatyUser? initialUser;
 
   @override
   State<PublicUserProfilePage> createState() => _PublicUserProfilePageState();
 }
 
 class _PublicUserProfilePageState extends State<PublicUserProfilePage> {
-  FilmaniakUser? _user;
+  InvitatyUser? _user;
   bool _isLoading = false;
 
-  Future<void> _showShareOptions(String link, FilmaniakUser user) async {
+  Future<void> _showShareOptions(String link, InvitatyUser user) async {
     if (link.isEmpty) return;
     if (!mounted) return;
 
@@ -53,7 +53,7 @@ class _PublicUserProfilePageState extends State<PublicUserProfilePage> {
     if (_user == null) {
       setState(() => _isLoading = true);
     }
-    final user = await FilmaniakApi.getPublicUserByUsername(widget.username);
+    final user = await InvitatyApi.getPublicUserByUsername(widget.username);
     if (!mounted) return;
     setState(() {
       _user = user ?? _user;
@@ -98,7 +98,7 @@ class _PublicUserProfilePageState extends State<PublicUserProfilePage> {
     }
 
     final user = _user!;
-    final publicUrl = FilmaniakApi.buildPublicProfileUrl(user.username);
+    final publicUrl = InvitatyApi.buildPublicProfileUrl(user.username);
     final website = user.websiteUrl.trim();
     final fullName = [user.firstName, user.lastName]
         .where((e) => e.trim().isNotEmpty)
