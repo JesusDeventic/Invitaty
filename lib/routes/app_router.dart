@@ -1,7 +1,7 @@
 import 'package:invitaty/core/global_functions.dart';
 import 'package:invitaty/core/global_variables.dart';
 import 'package:invitaty/generated/l10n.dart';
-import 'package:invitaty/page/home/home_placeholder_page.dart';
+import 'package:invitaty/page/home/home_page.dart';
 import 'package:invitaty/page/users/account_profile_page.dart';
 import 'package:invitaty/page/home/splash_screen_page.dart';
 import 'package:invitaty/page/login/forgot_password_page.dart';
