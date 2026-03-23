@@ -3,8 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:invitaty/api/firebase_web_config.dart';
 import 'package:invitaty/core/global_functions.dart';
+import 'package:invitaty/generated/l10n.dart';
+import 'package:invitaty/styles/colors.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart' show Color, debugPrint;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 /// Servicio centralizado de notificaciones push (Android / iOS / Web),
@@ -64,8 +65,9 @@ class InvitatyMessagingService {
         FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
           debugPrint('Mensaje FCM en primer plano: ${message.messageId}');
 
-          final title = message.notification?.title ?? 'Invitaty';
-          final body = message.notification?.body ?? 'Nueva notificación';
+          // Fallbacks traducidos desde ARB (evita hardcodeo).
+          final title = message.notification?.title ?? S.current.appName;
+          final body = message.notification?.body ?? S.current.notificationsLabel;
 
           await _showNotification(
             title: title,
@@ -108,7 +110,7 @@ class InvitatyMessagingService {
       priority: Priority.high,
       showWhen: true,
       icon: 'ic_notification',
-      color: Color(0xFFB8D936),
+      color: AppColors.primary,
     );
 
     const iosDetails = DarwinNotificationDetails(
