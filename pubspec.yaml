@@ -56,6 +56,8 @@ dependencies:
   emoji_picker_flutter: ^4.4.0
   qr_flutter: ^4.1.0
   flutter_html: ^3.0.0
+  just_audio: ^0.9.38
+  google_fonts: ^6.1.0
 
 dev_dependencies:
   flutter_test:

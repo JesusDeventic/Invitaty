@@ -9,6 +9,8 @@ import 'package:invitaty/page/login/login_page.dart';
 import 'package:invitaty/page/login/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:invitaty/page/invitation/viewer_screen.dart';
+import 'package:invitaty/page/invitation/editor_screen.dart';
 
 import 'app_routes.dart';
 
@@ -29,7 +31,8 @@ GoRouter createAppRouter(GlobalKey<NavigatorState> navigatorKey) {
       if (location == AppRoutes.splash && globalCurrentUser.username.isEmpty) {
         await loginUser();
       }
-      if (globalCurrentUser.username.isNotEmpty && authRoutes.contains(location)) {
+      if (globalCurrentUser.username.isNotEmpty &&
+          authRoutes.contains(location)) {
         return AppRoutes.home;
       }
       return null;
@@ -39,10 +42,7 @@ GoRouter createAppRouter(GlobalKey<NavigatorState> navigatorKey) {
         path: AppRoutes.splash,
         builder: (_, __) => const SplashScreenPage(),
       ),
-      GoRoute(
-        path: AppRoutes.login,
-        builder: (_, __) => const LoginPage(),
-      ),
+      GoRoute(path: AppRoutes.login, builder: (_, __) => const LoginPage()),
       GoRoute(
         path: AppRoutes.register,
         builder: (_, __) => const RegisterPage(),
@@ -51,14 +51,13 @@ GoRouter createAppRouter(GlobalKey<NavigatorState> navigatorKey) {
         path: AppRoutes.forgotPassword,
         builder: (_, __) => const ForgotPasswordPage(),
       ),
-      GoRoute(
-        path: AppRoutes.home,
-        builder: (_, __) => const HomePage(),
-      ),
+      GoRoute(path: AppRoutes.home, builder: (_, __) => const HomePage()),
       GoRoute(
         path: AppRoutes.accountProfile,
         builder: (_, __) => const AccountProfilePage(),
       ),
+      GoRoute(path: AppRoutes.viewer, builder: (_, __) => const ViewerScreen()),
+      GoRoute(path: AppRoutes.editor, builder: (_, __) => const EditorScreen()),
     ],
     errorBuilder: (context, state) => Scaffold(
       body: Center(

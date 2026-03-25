@@ -13,6 +13,9 @@ import 'package:invitaty/routes/app_routes.dart';
 import 'package:invitaty/widget/components_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:invitaty/providers/invitation_provider.dart';
+import 'package:invitaty/data/invitation_mock.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,8 +28,9 @@ class _HomePageState extends State<HomePage> {
   int _unreadNotificationsCount = 0;
   Timer? _unreadTimer;
   bool get _isGuest => globalUserToken.isEmpty;
-  String get _userLabel =>
-      globalCurrentUser.username.isNotEmpty ? globalCurrentUser.username : 'Invitado';
+  String get _userLabel => globalCurrentUser.username.isNotEmpty
+      ? globalCurrentUser.username
+      : 'Invitado';
 
   void _showAuthRequiredSnackbar() {
     showCustomSnackBar(
@@ -82,13 +86,13 @@ class _HomePageState extends State<HomePage> {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(
-              builder: (context) => const NotificationsPage(),
-            ),
+            MaterialPageRoute(builder: (context) => const NotificationsPage()),
           ).then((_) => _refreshUnreadNotifications());
         },
         child: Padding(
-          padding: isDesktop ? const EdgeInsets.all(8) : const EdgeInsets.all(2),
+          padding: isDesktop
+              ? const EdgeInsets.all(8)
+              : const EdgeInsets.all(2),
           child: Container(
             width: isDesktop ? null : 50,
             height: 50,
@@ -191,7 +195,9 @@ class _HomePageState extends State<HomePage> {
         color: Theme.of(context).colorScheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Theme.of(context).colorScheme.secondary.withValues(alpha: 0.2),
+            color: Theme.of(
+              context,
+            ).colorScheme.secondary.withValues(alpha: 0.2),
             blurRadius: 5,
             offset: const Offset(-1, 0),
           ),
@@ -235,7 +241,9 @@ class _HomePageState extends State<HomePage> {
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
-                                  color: Theme.of(context).colorScheme.onPrimary,
+                                  color: Theme.of(
+                                    context,
+                                  ).colorScheme.onPrimary,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
@@ -273,20 +281,18 @@ class _HomePageState extends State<HomePage> {
                   leading: Icon(
                     Icons.app_settings_alt_rounded,
                     color: _isGuest
-                        ? Theme.of(context)
-                            .colorScheme
-                            .onSurface
-                            .withValues(alpha: 0.5)
+                        ? Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.5)
                         : null,
                   ),
                   title: Text(
                     S.current.generalSettings,
                     style: TextStyle(
                       color: _isGuest
-                          ? Theme.of(context)
-                              .colorScheme
-                              .onSurface
-                              .withValues(alpha: 0.5)
+                          ? Theme.of(
+                              context,
+                            ).colorScheme.onSurface.withValues(alpha: 0.5)
                           : null,
                     ),
                   ),
@@ -308,14 +314,18 @@ class _HomePageState extends State<HomePage> {
                   leading: Icon(
                     Icons.person_rounded,
                     color: _isGuest
-                        ? Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45)
+                        ? Theme.of(
+                            context,
+                          ).colorScheme.onSurface.withValues(alpha: 0.45)
                         : null,
                   ),
                   title: Text(
                     S.current.accountSettings,
                     style: _isGuest
                         ? TextStyle(
-                            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.45),
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.onSurface.withValues(alpha: 0.45),
                           )
                         : null,
                   ),
@@ -340,9 +350,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(
-                        builder: (context) => FAQPage(),
-                      ),
+                      MaterialPageRoute(builder: (context) => FAQPage()),
                     );
                   },
                 ),
@@ -364,38 +372,40 @@ class _HomePageState extends State<HomePage> {
                     leading: const Icon(Icons.exit_to_app_rounded),
                     title: Text(S.current.userSectionSessionClose),
                     onTap: () {
-                    final router = GoRouter.of(context);
-                    showConfirmDialogGlobal(
-                      context,
-                      title: S.current.userSectionSessionClose,
-                      message: S.current.dialogCloseSessionContent,
-                    ).then((confirmed) async {
-                      if (!confirmed) return;
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        barrierColor: Colors.black26,
-                        builder: (ctx) => PopScope(
-                          canPop: false,
-                          child: Dialog(
-                            backgroundColor: Colors.transparent,
-                            elevation: 0,
-                            insetPadding: EdgeInsets.zero,
-                            child: SizedBox.expand(
-                              child: Center(
-                                child: const CircularProgressIndicator(strokeWidth: 2),
+                      final router = GoRouter.of(context);
+                      showConfirmDialogGlobal(
+                        context,
+                        title: S.current.userSectionSessionClose,
+                        message: S.current.dialogCloseSessionContent,
+                      ).then((confirmed) async {
+                        if (!confirmed) return;
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          barrierColor: Colors.black26,
+                          builder: (ctx) => PopScope(
+                            canPop: false,
+                            child: Dialog(
+                              backgroundColor: Colors.transparent,
+                              elevation: 0,
+                              insetPadding: EdgeInsets.zero,
+                              child: SizedBox.expand(
+                                child: Center(
+                                  child: const CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      );
-                      await logoutUser();
-                      if (context.mounted) {
-                        Navigator.of(context).pop();
-                      }
-                      router.go(AppRoutes.login);
-                    });
-                  },
+                        );
+                        await logoutUser();
+                        if (context.mounted) {
+                          Navigator.of(context).pop();
+                        }
+                        router.go(AppRoutes.login);
+                      });
+                    },
                   ),
                 if (_isGuest)
                   ListTile(
@@ -437,7 +447,9 @@ class _HomePageState extends State<HomePage> {
         mouseCursor: SystemMouseCursors.click,
         onTap: _openUserPanel,
         child: Padding(
-          padding: isDesktop ? const EdgeInsets.all(8) : const EdgeInsets.all(2),
+          padding: isDesktop
+              ? const EdgeInsets.all(8)
+              : const EdgeInsets.all(2),
           child: Container(
             width: isDesktop ? null : 50,
             height: 50,
@@ -485,63 +497,62 @@ class _HomePageState extends State<HomePage> {
       },
       child: Scaffold(
         appBar: AppBar(
-        toolbarHeight: 60,
-        leadingWidth: 0,
-        leading: const SizedBox.shrink(),
-        titleSpacing: isDesktop ? 16 : 8,
-        title: InkWell(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ContactPage(),
-              ),
-            );
-          },
-          borderRadius: BorderRadius.circular(8),
-          mouseCursor: SystemMouseCursors.click,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Image.asset(
-                  'assets/logo.png',
-                  height: 50,
-                  errorBuilder: (_, __, ___) => const Icon(Icons.movie, size: 40),
-                ),
-                const SizedBox(width: 8),
-                Flexible(
-                  child: Text(
-                    S.current.appName,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          fontSize: isDesktop ? 30 : 22,
-                        ),
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
+          toolbarHeight: 60,
+          leadingWidth: 0,
+          leading: const SizedBox.shrink(),
+          titleSpacing: isDesktop ? 16 : 8,
+          title: InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ContactPage()),
+              );
+            },
+            borderRadius: BorderRadius.circular(8),
+            mouseCursor: SystemMouseCursors.click,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Image.asset(
+                    'assets/logo.png',
+                    height: 50,
+                    errorBuilder: (_, __, ___) =>
+                        const Icon(Icons.movie, size: 40),
                   ),
-                ),
-              ],
+                  const SizedBox(width: 8),
+                  Flexible(
+                    child: Text(
+                      S.current.appName,
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: isDesktop ? 30 : 22,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            _buildNotificationIcon(),
+            if (isDesktop && !_isGuest) _buildDesktopAppBarDivider(),
+            _buildUserProfile(),
+          ],
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1),
+            child: Container(
+              height: 0.5,
+              color: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.2),
             ),
           ),
         ),
-        actions: [
-          _buildNotificationIcon(),
-          if (isDesktop && !_isGuest) _buildDesktopAppBarDivider(),
-          _buildUserProfile(),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(1),
-          child: Container(
-            height: 0.5,
-            color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.2),
-          ),
-        ),
-      ),
-        body: SafeArea(
-          child: _buildMainContent(),
-        ),
+        body: SafeArea(child: _buildMainContent()),
       ),
     );
   }
@@ -564,7 +575,11 @@ class _HomePageState extends State<HomePage> {
                 _showAuthRequiredSnackbar();
                 return;
               }*/
-              showCustomSnackBar('Próximamente: crear invitación');
+              final invitationProvider = context.read<InvitationProvider>();
+
+              invitationProvider.setInvitation(invitationMock);
+
+              context.push(AppRoutes.editor);
             },
             icon: const Icon(Icons.add_rounded),
             label: Text(S.current.homeCreateInvitationButton),
