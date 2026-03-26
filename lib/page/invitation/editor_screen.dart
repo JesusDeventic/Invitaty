@@ -42,16 +42,73 @@ class EditorScreen extends StatelessWidget {
           final section = sections[index];
 
           return ReorderableDelayedDragStartListener(
-            key: ValueKey(section["id"]), // 🔥 obligatorio
+            key: ValueKey(section["id"]),
             index: index,
 
-            child: ListTile(
-              title: Text(section["type"] ?? "unknown"),
-              subtitle: Text(section["id"] ?? "no-id"),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
 
-              onTap: () {
-                _editModule(context, index, section);
-              },
+              child: Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+
+                child: InkWell(
+                  borderRadius: BorderRadius.circular(12),
+
+                  onTap: () {
+                    _editModule(context, index, section);
+                  },
+
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+
+                    child: Row(
+                      children: [
+                        // 🔹 ICONO
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade200,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Icon(_getIconForType(section["type"])),
+                        ),
+
+                        const SizedBox(width: 16),
+
+                        // 🔹 TEXTO
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                section["type"] ?? "unknown",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                section["id"] ?? "no-id",
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey.shade600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // 🔹 ICONO DRAG (visual, no obligatorio)
+                        const Icon(Icons.drag_indicator),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
           );
         },
@@ -107,6 +164,46 @@ class EditorScreen extends StatelessWidget {
 
     if (type == "text") {
       context.push('/edit-text', extra: {"index": index, "section": section});
+    }
+  }
+
+  IconData _getIconForType(String type) {
+    switch (type) {
+      case "text":
+        return Icons.text_fields;
+
+      case "cover":
+        return Icons.image;
+
+      case "countdown":
+        return Icons.timer;
+
+      case "location":
+        return Icons.location_on;
+
+      case "rsvp":
+        return Icons.check_circle;
+
+      case "gallery":
+        return Icons.photo_library;
+
+      case "video":
+        return Icons.videocam;
+
+      case "agenda":
+        return Icons.event;
+
+      case "dressCode":
+        return Icons.checkroom;
+
+      case "gifts":
+        return Icons.card_giftcard;
+
+      case "music":
+        return Icons.music_note;
+
+      default:
+        return Icons.widgets;
     }
   }
 
