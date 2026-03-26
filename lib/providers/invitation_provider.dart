@@ -1,60 +1,64 @@
 import 'package:flutter/material.dart';
 
 class InvitationProvider extends ChangeNotifier {
-  // 🟢 1. JSON de la invitación en memoria
-  Map<String, dynamic> _invitation = {};
+  Map<String, dynamic> _invitation = {"sections": []};
 
-  // 🟢 2. Getter (para leer desde fuera)
+  // 🔍 GETTER SECCIONES
+  List<Map<String, dynamic>> get sections {
+    return List<Map<String, dynamic>>.from(_invitation["sections"]);
+  }
+
+  // 🔍 GETTER INVITATION COMPLETA (útil para debug/viewer)
   Map<String, dynamic> get invitation => _invitation;
 
-  // 🟢 3. Inicializar invitación (por ejemplo con mock o plantilla)
-  void setInvitation(Map<String, dynamic> newInvitation) {
-    _invitation = _deepCopy(newInvitation);
+  // 🆕 SET INVITATION COMPLETA
+  void setInvitation(Map<String, dynamic> invitation) {
+    _invitation = {
+      ...invitation,
+
+      // 🔥 MUY IMPORTANTE: asegurar lista modificable
+      "sections": List<Map<String, dynamic>>.from(invitation["sections"] ?? []),
+    };
+
     notifyListeners();
   }
 
-  Map<String, dynamic> _deepCopy(Map<String, dynamic> original) {
-    final sections = (original["sections"] as List).map((section) {
-      final sectionMap = section as Map;
-
-      return {
-        ...sectionMap,
-        "data": Map<String, dynamic>.from(sectionMap["data"] as Map),
-      };
-    }).toList();
-
-    return {...original, "sections": sections};
-  }
-
-  // 🟢 4. Obtener secciones
-  List get sections => _invitation["sections"] ?? [];
-
-  // 🟢 5. Añadir sección
+  // ➕ AÑADIR SECCIÓN
   void addSection(Map<String, dynamic> section) {
-    _invitation["sections"].add(section);
+    final List<dynamic> currentSections = _invitation["sections"];
+
+    currentSections.add(section);
+
     notifyListeners();
   }
 
-  // 🟢 6. Actualizar sección
-  void updateSection(int index, Map<String, dynamic> newData) {
-    _invitation["sections"][index]["data"] = newData;
+  // ✏️ ACTUALIZAR SECCIÓN
+  void updateSection(int index, Map<String, dynamic> newSection) {
+    final List<dynamic> currentSections = _invitation["sections"];
+
+    currentSections[index] = newSection;
+
     notifyListeners();
   }
 
-  // 🟢 7. Eliminar sección
+  // ❌ ELIMINAR SECCIÓN
   void removeSection(int index) {
-    _invitation["sections"].removeAt(index);
+    final List<dynamic> currentSections = _invitation["sections"];
+
+    currentSections.removeAt(index);
+
     notifyListeners();
   }
 
-  // 🟢 8. Reordenar secciones
   void reorderSections(int oldIndex, int newIndex) {
-    final sections = _invitation["sections"];
+    final List<dynamic> currentSections = _invitation["sections"];
 
-    if (newIndex > oldIndex) newIndex--;
+    if (newIndex > oldIndex) {
+      newIndex -= 1;
+    }
 
-    final item = sections.removeAt(oldIndex);
-    sections.insert(newIndex, item);
+    final item = currentSections.removeAt(oldIndex);
+    currentSections.insert(newIndex, item);
 
     notifyListeners();
   }

@@ -17,12 +17,9 @@ class EditorScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Editor de invitación"),
-
-        // 👁️ BOTÓN PREVIEW
         actions: [
           IconButton(
             icon: const Icon(Icons.visibility),
-            tooltip: "Previsualizar",
             onPressed: () {
               context.push('/viewer');
             },
@@ -30,21 +27,36 @@ class EditorScreen extends StatelessWidget {
         ],
       ),
 
-      // 🟢 LISTA DE MÓDULOS
-      body: ListView.builder(
+      body: ReorderableListView.builder(
         itemCount: sections.length,
+
+        // 🔥 IMPORTANTE
+        buildDefaultDragHandles: false,
+
+        onReorder: (oldIndex, newIndex) {
+          final provider = context.read<InvitationProvider>();
+          provider.reorderSections(oldIndex, newIndex);
+        },
+
         itemBuilder: (context, index) {
           final section = sections[index];
 
-          return ListTile(
-            leading: const Icon(Icons.view_agenda),
-            title: Text(section["type"] ?? "unknown"),
-            subtitle: Text(section["id"] ?? "no-id"),
+          return ReorderableDelayedDragStartListener(
+            key: ValueKey(section["id"]), // 🔥 obligatorio
+            index: index,
+
+            child: ListTile(
+              title: Text(section["type"] ?? "unknown"),
+              subtitle: Text(section["id"] ?? "no-id"),
+
+              onTap: () {
+                _editModule(context, index, section);
+              },
+            ),
           );
         },
       ),
 
-      // ➕ BOTÓN AÑADIR
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           _showModulePicker(context);
@@ -54,35 +66,51 @@ class EditorScreen extends StatelessWidget {
     );
   }
 
-  // 🔽 ABRE EL SELECTOR DE MÓDULOS
+  // 🔽 ABRIR SELECTOR
   void _showModulePicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
+      isScrollControlled: true, // 🔥 IMPORTANTE
       builder: (_) {
-        return ModulePicker(
-          onSelected: (type) {
-            _addModule(context, type);
-          },
+        return FractionallySizedBox(
+          heightFactor: 0.6, // 🔥 ocupa 60% pantalla
+          child: ModulePicker(
+            onSelected: (type) {
+              _addModule(context, type);
+            },
+          ),
         );
       },
     );
   }
 
-  // ➕ AÑADIR MÓDULO SEGÚN TIPO
+  // ➕ AÑADIR MÓDULO
   void _addModule(BuildContext context, ModuleType type) {
     final provider = context.read<InvitationProvider>();
 
     final newSection = {
       "id": "section_${DateTime.now().millisecondsSinceEpoch}",
-      "type": type.name, // 🔥 MUY IMPORTANTE
+      "type": type.name,
       "data": _getDefaultData(type),
     };
 
     provider.addSection(newSection);
   }
 
-  // 🧠 DATOS INICIALES SEGÚN TIPO
+  // ✏️ EDITAR SEGÚN TIPO
+  void _editModule(
+    BuildContext context,
+    int index,
+    Map<String, dynamic> section,
+  ) {
+    final type = section["type"];
+
+    if (type == "text") {
+      context.push('/edit-text', extra: {"index": index, "section": section});
+    }
+  }
+
+  // 🧠 DATOS POR DEFECTO
   Map<String, dynamic> _getDefaultData(ModuleType type) {
     switch (type) {
       case ModuleType.text:
@@ -95,7 +123,12 @@ class EditorScreen extends StatelessWidget {
         return {"name": "Lugar del evento", "address": "Dirección..."};
 
       case ModuleType.countdown:
-        return {"title": "Cuenta atrás"};
+        return {
+          "title": "Cuenta atrás",
+          "eventDateTime": DateTime.now()
+              .add(const Duration(days: 1))
+              .toIso8601String(),
+        };
 
       case ModuleType.music:
         return {"title": "Música", "url": ""};

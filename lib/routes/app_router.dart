@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:invitaty/page/invitation/viewer_screen.dart';
 import 'package:invitaty/page/invitation/editor_screen.dart';
+import 'package:invitaty/page/editors/edit_text_module_screen.dart';
 
 import 'app_routes.dart';
 
@@ -58,7 +59,19 @@ GoRouter createAppRouter(GlobalKey<NavigatorState> navigatorKey) {
       ),
       GoRoute(path: AppRoutes.viewer, builder: (_, __) => const ViewerScreen()),
       GoRoute(path: AppRoutes.editor, builder: (_, __) => const EditorScreen()),
+      GoRoute(
+        path: '/edit-text',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+
+          return EditTextModuleScreen(
+            index: extra["index"],
+            section: extra["section"],
+          );
+        },
+      ),
     ],
+
     errorBuilder: (context, state) => Scaffold(
       body: Center(
         child: Column(
