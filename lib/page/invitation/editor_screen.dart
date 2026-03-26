@@ -1,31 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:invitaty/providers/invitation_provider.dart';
 import 'package:go_router/go_router.dart';
+
+import 'package:invitaty/providers/invitation_provider.dart';
+import 'package:invitaty/modules/module_type.dart';
+import 'package:invitaty/widget/module_picker.dart';
 
 class EditorScreen extends StatelessWidget {
   const EditorScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // 🟢 Escuchamos el provider (reactivo)
     final invitationProvider = context.watch<InvitationProvider>();
-
-    // 🟢 Obtenemos las secciones (módulos)
     final sections = invitationProvider.sections;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text("Editor de invitación"),
 
-        // 🔥 AQUÍ AÑADIMOS EL BOTÓN DE PREVIEW
+        // 👁️ BOTÓN PREVIEW
         actions: [
           IconButton(
             icon: const Icon(Icons.visibility),
-            tooltip: "Previsualizar invitación",
-
+            tooltip: "Previsualizar",
             onPressed: () {
-              // 🟢 Navegamos al viewer
               context.push('/viewer');
             },
           ),
@@ -40,36 +38,85 @@ class EditorScreen extends StatelessWidget {
 
           return ListTile(
             leading: const Icon(Icons.view_agenda),
-
-            // tipo de módulo (text, cover, etc.)
             title: Text(section["type"] ?? "unknown"),
-
-            // id del módulo
             subtitle: Text(section["id"] ?? "no-id"),
           );
         },
       ),
 
-      // 🟢 BOTÓN PARA AÑADIR MÓDULOS
+      // ➕ BOTÓN AÑADIR
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          _addModule(context);
+          _showModulePicker(context);
         },
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  // 🔧 FUNCIÓN PARA AÑADIR UN MÓDULO
-  void _addModule(BuildContext context) {
+  // 🔽 ABRE EL SELECTOR DE MÓDULOS
+  void _showModulePicker(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) {
+        return ModulePicker(
+          onSelected: (type) {
+            _addModule(context, type);
+          },
+        );
+      },
+    );
+  }
+
+  // ➕ AÑADIR MÓDULO SEGÚN TIPO
+  void _addModule(BuildContext context, ModuleType type) {
     final provider = context.read<InvitationProvider>();
 
     final newSection = {
       "id": "section_${DateTime.now().millisecondsSinceEpoch}",
-      "type": "text",
-      "data": {"title": "Nuevo módulo", "body": "Editar contenido..."},
+      "type": type.name, // 🔥 MUY IMPORTANTE
+      "data": _getDefaultData(type),
     };
 
     provider.addSection(newSection);
+  }
+
+  // 🧠 DATOS INICIALES SEGÚN TIPO
+  Map<String, dynamic> _getDefaultData(ModuleType type) {
+    switch (type) {
+      case ModuleType.text:
+        return {"title": "Nuevo texto", "body": "Editar contenido..."};
+
+      case ModuleType.cover:
+        return {"title": "Título portada", "subtitle": "Subtítulo"};
+
+      case ModuleType.location:
+        return {"name": "Lugar del evento", "address": "Dirección..."};
+
+      case ModuleType.countdown:
+        return {"title": "Cuenta atrás"};
+
+      case ModuleType.music:
+        return {"title": "Música", "url": ""};
+
+      case ModuleType.gallery:
+        return {"images": []};
+
+      case ModuleType.video:
+        return {"url": ""};
+
+      case ModuleType.rsvp:
+        return {"title": "Confirmar asistencia"};
+
+      case ModuleType.agenda:
+        return {"events": []};
+
+      case ModuleType.dressCode:
+        return {"text": "Dress code..."};
+
+      case ModuleType.gifts:
+        return {"text": "Lista de regalos..."};
+    }
   }
 }

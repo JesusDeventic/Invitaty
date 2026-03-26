@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:invitaty/data/invitation_mock.dart';
 import 'package:invitaty/modules/module_registry.dart';
 import 'package:invitaty/modules/module_type.dart';
 import 'package:provider/provider.dart';

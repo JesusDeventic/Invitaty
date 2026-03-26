@@ -9,27 +9,44 @@ class CountdownModule extends StatelessWidget {
   Widget build(BuildContext context) {
     final title = data["title"] ?? "Cuenta atrás";
 
-    final eventDateTime = DateTime.parse(data["eventDateTime"]);
-    final remaining = eventDateTime.difference(DateTime.now());
+    // 🛡️ PROTECCIÓN CONTRA NULL
+    final eventString = data["eventDateTime"];
 
-    final days = remaining.inDays;
-    final hours = remaining.inHours % 24;
-    final minutes = remaining.inMinutes % 60;
+    DateTime? eventDateTime;
+
+    if (eventString != null && eventString is String) {
+      try {
+        eventDateTime = DateTime.parse(eventString);
+      } catch (e) {
+        eventDateTime = null;
+      }
+    }
+
+    // 🛑 SI NO HAY FECHA → NO CRASHEA
+    if (eventDateTime == null) {
+      return Container(
+        padding: const EdgeInsets.all(16),
+        child: const Text("Fecha no definida"),
+      );
+    }
+
+    final now = DateTime.now();
+    final difference = eventDateTime.difference(now);
+
+    final days = difference.inDays;
+    final hours = difference.inHours % 24;
+    final minutes = difference.inMinutes % 60;
 
     return Container(
       padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(vertical: 8),
       child: Column(
         children: [
           Text(
             title,
             style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 8),
-          Text(
-            "$days días $hours horas $minutes minutos",
-            style: const TextStyle(fontSize: 16),
-          ),
+          const SizedBox(height: 10),
+          Text("$days días $hours horas $minutes minutos"),
         ],
       ),
     );
