@@ -26,44 +26,31 @@ class EditorScreen extends StatelessWidget {
           ),
         ],
       ),
-
       body: ReorderableListView.builder(
         itemCount: sections.length,
-
-        // 🔥 IMPORTANTE
         buildDefaultDragHandles: false,
-
         onReorder: (oldIndex, newIndex) {
           final provider = context.read<InvitationProvider>();
           provider.reorderSections(oldIndex, newIndex);
         },
-
         itemBuilder: (context, index) {
           final section = sections[index];
 
-          return ReorderableDelayedDragStartListener(
+          return ReorderableDragStartListener(
             key: ValueKey(section["id"]),
             index: index,
-
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-
               child: Card(
                 elevation: 3,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
-
-                  onTap: () {
-                    _editModule(context, index, section);
-                  },
-
+                  onTap: () => _editModule(context, index, section),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
-
                     child: Row(
                       children: [
                         // 🔹 ICONO
@@ -75,9 +62,7 @@ class EditorScreen extends StatelessWidget {
                           ),
                           child: Icon(_getIconForType(section["type"])),
                         ),
-
                         const SizedBox(width: 16),
-
                         // 🔹 TEXTO
                         Expanded(
                           child: Column(
@@ -101,8 +86,6 @@ class EditorScreen extends StatelessWidget {
                             ],
                           ),
                         ),
-
-                        // 🔹 ICONO DRAG (visual, no obligatorio)
                         const Icon(Icons.drag_indicator),
                       ],
                     ),
@@ -113,48 +96,37 @@ class EditorScreen extends StatelessWidget {
           );
         },
       ),
-
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showModulePicker(context);
-        },
+        onPressed: () => _showModulePicker(context),
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  // 🔽 ABRIR SELECTOR
+  // 🔽 Abrir selector de módulos
   void _showModulePicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // 🔥 IMPORTANTE
-      builder: (_) {
-        return FractionallySizedBox(
-          heightFactor: 0.6, // 🔥 ocupa 60% pantalla
-          child: ModulePicker(
-            onSelected: (type) {
-              _addModule(context, type);
-            },
-          ),
-        );
-      },
+      isScrollControlled: true,
+      builder: (_) => FractionallySizedBox(
+        heightFactor: 0.6,
+        child: ModulePicker(onSelected: (type) => _addModule(context, type)),
+      ),
     );
   }
 
-  // ➕ AÑADIR MÓDULO
+  // ➕ Añadir módulo
   void _addModule(BuildContext context, ModuleType type) {
     final provider = context.read<InvitationProvider>();
-
     final newSection = {
-      "id": "section_${DateTime.now().millisecondsSinceEpoch}",
+      "id": "${type.name}_${DateTime.now().millisecondsSinceEpoch}",
       "type": type.name,
       "data": _getDefaultData(type),
     };
-
     provider.addSection(newSection);
   }
 
-  // ✏️ EDITAR SEGÚN TIPO
+  // ✏️ Editar módulo según tipo
   void _editModule(
     BuildContext context,
     int index,
@@ -162,63 +134,115 @@ class EditorScreen extends StatelessWidget {
   ) {
     final type = section["type"];
 
-    if (type == "text") {
-      context.push('/edit-text', extra: {"index": index, "section": section});
+    switch (type) {
+      case "text":
+        context.push('/edit-text', extra: {"index": index, "section": section});
+        break;
+      case "countdown":
+        context.push(
+          '/edit-countdown',
+          extra: {"index": index, "section": section},
+        );
+        break;
+      case "location":
+        context.push(
+          '/edit-location',
+          extra: {"index": index, "section": section},
+        );
+        break;
+      case "music":
+        context.push(
+          '/edit-music',
+          extra: {"index": index, "section": section},
+        );
+        break;
+      case "agenda":
+        context.push(
+          '/edit-agenda',
+          extra: {"index": index, "section": section},
+        );
+        break;
+      case "dressCode":
+        context.push(
+          '/edit-dress',
+          extra: {"index": index, "section": section},
+        );
+        break;
+      case "gifts":
+        context.push(
+          '/edit-gifts',
+          extra: {"index": index, "section": section},
+        );
+        break;
+      case "gallery":
+        context.push(
+          '/edit-gallery',
+          extra: {"index": index, "section": section},
+        );
+        break;
+      case "video":
+        context.push(
+          '/edit-video',
+          extra: {"index": index, "section": section},
+        );
+        break;
+      case "rsvp":
+        context.push('/edit-rsvp', extra: {"index": index, "section": section});
+        break;
+      case "cover":
+        context.push(
+          '/edit-cover',
+          extra: {"index": index, "section": section},
+        );
+        break;
+      default:
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Edición no implementada para este módulo"),
+          ),
+        );
     }
   }
 
+  // 🔹 Iconos de módulos
   IconData _getIconForType(String type) {
     switch (type) {
       case "text":
         return Icons.text_fields;
-
       case "cover":
         return Icons.image;
-
       case "countdown":
         return Icons.timer;
-
       case "location":
         return Icons.location_on;
-
       case "rsvp":
         return Icons.check_circle;
-
       case "gallery":
         return Icons.photo_library;
-
       case "video":
         return Icons.videocam;
-
       case "agenda":
         return Icons.event;
-
       case "dressCode":
         return Icons.checkroom;
-
       case "gifts":
         return Icons.card_giftcard;
-
       case "music":
         return Icons.music_note;
-
       default:
         return Icons.widgets;
     }
   }
 
-  // 🧠 DATOS POR DEFECTO
+  // 🧠 Datos por defecto según módulo
   Map<String, dynamic> _getDefaultData(ModuleType type) {
     switch (type) {
       case ModuleType.text:
         return {"title": "Nuevo texto", "body": "Editar contenido..."};
-
       case ModuleType.cover:
         return {"title": "Título portada", "subtitle": "Subtítulo"};
-
       case ModuleType.location:
         return {"name": "Lugar del evento", "address": "Dirección..."};
-
       case ModuleType.countdown:
         return {
           "title": "Cuenta atrás",
@@ -226,27 +250,32 @@ class EditorScreen extends StatelessWidget {
               .add(const Duration(days: 1))
               .toIso8601String(),
         };
-
       case ModuleType.music:
         return {"title": "Música", "url": ""};
-
       case ModuleType.gallery:
         return {"images": []};
-
       case ModuleType.video:
-        return {"url": ""};
-
+        return {"videos": []};
       case ModuleType.rsvp:
-        return {"title": "Confirmar asistencia"};
-
+        return {
+          "fields": ["name", "email", "attending"],
+        };
       case ModuleType.agenda:
-        return {"events": []};
-
+        return {"items": []};
       case ModuleType.dressCode:
-        return {"text": "Dress code..."};
-
+        return {
+          "title": "Código de vestimenta",
+          "style": "",
+          "description": "",
+        };
       case ModuleType.gifts:
-        return {"text": "Lista de regalos..."};
+        return {
+          "title": "Regalos",
+          "message": "",
+          "iban": "",
+          "bizum": "",
+          "link": "",
+        };
     }
   }
 }

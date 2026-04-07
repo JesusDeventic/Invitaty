@@ -24,7 +24,12 @@ const Map<String, dynamic> invitationMock = {
     {
       "id": "text_1",
       "type": "text",
-      "data": {"title": "Te esperamos", "body": "Será una noche increíble"},
+      "data": {
+        "title": "Te esperamos",
+        "body": "Será una noche increíble",
+        "font": "Poppins",
+        "fontSize": 16,
+      },
     },
     {
       "id": "countdown_1",
