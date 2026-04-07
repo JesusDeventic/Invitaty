@@ -6,7 +6,7 @@ const Map<String, dynamic> invitationMock = {
 
   "theme": {
     "primary": "#568525",
-    "secondary": "FFFFFF",
+    "secondary": "#FFFFFF",
     "font": "Poppins",
     "base": "light",
   },
@@ -15,7 +15,11 @@ const Map<String, dynamic> invitationMock = {
     {
       "id": "cover_1",
       "type": "cover",
-      "data": {"title": "Cumple de Laura", "subtitle": "¡30 años!"},
+      "data": {
+        "title": "Cumple de Laura",
+        "subtitle": "¡30 años!",
+        "image": "",
+      },
     },
     {
       "id": "text_1",
@@ -43,9 +47,9 @@ const Map<String, dynamic> invitationMock = {
       "id": "location_1",
       "type": "location",
       "data": {
-        "name": "Restaurante X",
-        "address": "Calle Falsa 123, Madrid",
-        "mapsUrl": "https://maps.google.com/?q=Restaurante+X",
+        "name": "Iglesia de San Pablo",
+        "address": "Pl. de San Pablo, 4, 47011 Valladolid",
+        "mapsUrl": "https://maps.google.com/?q=Iglesia+San+Pablo+Valladolid",
       },
     },
     {
@@ -91,7 +95,7 @@ const Map<String, dynamic> invitationMock = {
       "data": {
         "videos": [
           {
-            "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+            "url": "https://youtu.be/eioYulMp_5k?si=l8rKnN94tam_yj9K",
             "title": "Vídeo del evento",
           },
         ],

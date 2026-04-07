@@ -9,6 +9,11 @@ class ModulePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 🔥 FILTRAR SOLO LOS MÓDULOS AÑADIBLES
+    final addableModules = ModuleCatalog.modules
+        .where((m) => m.isAddable)
+        .toList();
+
     return Container(
       padding: const EdgeInsets.all(16),
       child: Column(
@@ -34,14 +39,14 @@ class ModulePicker extends StatelessWidget {
           // 🔥 GRID SCROLLEABLE
           Expanded(
             child: GridView.builder(
-              itemCount: ModuleCatalog.modules.length,
+              itemCount: addableModules.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10,
               ),
               itemBuilder: (context, index) {
-                final module = ModuleCatalog.modules[index];
+                final module = addableModules[index];
 
                 return GestureDetector(
                   onTap: () {
