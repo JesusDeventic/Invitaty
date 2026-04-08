@@ -18,6 +18,7 @@ class EditorScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Editor de invitación"),
         actions: [
+          // 👁️ PREVISUALIZAR INVITACIÓN
           IconButton(
             icon: const Icon(Icons.visibility),
             onPressed: () {
@@ -26,44 +27,60 @@ class EditorScreen extends StatelessWidget {
           ),
         ],
       ),
+
+      // 🔥 LISTA ORDENABLE DE MÓDULOS
       body: ReorderableListView.builder(
         itemCount: sections.length,
+
+        // ❗ Permite arrastrar desde cualquier parte del módulo
         buildDefaultDragHandles: false,
+
+        // 🔄 REORDENAR MÓDULOS
         onReorder: (oldIndex, newIndex) {
           final provider = context.read<InvitationProvider>();
           provider.reorderSections(oldIndex, newIndex);
         },
+
         itemBuilder: (context, index) {
           final section = sections[index];
 
           return ReorderableDragStartListener(
             key: ValueKey(section["id"]),
             index: index,
+
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+
               child: Card(
                 elevation: 3,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
+
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
+
+                  // ✏️ EDITAR MÓDULO
                   onTap: () => _editModule(context, index, section),
+
                   child: Padding(
                     padding: const EdgeInsets.all(16),
+
                     child: Row(
                       children: [
-                        // 🔹 ICONO
+                        // 🔹 ICONO DEL MÓDULO
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: Colors.grey.shade200,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Icon(_getIconForType(section["type"])),
+                          child: Icon(_getIconForType(section["type"] ?? "")),
                         ),
+
                         const SizedBox(width: 16),
-                        // 🔹 TEXTO
+
+                        // 🔹 INFO DEL MÓDULO
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -86,6 +103,8 @@ class EditorScreen extends StatelessWidget {
                             ],
                           ),
                         ),
+
+                        // 🔹 ICONO VISUAL DE DRAG
                         const Icon(Icons.drag_indicator),
                       ],
                     ),
@@ -96,6 +115,8 @@ class EditorScreen extends StatelessWidget {
           );
         },
       ),
+
+      // ➕ BOTÓN AÑADIR MÓDULO
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showModulePicker(context),
         child: const Icon(Icons.add),
@@ -103,98 +124,89 @@ class EditorScreen extends StatelessWidget {
     );
   }
 
-  // 🔽 Abrir selector de módulos
+  // 🔽 ABRIR SELECTOR DE MÓDULOS
   void _showModulePicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
+      isScrollControlled: true, // 🔥 importante para evitar overflow
+
       builder: (_) => FractionallySizedBox(
-        heightFactor: 0.6,
+        heightFactor: 0.6, // 🔥 ocupa el 60% de la pantalla
         child: ModulePicker(onSelected: (type) => _addModule(context, type)),
       ),
     );
   }
 
-  // ➕ Añadir módulo
+  // ➕ AÑADIR NUEVO MÓDULO
   void _addModule(BuildContext context, ModuleType type) {
     final provider = context.read<InvitationProvider>();
+
     final newSection = {
       "id": "${type.name}_${DateTime.now().millisecondsSinceEpoch}",
       "type": type.name,
       "data": _getDefaultData(type),
     };
+
     provider.addSection(newSection);
   }
 
-  // ✏️ Editar módulo según tipo
+  // ✏️ EDITAR MÓDULO SEGÚN SU TIPO
   void _editModule(
     BuildContext context,
     int index,
     Map<String, dynamic> section,
   ) {
-    final type = section["type"];
+    // 🔥 IMPORTANTE: aseguramos que siempre es String
+    final String type = section["type"] ?? "";
+
+    // 🔹 Extra reutilizable
+    final extra = {"index": index, "section": section};
 
     switch (type) {
       case "text":
-        context.push('/edit-text', extra: {"index": index, "section": section});
+        context.push('/edit-text', extra: extra);
         break;
+
       case "countdown":
-        context.push(
-          '/edit-countdown',
-          extra: {"index": index, "section": section},
-        );
+        context.push('/edit-countdown', extra: extra);
         break;
+
       case "location":
-        context.push(
-          '/edit-location',
-          extra: {"index": index, "section": section},
-        );
+        context.push('/edit-location', extra: extra);
         break;
+
       case "music":
-        context.push(
-          '/edit-music',
-          extra: {"index": index, "section": section},
-        );
+        context.push('/edit-music', extra: extra);
         break;
+
       case "agenda":
-        context.push(
-          '/edit-agenda',
-          extra: {"index": index, "section": section},
-        );
+        context.push('/edit-agenda', extra: extra);
         break;
+
       case "dressCode":
-        context.push(
-          '/edit-dress',
-          extra: {"index": index, "section": section},
-        );
+        context.push('/edit-dress', extra: extra);
         break;
+
       case "gifts":
-        context.push(
-          '/edit-gifts',
-          extra: {"index": index, "section": section},
-        );
+        context.push('/edit-gifts', extra: extra);
         break;
+
       case "gallery":
-        context.push(
-          '/edit-gallery',
-          extra: {"index": index, "section": section},
-        );
+        context.push('/edit-gallery', extra: extra);
         break;
+
       case "video":
-        context.push(
-          '/edit-video',
-          extra: {"index": index, "section": section},
-        );
+        context.push('/edit-video', extra: extra);
         break;
+
       case "rsvp":
-        context.push('/edit-rsvp', extra: {"index": index, "section": section});
+        context.push('/edit-rsvp', extra: extra);
         break;
+
       case "cover":
-        context.push(
-          '/edit-cover',
-          extra: {"index": index, "section": section},
-        );
+        context.push('/edit-cover', extra: extra);
         break;
+
       default:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -204,7 +216,7 @@ class EditorScreen extends StatelessWidget {
     }
   }
 
-  // 🔹 Iconos de módulos
+  // 🎨 ICONOS SEGÚN TIPO DE MÓDULO
   IconData _getIconForType(String type) {
     switch (type) {
       case "text":
@@ -234,15 +246,18 @@ class EditorScreen extends StatelessWidget {
     }
   }
 
-  // 🧠 Datos por defecto según módulo
+  // 🧠 DATOS POR DEFECTO DE CADA MÓDULO
   Map<String, dynamic> _getDefaultData(ModuleType type) {
     switch (type) {
       case ModuleType.text:
         return {"title": "Nuevo texto", "body": "Editar contenido..."};
+
       case ModuleType.cover:
         return {"title": "Título portada", "subtitle": "Subtítulo"};
+
       case ModuleType.location:
         return {"name": "Lugar del evento", "address": "Dirección..."};
+
       case ModuleType.countdown:
         return {
           "title": "Cuenta atrás",
@@ -250,24 +265,31 @@ class EditorScreen extends StatelessWidget {
               .add(const Duration(days: 1))
               .toIso8601String(),
         };
+
       case ModuleType.music:
         return {"title": "Música", "url": ""};
+
       case ModuleType.gallery:
         return {"images": []};
+
       case ModuleType.video:
         return {"videos": []};
+
       case ModuleType.rsvp:
         return {
           "fields": ["name", "email", "attending"],
         };
+
       case ModuleType.agenda:
         return {"items": []};
+
       case ModuleType.dressCode:
         return {
           "title": "Código de vestimenta",
           "style": "",
           "description": "",
         };
+
       case ModuleType.gifts:
         return {
           "title": "Regalos",

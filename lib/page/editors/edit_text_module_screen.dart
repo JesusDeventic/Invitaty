@@ -69,10 +69,39 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
     Navigator.pop(context);
   }
 
-  void _delete() {
-    final provider = context.read<InvitationProvider>();
-    provider.removeSection(widget.index);
-    Navigator.pop(context);
+  Future<void> _delete() async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Eliminar módulo"),
+          content: const Text(
+            "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer.",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+              child: const Text("Cancelar"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              child: const Text("Eliminar"),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed == true) {
+      final provider = context.read<InvitationProvider>();
+      provider.removeSection(widget.index);
+      Navigator.pop(context);
+    }
   }
 
   @override
