@@ -10,6 +10,9 @@ class TextModule extends StatelessWidget {
     final title = data["title"] ?? "";
     final body = data["body"] ?? "";
 
+    final font = data["font"] ?? "Poppins";
+    final fontSize = (data["fontSize"] ?? 16).toDouble();
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -18,10 +21,18 @@ class TextModule extends StatelessWidget {
           if (title.isNotEmpty)
             Text(
               title,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: fontSize + 4,
+                fontWeight: FontWeight.bold,
+                fontFamily: font,
+              ),
             ),
           const SizedBox(height: 8),
-          if (body.isNotEmpty) Text(body, style: const TextStyle(fontSize: 16)),
+          if (body.isNotEmpty)
+            Text(
+              body,
+              style: TextStyle(fontSize: fontSize, fontFamily: font),
+            ),
         ],
       ),
     );

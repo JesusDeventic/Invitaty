@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:invitaty/providers/invitation_provider.dart';
 
 class EditTextModuleScreen extends StatefulWidget {
@@ -24,6 +23,15 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
   String selectedFont = "Poppins";
   double fontSize = 16;
 
+  final List<String> availableFonts = [
+    "Poppins",
+    "Playfair",
+    "Fredoka",
+    "GreatVibes",
+    "Creepster",
+    "Disney",
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -44,7 +52,6 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
     super.dispose();
   }
 
-  // 💾 GUARDAR
   void _save() {
     final provider = context.read<InvitationProvider>();
 
@@ -62,7 +69,6 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
     Navigator.pop(context);
   }
 
-  // ❌ ELIMINAR
   void _delete() {
     final provider = context.read<InvitationProvider>();
     provider.removeSection(widget.index);
@@ -79,33 +85,27 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
           IconButton(icon: const Icon(Icons.save), onPressed: _save),
         ],
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16),
-
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 🔹 INPUTS
               TextField(
                 controller: titleController,
                 decoration: const InputDecoration(labelText: "Título"),
                 onChanged: (_) => setState(() {}),
               ),
-
               const SizedBox(height: 16),
-
               TextField(
                 controller: bodyController,
                 decoration: const InputDecoration(labelText: "Contenido"),
                 maxLines: 4,
                 onChanged: (_) => setState(() {}),
               ),
-
               const SizedBox(height: 24),
 
-              // 🔹 SELECTOR DE FUENTE
+              // 🔹 FUENTE
               const Text(
                 "Fuente",
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -114,11 +114,12 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
               DropdownButton<String>(
                 value: selectedFont,
                 isExpanded: true,
-                items: const [
-                  DropdownMenuItem(value: "Poppins", child: Text("Poppins")),
-                  DropdownMenuItem(value: "Roboto", child: Text("Roboto")),
-                  DropdownMenuItem(value: "Lobster", child: Text("Lobster")),
-                ],
+                items: availableFonts.map((font) {
+                  return DropdownMenuItem(
+                    value: font,
+                    child: Text(font, style: TextStyle(fontFamily: font)),
+                  );
+                }).toList(),
                 onChanged: (value) {
                   setState(() {
                     selectedFont = value!;
@@ -137,8 +138,8 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
               Slider(
                 value: fontSize,
                 min: 12,
-                max: 32,
-                divisions: 10,
+                max: 48,
+                divisions: 12,
                 label: fontSize.toString(),
                 onChanged: (value) {
                   setState(() {
@@ -164,7 +165,6 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
                   color: Colors.grey.shade100,
                   borderRadius: BorderRadius.circular(12),
                 ),
-
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
