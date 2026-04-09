@@ -69,7 +69,7 @@
     "buttonReloadNotifications":  "Recargar",
     "markAllAsRead":  "Marcar todo como leído",
     "notificationMarkAllAsk":  "¿Quieres marcar todas las notificaciones como leídas?",
-    "notificationMarkedRead":  "Notificación marcada como leída.",
+    "notificationMarkedRead":  "Notificación marcada como leída",
     "notificationsAllMarkedRead":  "Todas las notificaciones marcadas como leídas",
     "notificationMarkReadError":  "No se pudo marcar la notificación como leída",
     "deleteAllNotifications":  "Eliminar todas las notificaciones",
