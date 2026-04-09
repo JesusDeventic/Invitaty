@@ -13,6 +13,7 @@ import 'package:invitaty/page/invitation/viewer_screen.dart';
 import 'package:invitaty/page/invitation/editor_screen.dart';
 import 'package:invitaty/page/editors/edit_text_module_screen.dart';
 import 'package:invitaty/page/editors/edit_countdown_module_screen.dart';
+import 'package:invitaty/page/editors/edit_location_module_screen.dart';
 
 import 'app_routes.dart';
 
@@ -76,6 +77,17 @@ GoRouter createAppRouter(GlobalKey<NavigatorState> navigatorKey) {
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>;
           return EditCountdownModuleScreen(
+            index: extra["index"],
+            section: extra["section"],
+          );
+        },
+      ),
+      GoRoute(
+        path: '/edit-location',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+
+          return EditLocationModuleScreen(
             index: extra["index"],
             section: extra["section"],
           );
