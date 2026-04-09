@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:invitaty/providers/invitation_provider.dart';
 
@@ -59,7 +60,7 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     Navigator.pop(context);
   }
 
-  // ❌ ELIMINAR con confirmación
+  // ❌ ELIMINAR
   void _delete() async {
     final provider = context.read<InvitationProvider>();
 
@@ -89,11 +90,16 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     }
   }
 
-  // 🧠 AUTOGENERAR LINK GOOGLE MAPS
+  // 🧠 GENERAR LINK
   void _generateMapsUrl() {
     final address = addressController.text.trim();
 
-    if (address.isEmpty) return;
+    if (address.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Introduce una dirección primero")),
+      );
+      return;
+    }
 
     final encoded = Uri.encodeComponent(address);
 
@@ -101,6 +107,21 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
       mapsUrlController.text =
           "https://www.google.com/maps/search/?api=1&query=$encoded";
     });
+  }
+
+  // 🌍 ABRIR MAPS
+  void _openMaps() async {
+    final url = mapsUrlController.text;
+
+    if (url.isEmpty) return;
+
+    final uri = Uri.parse(url);
+
+    if (!await launchUrl(uri)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("No se pudo abrir el enlace")),
+      );
+    }
   }
 
   @override
@@ -113,10 +134,8 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
           IconButton(icon: const Icon(Icons.save), onPressed: _save),
         ],
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16),
-
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -127,6 +146,7 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
                 decoration: const InputDecoration(
                   labelText: "Nombre del lugar",
                 ),
+                onChanged: (_) => setState(() {}),
               ),
 
               const SizedBox(height: 16),
@@ -135,11 +155,12 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
               TextField(
                 controller: addressController,
                 decoration: const InputDecoration(labelText: "Dirección"),
+                onChanged: (_) => setState(() {}),
               ),
 
               const SizedBox(height: 16),
 
-              // 🔹 BOTÓN GENERAR LINK
+              // 🔹 BOTÓN GENERAR
               ElevatedButton.icon(
                 onPressed: _generateMapsUrl,
                 icon: const Icon(Icons.map),
@@ -148,12 +169,13 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
 
               const SizedBox(height: 16),
 
-              // 🔹 URL MAPS
+              // 🔹 URL
               TextField(
                 controller: mapsUrlController,
                 decoration: const InputDecoration(
                   labelText: "Enlace de Google Maps",
                 ),
+                onChanged: (_) => setState(() {}),
               ),
 
               const SizedBox(height: 24),
@@ -173,7 +195,6 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
                   color: Colors.grey.shade100,
                   borderRadius: BorderRadius.circular(12),
                 ),
-
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -194,12 +215,20 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
                     const SizedBox(height: 12),
 
                     if (mapsUrlController.text.isNotEmpty)
-                      Row(
-                        children: const [
-                          Icon(Icons.map, size: 16),
-                          SizedBox(width: 6),
-                          Text("Abrir en Google Maps"),
-                        ],
+                      InkWell(
+                        onTap: _openMaps,
+                        child: Row(
+                          children: const [
+                            Icon(Icons.map, size: 16),
+                            SizedBox(width: 6),
+                            Text(
+                              "Abrir en Google Maps",
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                   ],
                 ),

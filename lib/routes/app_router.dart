@@ -14,6 +14,7 @@ import 'package:invitaty/page/invitation/editor_screen.dart';
 import 'package:invitaty/page/editors/edit_text_module_screen.dart';
 import 'package:invitaty/page/editors/edit_countdown_module_screen.dart';
 import 'package:invitaty/page/editors/edit_location_module_screen.dart';
+import 'package:invitaty/page/editors/edit_dress_code_module_screen.dart';
 
 import 'app_routes.dart';
 
@@ -88,6 +89,17 @@ GoRouter createAppRouter(GlobalKey<NavigatorState> navigatorKey) {
           final extra = state.extra as Map<String, dynamic>;
 
           return EditLocationModuleScreen(
+            index: extra["index"],
+            section: extra["section"],
+          );
+        },
+      ),
+      GoRoute(
+        path: '/edit-dress',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+
+          return EditDressCodeModuleScreen(
             index: extra["index"],
             section: extra["section"],
           );
