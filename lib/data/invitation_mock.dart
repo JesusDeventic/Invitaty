@@ -126,6 +126,7 @@ const Map<String, dynamic> invitationMock = {
         "iban": "ES12 3456 7890 1234 5678",
         "bizum": "123456789",
         "link": "https://throne.com/landing#Top",
+        "items": ["Cafetera", "TV", "etc"],
       },
     },
     {
