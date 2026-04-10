@@ -69,7 +69,9 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
       builder: (context) {
         return AlertDialog(
           title: const Text("Eliminar ubicación"),
-          content: const Text("¿Seguro que quieres eliminar este módulo?"),
+          content: const Text(
+            "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer.",
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),

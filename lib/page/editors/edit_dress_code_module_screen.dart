@@ -84,7 +84,9 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
       builder: (context) {
         return AlertDialog(
           title: const Text("Eliminar dress code"),
-          content: const Text("¿Seguro que quieres eliminar este módulo?"),
+          content: const Text(
+            "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer.",
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
