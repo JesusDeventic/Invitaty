@@ -147,7 +147,10 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
       appBar: AppBar(
         title: const Text("Editar cuenta atrás"),
         actions: [
-          IconButton(icon: const Icon(Icons.delete), onPressed: _delete),
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.red),
+            onPressed: _delete,
+          ),
           IconButton(icon: const Icon(Icons.save), onPressed: _save),
         ],
       ),

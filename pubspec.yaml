@@ -57,6 +57,7 @@ dependencies:
   qr_flutter: ^4.1.0
   flutter_html: ^3.0.0
   just_audio: ^0.9.38
+  flutter_colorpicker: ^1.0.3
 
 dev_dependencies:
   flutter_test:

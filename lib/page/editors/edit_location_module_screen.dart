@@ -132,7 +132,10 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
       appBar: AppBar(
         title: const Text("Editar ubicación"),
         actions: [
-          IconButton(icon: const Icon(Icons.delete), onPressed: _delete),
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.red),
+            onPressed: _delete,
+          ),
           IconButton(icon: const Icon(Icons.save), onPressed: _save),
         ],
       ),

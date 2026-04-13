@@ -13,8 +13,13 @@ class TextModule extends StatelessWidget {
     final font = data["font"] ?? "Poppins";
     final fontSize = (data["fontSize"] ?? 16).toDouble();
 
+    final color = data["color"] != null
+        ? Color(int.parse(data["color"]))
+        : Colors.black;
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -25,13 +30,20 @@ class TextModule extends StatelessWidget {
                 fontSize: fontSize + 4,
                 fontWeight: FontWeight.bold,
                 fontFamily: font,
+                color: color,
               ),
             ),
+
           const SizedBox(height: 8),
+
           if (body.isNotEmpty)
             Text(
               body,
-              style: TextStyle(fontSize: fontSize, fontFamily: font),
+              style: TextStyle(
+                fontSize: fontSize,
+                fontFamily: font,
+                color: color,
+              ),
             ),
         ],
       ),

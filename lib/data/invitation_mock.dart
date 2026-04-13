@@ -18,7 +18,11 @@ const Map<String, dynamic> invitationMock = {
       "data": {
         "title": "Cumple de Laura",
         "subtitle": "¡30 años!",
-        "image": "",
+        "font": "Poppins",
+        "fontSizeTitle": 28,
+        "fontSizeSubtitle": 18,
+        "textColor": "#FFFFFF",
+        "imageUrl": "",
       },
     },
     {

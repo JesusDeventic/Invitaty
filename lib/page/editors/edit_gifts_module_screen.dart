@@ -163,7 +163,10 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
       appBar: AppBar(
         title: const Text("Editar regalos"),
         actions: [
-          IconButton(icon: const Icon(Icons.delete), onPressed: _deleteModule),
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.red),
+            onPressed: _deleteModule,
+          ),
           IconButton(icon: const Icon(Icons.save), onPressed: _save),
         ],
       ),

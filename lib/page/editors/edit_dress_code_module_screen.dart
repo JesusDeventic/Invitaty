@@ -113,7 +113,10 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
       appBar: AppBar(
         title: const Text("Editar vestimenta"),
         actions: [
-          IconButton(icon: const Icon(Icons.delete), onPressed: _delete),
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.red),
+            onPressed: _delete,
+          ),
           IconButton(icon: const Icon(Icons.save), onPressed: _save),
         ],
       ),
