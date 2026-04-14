@@ -18,6 +18,7 @@ import 'package:invitaty/page/editors/edit_dress_code_module_screen.dart';
 import 'package:invitaty/page/editors/edit_agenda_module_screen.dart';
 import 'package:invitaty/page/editors/edit_gifts_module_screen.dart';
 import 'package:invitaty/page/editors/edit_cover_module_screen.dart';
+import 'package:invitaty/page/editors/edit_gallery_module_screen.dart';
 
 import 'app_routes.dart';
 
@@ -136,6 +137,16 @@ GoRouter createAppRouter(GlobalKey<NavigatorState> navigatorKey) {
           final extra = state.extra as Map<String, dynamic>;
 
           return EditCoverModuleScreen(
+            index: extra["index"],
+            section: extra["section"],
+          );
+        },
+      ),
+      GoRoute(
+        path: '/edit-gallery',
+        builder: (context, state) {
+          final extra = state.extra as Map<String, dynamic>;
+          return EditGalleryModuleScreen(
             index: extra["index"],
             section: extra["section"],
           );

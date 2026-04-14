@@ -12,7 +12,7 @@ class AgendaModule extends StatelessWidget {
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
 
       decoration: BoxDecoration(
         color: Colors.grey.shade50,
@@ -20,17 +20,21 @@ class AgendaModule extends StatelessWidget {
       ),
 
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // 🔹 TÍTULO
+          // 🔹 TÍTULO CENTRADO
           Text(
             title,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              fontSize: 24, // 🔥 más grande
+              fontWeight: FontWeight.bold,
+            ),
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
 
-          // 🔹 LISTA DE EVENTOS
+          // 🔹 LISTA
           ...List.generate(items.length, (index) {
             final item = items[index];
 
@@ -41,72 +45,77 @@ class AgendaModule extends StatelessWidget {
             final isLast = index == items.length - 1;
 
             return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // 🔹 TIMELINE (punto + línea)
+                // 🔹 TIMELINE
                 Column(
                   children: [
-                    // Punto
                     Container(
-                      width: 10,
-                      height: 10,
+                      width: 12,
+                      height: 12,
                       decoration: const BoxDecoration(
                         color: Colors.black,
                         shape: BoxShape.circle,
                       ),
                     ),
 
-                    // Línea
                     if (!isLast)
                       Container(
                         width: 2,
-                        height: 60,
+                        height: 70,
                         color: Colors.grey.shade300,
                       ),
                   ],
                 ),
 
-                const SizedBox(width: 12),
+                const SizedBox(width: 16),
 
                 // 🔹 CONTENIDO
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.only(bottom: 16),
-
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Hora + título
-                        Row(
-                          children: [
-                            Text(
-                              time,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                itemTitle,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 260),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      // Hora
+                      if (time.isNotEmpty)
+                        Text(
+                          time,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
                         ),
 
-                        const SizedBox(height: 4),
+                      const SizedBox(height: 4),
 
-                        // Descripción
-                        if (description.isNotEmpty)
-                          Text(
-                            description,
-                            style: TextStyle(color: Colors.grey.shade700),
+                      // Título evento
+                      if (itemTitle.isNotEmpty)
+                        Text(
+                          itemTitle,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18, // 🔥 más grande
                           ),
-                      ],
-                    ),
+                        ),
+
+                      const SizedBox(height: 4),
+
+                      // Descripción
+                      if (description.isNotEmpty)
+                        Text(
+                          description,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.grey.shade700,
+                          ),
+                        ),
+
+                      const SizedBox(height: 20),
+                    ],
                   ),
                 ),
               ],

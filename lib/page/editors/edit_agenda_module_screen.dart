@@ -29,7 +29,6 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
     final data = widget.section["data"] ?? {};
 
     titleController = TextEditingController(text: data["title"] ?? "Agenda");
-
     items = List<Map<String, dynamic>>.from(data["items"] ?? []);
   }
 
@@ -75,7 +74,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
       builder: (context) => AlertDialog(
         title: const Text("Eliminar agenda"),
         content: const Text(
-          "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer.",
+          "¿Estás seguro de que quieres eliminar este módulo?",
         ),
         actions: [
           TextButton(
@@ -105,7 +104,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
-            // 🔹 HEADER CON DELETE
+            // 🔹 HEADER
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -120,7 +119,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
               ],
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
 
             // 🔹 HORA
             TextField(
@@ -131,7 +130,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
               },
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
 
             // 🔹 TÍTULO
             TextField(
@@ -142,7 +141,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
               },
             ),
 
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
 
             // 🔹 DESCRIPCIÓN
             TextField(
@@ -175,15 +174,17 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
 
       body: Padding(
         padding: const EdgeInsets.all(16),
+
         child: Column(
           children: [
             // 🔹 TÍTULO
             TextField(
               controller: titleController,
+              textAlign: TextAlign.center, // 🔥 centrado
               decoration: const InputDecoration(labelText: "Título"),
             ),
 
-            const SizedBox(height: 16),
+            const SizedBox(height: 20),
 
             // 🔹 LISTA
             Expanded(
