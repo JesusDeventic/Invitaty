@@ -1,28 +1,72 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:invitaty/music_controller/music_controller.dart';
 
-class MusicModule extends StatelessWidget {
+class MusicModule extends StatefulWidget {
   final Map<String, dynamic> data;
 
   const MusicModule({super.key, required this.data});
 
   @override
-  Widget build(BuildContext context) {
-    final title = data["title"] ?? "Música";
-    final url = data["url"] as String?;
+  State<MusicModule> createState() => _MusicModuleState();
+}
 
-    final controller = MusicController();
+class _MusicModuleState extends State<MusicModule> {
+  final controller = MusicController();
+
+  late final StreamSubscription _sub;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 🔥 Listener controlado (evita leaks)
+    _sub = controller.player.playerStateStream.listen((state) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _sub.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final title = widget.data["title"] ?? "Música";
+    final url = widget.data["url"] as String?;
+
+    final isPlaying = controller.isPlaying;
 
     return Container(
-      padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          // 🎵 ICONO
+          const Icon(Icons.music_note, size: 40),
+
+          const SizedBox(height: 8),
+
+          // 🔹 TÍTULO
           Text(
             title,
-            style: Theme.of(context).textTheme.titleLarge, // 👈 usa theme
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 12),
+
+          const SizedBox(height: 16),
+
+          // 🔹 BOTÓN
           ElevatedButton.icon(
             onPressed: () async {
               try {
@@ -35,6 +79,8 @@ class MusicModule extends StatelessWidget {
                 } else {
                   await controller.play(url);
                 }
+
+                setState(() {}); // 🔥 refresco inmediato botón
               } catch (e) {
                 debugPrint("Error audio: $e");
 
@@ -47,8 +93,8 @@ class MusicModule extends StatelessWidget {
                 }
               }
             },
-            icon: Icon(controller.isPlaying ? Icons.pause : Icons.play_arrow),
-            label: Text(controller.isPlaying ? "Pausar" : "Reproducir"),
+            icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+            label: Text(isPlaying ? "Pausar" : "Reproducir"),
           ),
         ],
       ),

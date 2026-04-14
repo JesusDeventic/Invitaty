@@ -5,27 +5,37 @@ class MusicController {
   static final MusicController _instance = MusicController._internal();
   factory MusicController() => _instance;
 
-  MusicController._internal();
+  MusicController._internal() {
+    // 🔥 Escuchar estado real del player
+    _player.playerStateStream.listen((state) {
+      isPlaying = state.playing;
+    });
+  }
 
   final AudioPlayer _player = AudioPlayer();
+
   bool isPlaying = false;
 
   Future<void> play(String? url) async {
     if (url == null || url.isEmpty) {
-      debugPrint("URL de audio vacía");
+      debugPrint("URL vacía");
       return;
     }
 
     try {
       await _player.stop();
 
-      await _player.setUrl(url); // aquí suele petar en Windows
+      // 🔥 IMPORTANTE: validar URL
+      final uri = Uri.tryParse(url);
+      if (uri == null || !uri.hasAbsolutePath) {
+        throw Exception("URL inválida");
+      }
+
+      await _player.setUrl(url);
 
       await _player.play();
-
-      isPlaying = true;
     } catch (e) {
-      debugPrint("ERROR reproduciendo audio: $e");
+      debugPrint("ERROR audio: $e");
       isPlaying = false;
     }
   }
@@ -33,9 +43,8 @@ class MusicController {
   Future<void> pause() async {
     try {
       await _player.pause();
-      isPlaying = false;
     } catch (e) {
-      debugPrint("ERROR pausando audio: $e");
+      debugPrint("ERROR pausa: $e");
     }
   }
 
