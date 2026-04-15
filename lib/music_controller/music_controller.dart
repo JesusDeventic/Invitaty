@@ -1,4 +1,4 @@
-import 'package:just_audio/just_audio.dart';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/foundation.dart';
 
 class MusicController {
@@ -6,9 +6,8 @@ class MusicController {
   factory MusicController() => _instance;
 
   MusicController._internal() {
-    // 🔥 Escuchar estado real del player
-    _player.playerStateStream.listen((state) {
-      isPlaying = state.playing;
+    _player.onPlayerStateChanged.listen((state) {
+      isPlaying = state == PlayerState.playing;
     });
   }
 
@@ -24,16 +23,8 @@ class MusicController {
 
     try {
       await _player.stop();
-
-      // 🔥 IMPORTANTE: validar URL
-      final uri = Uri.tryParse(url);
-      if (uri == null || !uri.hasAbsolutePath) {
-        throw Exception("URL inválida");
-      }
-
-      await _player.setUrl(url);
-
-      await _player.play();
+      await _player.play(UrlSource(url));
+      isPlaying = true;
     } catch (e) {
       debugPrint("ERROR audio: $e");
       isPlaying = false;
@@ -43,6 +34,7 @@ class MusicController {
   Future<void> pause() async {
     try {
       await _player.pause();
+      isPlaying = false;
     } catch (e) {
       debugPrint("ERROR pausa: $e");
     }

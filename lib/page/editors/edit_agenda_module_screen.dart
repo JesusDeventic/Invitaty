@@ -22,6 +22,10 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
 
   List<Map<String, dynamic>> items = [];
 
+  final List<TextEditingController> timeControllers = [];
+  final List<TextEditingController> titleControllers = [];
+  final List<TextEditingController> descControllers = [];
+
   @override
   void initState() {
     super.initState();
@@ -29,30 +33,52 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
     final data = widget.section["data"] ?? {};
 
     titleController = TextEditingController(text: data["title"] ?? "Agenda");
-    items = List<Map<String, dynamic>>.from(data["items"] ?? []);
+
+    final rawItems = List<Map<String, dynamic>>.from(data["items"] ?? []);
+    items = List<Map<String, dynamic>>.from(rawItems);
+
+    _syncControllers();
+  }
+
+  void _syncControllers() {
+    timeControllers.clear();
+    titleControllers.clear();
+    descControllers.clear();
+
+    for (final item in items) {
+      timeControllers.add(TextEditingController(text: item["time"] ?? ""));
+      titleControllers.add(TextEditingController(text: item["title"] ?? ""));
+      descControllers.add(
+        TextEditingController(text: item["description"] ?? ""),
+      );
+    }
   }
 
   @override
   void dispose() {
     titleController.dispose();
+
+    for (final c in timeControllers) c.dispose();
+    for (final c in titleControllers) c.dispose();
+    for (final c in descControllers) c.dispose();
+
     super.dispose();
   }
 
-  // ➕ AÑADIR EVENTO
   void _addItem() {
     setState(() {
       items.add({"time": "", "title": "", "description": ""});
+      _syncControllers();
     });
   }
 
-  // ❌ ELIMINAR EVENTO
   void _removeItem(int index) {
     setState(() {
       items.removeAt(index);
+      _syncControllers();
     });
   }
 
-  // 💾 GUARDAR
   void _save() {
     final provider = context.read<InvitationProvider>();
 
@@ -65,8 +91,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
     Navigator.pop(context);
   }
 
-  // ❌ ELIMINAR MÓDULO
-  void _deleteModule() async {
+  Future<void> _deleteModule() async {
     final provider = context.read<InvitationProvider>();
 
     final confirm = await showDialog<bool>(
@@ -96,15 +121,12 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
   }
 
   Widget _buildItem(int index) {
-    final item = items[index];
-
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
-            // 🔹 HEADER
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -121,35 +143,35 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
 
             const SizedBox(height: 12),
 
-            // 🔹 HORA
             TextField(
-              controller: TextEditingController(text: item["time"]),
+              controller: timeControllers[index],
+              textAlign: TextAlign.left, // 🔥 FIX
               decoration: const InputDecoration(labelText: "Hora (ej: 18:00)"),
               onChanged: (value) {
-                item["time"] = value;
+                items[index]["time"] = value;
               },
             ),
 
             const SizedBox(height: 12),
 
-            // 🔹 TÍTULO
             TextField(
-              controller: TextEditingController(text: item["title"]),
+              controller: titleControllers[index],
+              textAlign: TextAlign.left, // 🔥 FIX
               decoration: const InputDecoration(labelText: "Título"),
               onChanged: (value) {
-                item["title"] = value;
+                items[index]["title"] = value;
               },
             ),
 
             const SizedBox(height: 12),
 
-            // 🔹 DESCRIPCIÓN
             TextField(
-              controller: TextEditingController(text: item["description"]),
+              controller: descControllers[index],
+              textAlign: TextAlign.left, // 🔥 FIX
               decoration: const InputDecoration(labelText: "Descripción"),
               maxLines: 2,
               onChanged: (value) {
-                item["description"] = value;
+                items[index]["description"] = value;
               },
             ),
           ],
@@ -174,19 +196,17 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
 
       body: Padding(
         padding: const EdgeInsets.all(16),
-
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start, // 🔥 FIX GLOBAL
           children: [
-            // 🔹 TÍTULO
             TextField(
               controller: titleController,
-              textAlign: TextAlign.center, // 🔥 centrado
+              textAlign: TextAlign.left, // 🔥 FIX
               decoration: const InputDecoration(labelText: "Título"),
             ),
 
             const SizedBox(height: 20),
 
-            // 🔹 LISTA
             Expanded(
               child: ListView(
                 children: [

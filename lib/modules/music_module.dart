@@ -1,6 +1,5 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+
 import 'package:invitaty/music_controller/music_controller.dart';
 
 class MusicModule extends StatefulWidget {
@@ -13,27 +12,7 @@ class MusicModule extends StatefulWidget {
 }
 
 class _MusicModuleState extends State<MusicModule> {
-  final controller = MusicController();
-
-  late final StreamSubscription _sub;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // 🔥 Listener controlado (evita leaks)
-    _sub = controller.player.playerStateStream.listen((state) {
-      if (mounted) {
-        setState(() {});
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _sub.cancel();
-    super.dispose();
-  }
+  final MusicController controller = MusicController();
 
   @override
   Widget build(BuildContext context) {
@@ -52,12 +31,10 @@ class _MusicModuleState extends State<MusicModule> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // 🎵 ICONO
           const Icon(Icons.music_note, size: 40),
 
           const SizedBox(height: 8),
 
-          // 🔹 TÍTULO
           Text(
             title,
             textAlign: TextAlign.center,
@@ -66,7 +43,6 @@ class _MusicModuleState extends State<MusicModule> {
 
           const SizedBox(height: 16),
 
-          // 🔹 BOTÓN
           ElevatedButton.icon(
             onPressed: () async {
               try {
@@ -80,11 +56,13 @@ class _MusicModuleState extends State<MusicModule> {
                   await controller.play(url);
                 }
 
-                setState(() {}); // 🔥 refresco inmediato botón
+                if (mounted) {
+                  setState(() {});
+                }
               } catch (e) {
                 debugPrint("Error audio: $e");
 
-                if (context.mounted) {
+                if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text("No se pudo reproducir la música"),

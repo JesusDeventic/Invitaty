@@ -5,27 +5,24 @@ class CountdownModule extends StatelessWidget {
 
   const CountdownModule({super.key, required this.data});
 
+  DateTime? _parseDate(dynamic value) {
+    if (value == null) return null;
+    return DateTime.tryParse(value.toString());
+  }
+
   @override
   Widget build(BuildContext context) {
     final title = data["title"] ?? "Cuenta atrás";
+    final eventDateTime = _parseDate(data["eventDateTime"]);
 
-    // 🛡️ PROTECCIÓN CONTRA NULL
-    final eventString = data["eventDateTime"];
-
-    DateTime? eventDateTime;
-
-    if (eventString != null && eventString is String) {
-      try {
-        eventDateTime = DateTime.parse(eventString);
-      } catch (e) {
-        eventDateTime = null;
-      }
-    }
-
-    // 🛑 SI NO HAY FECHA → NO CRASHEA
     if (eventDateTime == null) {
       return Container(
+        margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.grey.shade50,
+          borderRadius: BorderRadius.circular(12),
+        ),
         child: const Text("Fecha no definida"),
       );
     }
@@ -33,20 +30,42 @@ class CountdownModule extends StatelessWidget {
     final now = DateTime.now();
     final difference = eventDateTime.difference(now);
 
-    final days = difference.inDays;
-    final hours = difference.inHours % 24;
-    final minutes = difference.inMinutes % 60;
+    final isPast = difference.isNegative;
+
+    final safeDifference = isPast ? Duration.zero : difference;
+
+    final days = safeDifference.inDays;
+    final hours = safeDifference.inHours % 24;
+    final minutes = safeDifference.inMinutes % 60;
 
     return Container(
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.grey.shade50,
+        borderRadius: BorderRadius.circular(12),
+      ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(
             title,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 10),
-          Text("$days días $hours horas $minutes minutos"),
+          const SizedBox(height: 12),
+
+          Text(
+            isPast
+                ? "El evento ya ha comenzado"
+                : "$days días · $hours horas · $minutes minutos",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 18,
+              color: isPast ? Colors.redAccent : Colors.black87,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
         ],
       ),
     );

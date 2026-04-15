@@ -48,16 +48,28 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
     fontSize = (data["fontSize"] ?? 18).toDouble().clamp(18.0, 48.0);
 
-    textColor = data["color"] != null
-        ? _hexToColor(data["color"])
-        : Colors.black;
+    textColor = _parseColor(data["color"]);
   }
 
-  // 🎨 HEX → COLOR
-  Color _hexToColor(String hex) {
-    hex = hex.replaceAll("#", "");
-    if (hex.length == 6) hex = "FF$hex";
-    return Color(int.parse(hex, radix: 16));
+  // 🎨 COLOR SAFE PARSER
+  Color _parseColor(dynamic value) {
+    if (value == null) return Colors.black;
+
+    try {
+      // HEX
+      if (value is String) {
+        String hex = value.replaceAll("#", "");
+        if (hex.length == 6) hex = "FF$hex";
+        return Color(int.parse(hex, radix: 16));
+      }
+
+      // INT fallback
+      if (value is int) {
+        return Color(value);
+      }
+    } catch (_) {}
+
+    return Colors.black;
   }
 
   // 🎨 COLOR → HEX (SIN deprecated)
@@ -67,7 +79,6 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
     return "#${hex.substring(2).toUpperCase()}";
   }
 
-  // 🎨 COLOR PICKER
   void _pickColor() {
     Color tempColor = textColor;
 
@@ -102,7 +113,6 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
     );
   }
 
-  // 💾 GUARDAR
   void _save() {
     final provider = context.read<InvitationProvider>();
 
@@ -121,7 +131,6 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
     Navigator.pop(context);
   }
 
-  // ❌ ELIMINAR
   Future<void> _delete() async {
     final provider = context.read<InvitationProvider>();
 
@@ -198,12 +207,12 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
               DropdownButton<String>(
                 value: selectedFont,
                 isExpanded: true,
-                items: availableFonts
-                    .map(
-                      (font) =>
-                          DropdownMenuItem(value: font, child: Text(font)),
-                    )
-                    .toList(),
+                items: availableFonts.map((font) {
+                  return DropdownMenuItem(
+                    value: font,
+                    child: Text(font, style: TextStyle(fontFamily: font)),
+                  );
+                }).toList(),
                 onChanged: (v) => setState(() => selectedFont = v!),
               ),
 

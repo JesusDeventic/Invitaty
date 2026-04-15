@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:invitaty/providers/invitation_provider.dart';
 
 class EditDressCodeModuleScreen extends StatefulWidget {
@@ -58,7 +57,7 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
     super.dispose();
   }
 
-  // 💾 GUARDAR
+  // 💾 SAVE
   void _save() {
     final provider = context.read<InvitationProvider>();
 
@@ -75,36 +74,41 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
     Navigator.pop(context);
   }
 
-  // ❌ ELIMINAR CON CONFIRMACIÓN
-  void _delete() async {
-    final provider = context.read<InvitationProvider>();
-
+  // 🗑 DELETE
+  Future<void> _delete() async {
     final confirm = await showDialog<bool>(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Eliminar dress code"),
-          content: const Text(
-            "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer.",
+      builder: (context) => AlertDialog(
+        title: const Text("Eliminar dress code"),
+        content: const Text("¿Seguro que quieres eliminar este módulo?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Cancelar"),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text("Cancelar"),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text("Eliminar"),
-            ),
-          ],
-        );
-      },
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("Eliminar"),
+          ),
+        ],
+      ),
     );
 
     if (confirm == true) {
-      provider.removeSection(widget.index);
+      context.read<InvitationProvider>().removeSection(widget.index);
       Navigator.pop(context);
     }
+  }
+
+  Widget _buildStyleChip(String style) {
+    final isSelected = selectedStyle == style;
+
+    return ChoiceChip(
+      label: Text(style),
+      selected: isSelected,
+      onSelected: (_) => setState(() => selectedStyle = style),
+    );
   }
 
   @override
@@ -120,48 +124,35 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
           IconButton(icon: const Icon(Icons.save), onPressed: _save),
         ],
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16),
-
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 🔹 TÍTULO
               TextField(
                 controller: titleController,
                 decoration: const InputDecoration(labelText: "Título"),
                 onChanged: (_) => setState(() {}),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
 
-              // 🔹 ESTILO (DROPDOWN)
               const Text(
                 "Tipo de vestimenta",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
 
-              DropdownButton<String>(
-                value: selectedStyle,
-                isExpanded: true,
-                items: styles
-                    .map(
-                      (style) =>
-                          DropdownMenuItem(value: style, child: Text(style)),
-                    )
-                    .toList(),
-                onChanged: (value) {
-                  setState(() {
-                    selectedStyle = value!;
-                  });
-                },
+              const SizedBox(height: 10),
+
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: styles.map(_buildStyleChip).toList(),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
 
-              // 🔹 DESCRIPCIÓN
               TextField(
                 controller: descriptionController,
                 decoration: const InputDecoration(
@@ -173,7 +164,6 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
 
               const SizedBox(height: 24),
 
-              // 🔹 PREVIEW
               const Text(
                 "Vista previa",
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -185,10 +175,9 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
                 width: double.infinity,
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
+                  color: Colors.grey.shade50,
                   borderRadius: BorderRadius.circular(12),
                 ),
-
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
@@ -213,7 +202,7 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
+                        color: Colors.grey.shade200,
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(

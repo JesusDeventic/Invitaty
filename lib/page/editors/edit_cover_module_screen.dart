@@ -40,6 +40,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
     subtitleController = TextEditingController(text: data["subtitle"] ?? "");
 
     selectedFont = data["font"] ?? "Poppins";
+
     titleSize = (data["fontSizeTitle"] ?? 28).toDouble();
     subtitleSize = (data["fontSizeSubtitle"] ?? 18).toDouble();
 
@@ -56,7 +57,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
     super.dispose();
   }
 
-  // 💾 GUARDAR
+  // 💾 SAVE
   void _save() {
     final provider = context.read<InvitationProvider>();
 
@@ -77,7 +78,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
     Navigator.pop(context);
   }
 
-  // 🎨 COLOR PICKER
+  // 🎨 COLOR PICKER (igual estilo text)
   void _openColorPicker() {
     Color tempColor = selectedColor;
 
@@ -85,15 +86,17 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Seleccionar color"),
+          title: const Text("Seleccionar color texto"),
           content: SingleChildScrollView(
-            child: ColorPicker(
-              pickerColor: tempColor,
-              onColorChanged: (color) {
-                tempColor = color;
-              },
-              enableAlpha: false,
-              displayThumbColor: true,
+            child: Column(
+              children: [
+                ColorPicker(
+                  pickerColor: tempColor,
+                  onColorChanged: (color) => tempColor = color,
+                  enableAlpha: false,
+                  displayThumbColor: true,
+                ),
+              ],
             ),
           ),
           actions: [
@@ -101,7 +104,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
               onPressed: () => Navigator.pop(context),
               child: const Text("Cancelar"),
             ),
-            TextButton(
+            ElevatedButton(
               onPressed: () {
                 setState(() {
                   selectedColor = tempColor;
@@ -147,28 +150,31 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
 
               const SizedBox(height: 24),
 
-              // FUENTE
               const Text(
                 "Fuente",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
+
               DropdownButton<String>(
                 value: selectedFont,
                 isExpanded: true,
-                items: const [
-                  DropdownMenuItem(value: "Poppins", child: Text("Poppins")),
-                  DropdownMenuItem(value: "Playfair", child: Text("Playfair")),
-                  DropdownMenuItem(
-                    value: "Great Vibes",
-                    child: Text("Great Vibes"),
-                  ),
-                  DropdownMenuItem(value: "Fredoka", child: Text("Fredoka")),
-                  DropdownMenuItem(
-                    value: "Creepster",
-                    child: Text("Creepster"),
-                  ),
-                  DropdownMenuItem(value: "Disney", child: Text("Disney")),
-                ],
+                items:
+                    const [
+                      "Poppins",
+                      "Playfair",
+                      "Fredoka",
+                      "GreatVibes",
+                      "Creepster",
+                      "Disney",
+                    ].map((font) {
+                      return DropdownMenuItem(
+                        value: font,
+                        child: Text(
+                          font,
+                          style: TextStyle(fontFamily: font, fontSize: 16),
+                        ),
+                      );
+                    }).toList(),
                 onChanged: (value) {
                   setState(() => selectedFont = value!);
                 },
@@ -176,14 +182,12 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
 
               const SizedBox(height: 16),
 
-              // TAMAÑOS
               const Text("Tamaño título"),
               Slider(
                 value: titleSize,
                 min: 18,
                 max: 48,
                 divisions: 15,
-                label: titleSize.toStringAsFixed(0),
                 onChanged: (v) => setState(() => titleSize = v),
               ),
 
@@ -193,13 +197,11 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
                 min: 14,
                 max: 32,
                 divisions: 10,
-                label: subtitleSize.toStringAsFixed(0),
                 onChanged: (v) => setState(() => subtitleSize = v),
               ),
 
               const SizedBox(height: 16),
 
-              // 🎨 COLOR (IGUAL QUE TEXT)
               const Text(
                 "Color",
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -231,7 +233,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
               ElevatedButton.icon(
                 onPressed: _setFakeImage,
                 icon: const Icon(Icons.image),
-                label: const Text("Seleccionar imagen de fondo"),
+                label: const Text("Seleccionar imagen"),
               ),
 
               const SizedBox(height: 24),
@@ -305,6 +307,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
   }
 
   String _colorToHex(Color color) {
-    return "#${color.value.toRadixString(16).substring(2)}";
+    final value = color.toARGB32();
+    return "#${value.toRadixString(16).substring(2).toUpperCase()}";
   }
 }

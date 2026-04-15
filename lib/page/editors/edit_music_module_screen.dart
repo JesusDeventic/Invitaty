@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:invitaty/providers/invitation_provider.dart';
 
 class EditMusicModuleScreen extends StatefulWidget {
@@ -21,6 +20,8 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
   late TextEditingController titleController;
   late TextEditingController urlController;
 
+  bool isPlaying = false;
+
   @override
   void initState() {
     super.initState();
@@ -38,7 +39,6 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
     super.dispose();
   }
 
-  // 💾 GUARDAR
   void _save() {
     final provider = context.read<InvitationProvider>();
 
@@ -51,139 +51,77 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
     Navigator.pop(context);
   }
 
-  // ❌ ELIMINAR
-  void _delete() async {
-    final provider = context.read<InvitationProvider>();
-
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Eliminar música"),
-          content: const Text(
-            "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer.",
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text("Cancelar"),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text("Eliminar"),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (confirm == true) {
-      provider.removeSection(widget.index);
-      Navigator.pop(context);
-    }
-  }
-
-  // 🔗 VALIDACIÓN SIMPLE
-  bool _isValidUrl(String url) {
-    final uri = Uri.tryParse(url);
-    return uri != null && uri.hasAbsolutePath;
-  }
-
   @override
   Widget build(BuildContext context) {
     final url = urlController.text;
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Editar música"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.delete, color: Colors.red),
-            onPressed: _delete,
-          ),
-          IconButton(icon: const Icon(Icons.save), onPressed: _save),
-        ],
-      ),
-
+      appBar: AppBar(title: const Text("Editar música")),
       body: Padding(
         padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start, // 🔥 FIX
+          children: [
+            TextField(
+              controller: titleController,
+              textAlign: TextAlign.left,
+              decoration: const InputDecoration(labelText: "Título"),
+              onChanged: (_) => setState(() {}),
+            ),
 
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 🔹 TÍTULO
-              TextField(
-                controller: titleController,
-                decoration: const InputDecoration(labelText: "Título"),
-                onChanged: (_) => setState(() {}),
+            const SizedBox(height: 16),
+
+            TextField(
+              controller: urlController,
+              textAlign: TextAlign.left,
+              decoration: const InputDecoration(labelText: "URL"),
+              onChanged: (_) => setState(() {}),
+            ),
+
+            const SizedBox(height: 24),
+
+            const Text(
+              "Vista previa",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 12),
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(12),
               ),
+              child: Column(
+                children: [
+                  const Icon(Icons.music_note, size: 40),
 
-              const SizedBox(height: 16),
+                  const SizedBox(height: 8),
 
-              // 🔹 URL
-              TextField(
-                controller: urlController,
-                decoration: const InputDecoration(
-                  labelText: "URL de la música",
-                  hintText: "https://...",
-                ),
-                onChanged: (_) => setState(() {}),
-              ),
-
-              const SizedBox(height: 8),
-
-              if (url.isNotEmpty && !_isValidUrl(url))
-                const Text("URL inválida", style: TextStyle(color: Colors.red)),
-
-              const SizedBox(height: 24),
-
-              // 🔹 PREVIEW
-              const Text(
-                "Vista previa",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-
-              const SizedBox(height: 12),
-
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-
-                child: Column(
-                  children: [
-                    const Icon(Icons.music_note, size: 40),
-
-                    const SizedBox(height: 8),
-
-                    Text(
-                      titleController.text.isEmpty
-                          ? "Título de música"
-                          : titleController.text,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Text(
+                    titleController.text.isEmpty
+                        ? "Título"
+                        : titleController.text,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
                     ),
+                  ),
 
-                    const SizedBox(height: 12),
+                  const SizedBox(height: 12),
 
-                    ElevatedButton.icon(
-                      onPressed: () {},
-                      icon: const Icon(Icons.play_arrow),
-                      label: const Text("Reproducir"),
-                    ),
-                  ],
-                ),
+                  ElevatedButton.icon(
+                    onPressed: url.isEmpty ? null : () {},
+                    icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+                    label: Text(isPlaying ? "Pausar" : "Reproducir"),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

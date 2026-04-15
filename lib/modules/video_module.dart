@@ -8,13 +8,14 @@ class VideoModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final title = data["title"] ?? "Vídeos";
     final videos = List<Map<String, dynamic>>.from(data["videos"] ?? []);
 
     if (videos.isEmpty) return const SizedBox();
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(20),
 
       decoration: BoxDecoration(
         color: Colors.grey.shade50,
@@ -24,16 +25,18 @@ class VideoModule extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(
-            "Vídeos",
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+          // 🔹 TÍTULO
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
           ),
 
           const SizedBox(height: 16),
 
           ...videos.map((video) {
             final url = video["url"] as String?;
-            final title = video["title"] ?? "Vídeo";
+            final videoTitle = video["title"] ?? "Vídeo";
 
             final videoId = _extractYoutubeId(url);
             final thumbnail = videoId != null
@@ -41,13 +44,14 @@ class VideoModule extends StatelessWidget {
                 : null;
 
             return Container(
-              margin: const EdgeInsets.only(bottom: 16),
+              margin: const EdgeInsets.only(bottom: 20),
 
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // 🔹 TÍTULO
+                  // 🔹 TÍTULO DEL VIDEO
                   Text(
-                    title,
+                    videoTitle,
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
@@ -56,21 +60,35 @@ class VideoModule extends StatelessWidget {
 
                   // 🔹 PREVIEW
                   if (thumbnail != null)
-                    GestureDetector(
-                      onTap: () => _openVideo(context, url),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          ClipRRect(
+                    Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(
+                          maxWidth: 300, // 🔥 tamaño controlado
+                        ),
+                        child: GestureDetector(
+                          onTap: () => _openVideo(context, url),
+                          child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
-                            child: Image.network(thumbnail),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                AspectRatio(
+                                  aspectRatio: 16 / 9,
+                                  child: Image.network(
+                                    thumbnail,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+
+                                const Icon(
+                                  Icons.play_circle_fill,
+                                  size: 50,
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
                           ),
-                          const Icon(
-                            Icons.play_circle_fill,
-                            size: 60,
-                            color: Colors.white,
-                          ),
-                        ],
+                        ),
                       ),
                     )
                   else
@@ -94,7 +112,7 @@ class VideoModule extends StatelessWidget {
     final uri = Uri.parse(url);
 
     if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+      await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("No se pudo abrir el vídeo")),

@@ -43,7 +43,6 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     super.dispose();
   }
 
-  // 💾 GUARDAR
   void _save() {
     final provider = context.read<InvitationProvider>();
 
@@ -60,30 +59,26 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     Navigator.pop(context);
   }
 
-  // ❌ ELIMINAR
-  void _delete() async {
+  Future<void> _delete() async {
     final provider = context.read<InvitationProvider>();
 
     final confirm = await showDialog<bool>(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text("Eliminar ubicación"),
-          content: const Text(
-            "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer.",
+      builder: (context) => AlertDialog(
+        title: const Text("Eliminar ubicación"),
+        content: const Text("¿Estás seguro? Esta acción no se puede deshacer."),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Cancelar"),
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text("Cancelar"),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text("Eliminar"),
-            ),
-          ],
-        );
-      },
+          ElevatedButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text("Eliminar"),
+          ),
+        ],
+      ),
     );
 
     if (confirm == true) {
@@ -92,16 +87,10 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     }
   }
 
-  // 🧠 GENERAR LINK
   void _generateMapsUrl() {
     final address = addressController.text.trim();
 
-    if (address.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Introduce una dirección primero")),
-      );
-      return;
-    }
+    if (address.isEmpty) return;
 
     final encoded = Uri.encodeComponent(address);
 
@@ -111,15 +100,13 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     });
   }
 
-  // 🌍 ABRIR MAPS
-  void _openMaps() async {
+  Future<void> _openMaps() async {
     final url = mapsUrlController.text;
-
     if (url.isEmpty) return;
 
     final uri = Uri.parse(url);
 
-    if (!await launchUrl(uri)) {
+    if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("No se pudo abrir el enlace")),
       );
@@ -129,117 +116,107 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Editar ubicación"),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.delete, color: Colors.red),
-            onPressed: _delete,
-          ),
-          IconButton(icon: const Icon(Icons.save), onPressed: _save),
-        ],
-      ),
+      appBar: AppBar(title: const Text("Editar ubicación")),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 🔹 NOMBRE
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: "Nombre del lugar",
-                ),
-                onChanged: (_) => setState(() {}),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start, // 🔥 FIX GLOBAL
+          children: [
+            // 🏷️ NOMBRE
+            TextField(
+              controller: nameController,
+              textAlign: TextAlign.left, // 🔥 FIX
+              decoration: const InputDecoration(labelText: "Nombre del lugar"),
+              onChanged: (_) => setState(() {}),
+            ),
+
+            const SizedBox(height: 16),
+
+            // 📍 DIRECCIÓN
+            TextField(
+              controller: addressController,
+              textAlign: TextAlign.left, // 🔥 FIX
+              decoration: const InputDecoration(labelText: "Dirección"),
+              onChanged: (_) => setState(() {}),
+            ),
+
+            const SizedBox(height: 16),
+
+            ElevatedButton.icon(
+              onPressed: _generateMapsUrl,
+              icon: const Icon(Icons.map),
+              label: const Text("Generar enlace de Google Maps"),
+            ),
+
+            const SizedBox(height: 16),
+
+            // 🔗 URL
+            TextField(
+              controller: mapsUrlController,
+              textAlign: TextAlign.left, // 🔥 FIX
+              decoration: const InputDecoration(
+                labelText: "Enlace de Google Maps",
               ),
+              onChanged: (_) => setState(() {}),
+            ),
 
-              const SizedBox(height: 16),
+            const SizedBox(height: 24),
 
-              // 🔹 DIRECCIÓN
-              TextField(
-                controller: addressController,
-                decoration: const InputDecoration(labelText: "Dirección"),
-                onChanged: (_) => setState(() {}),
+            const Text(
+              "Vista previa",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 12),
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(12),
               ),
-
-              const SizedBox(height: 16),
-
-              // 🔹 BOTÓN GENERAR
-              ElevatedButton.icon(
-                onPressed: _generateMapsUrl,
-                icon: const Icon(Icons.map),
-                label: const Text("Generar enlace de Google Maps"),
-              ),
-
-              const SizedBox(height: 16),
-
-              // 🔹 URL
-              TextField(
-                controller: mapsUrlController,
-                decoration: const InputDecoration(
-                  labelText: "Enlace de Google Maps",
-                ),
-                onChanged: (_) => setState(() {}),
-              ),
-
-              const SizedBox(height: 24),
-
-              // 🔹 PREVIEW
-              const Text(
-                "Vista previa",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-
-              const SizedBox(height: 12),
-
-              Container(
-                width: double.infinity,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    if (nameController.text.isNotEmpty)
-                      Text(
-                        nameController.text,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  if (nameController.text.isNotEmpty)
+                    Text(
+                      nameController.text,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
+                    ),
 
-                    const SizedBox(height: 8),
+                  const SizedBox(height: 8),
 
-                    if (addressController.text.isNotEmpty)
-                      Text(addressController.text),
+                  if (addressController.text.isNotEmpty)
+                    Text(addressController.text, textAlign: TextAlign.center),
 
-                    const SizedBox(height: 12),
+                  const SizedBox(height: 12),
 
-                    if (mapsUrlController.text.isNotEmpty)
-                      InkWell(
-                        onTap: _openMaps,
-                        child: Row(
-                          children: const [
-                            Icon(Icons.map, size: 16),
-                            SizedBox(width: 6),
-                            Text(
-                              "Abrir en Google Maps",
-                              style: TextStyle(
-                                decoration: TextDecoration.underline,
-                              ),
+                  if (mapsUrlController.text.isNotEmpty)
+                    InkWell(
+                      onTap: _openMaps,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: const [
+                          Icon(Icons.map, size: 16),
+                          SizedBox(width: 6),
+                          Text(
+                            "Abrir en Google Maps",
+                            style: TextStyle(
+                              decoration: TextDecoration.underline,
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

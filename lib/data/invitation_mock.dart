@@ -49,7 +49,7 @@ const Map<String, dynamic> invitationMock = {
       "data": {
         "title": "Nuestra canción",
         "url":
-            "https://www.soundjay.com/free-music_c2026/sounds/heart-of-the-sea-01.mp3",
+            "https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3",
       },
     },
     {

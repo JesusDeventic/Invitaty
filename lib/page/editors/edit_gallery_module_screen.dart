@@ -29,7 +29,9 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
 
     final data = widget.section["data"] ?? {};
 
-    images = List<String>.from(data["images"] ?? []);
+    final rawImages = data["images"];
+    images = rawImages is List ? List<String>.from(rawImages) : [];
+
     titleController = TextEditingController(text: data["title"] ?? "Galería");
   }
 
@@ -39,7 +41,7 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
     super.dispose();
   }
 
-  // 💾 GUARDAR
+  // 💾 SAVE
   void _save() {
     final provider = context.read<InvitationProvider>();
 
@@ -52,14 +54,14 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
     Navigator.pop(context);
   }
 
-  // ❌ ELIMINAR MÓDULO
+  // 🗑 DELETE MODULE
   Future<void> _deleteModule() async {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text("Eliminar galería"),
         content: const Text(
-          "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer.",
+          "¿Estás seguro de que quieres eliminar este módulo?",
         ),
         actions: [
           TextButton(
@@ -81,23 +83,23 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
     }
   }
 
-  // ➕ AÑADIR IMAGEN (FAKE)
+  // ➕ ADD IMAGE (FAKE NOW, FUTURE: UPLOAD)
   void _addImage() {
     setState(() {
       images.add(
-        "https://picsum.photos/200?random=${DateTime.now().millisecondsSinceEpoch}",
+        "https://picsum.photos/400?random=${DateTime.now().millisecondsSinceEpoch}",
       );
     });
   }
 
-  // ❌ ELIMINAR IMAGEN
+  // ❌ REMOVE IMAGE
   void _removeImage(int index) {
     setState(() {
       images.removeAt(index);
     });
   }
 
-  // 🔀 REORDENAR
+  // 🔀 REORDER
   void _reorder(int oldIndex, int newIndex) {
     setState(() {
       if (newIndex > oldIndex) newIndex -= 1;
@@ -126,12 +128,10 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
       ),
 
       body: Padding(
-        padding: const EdgeInsets.all(12),
-
+        padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 🏷️ TÍTULO
             TextField(
               controller: titleController,
               decoration: const InputDecoration(
@@ -150,7 +150,7 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
 
             Expanded(
               child: images.isEmpty
-                  ? const Center(child: Text("No hay imágenes"))
+                  ? _buildEmptyState()
                   : ReorderableGridView.builder(
                       itemCount: images.length,
                       onReorder: _reorder,
@@ -175,7 +175,6 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
                                 ),
                               ),
 
-                              // ❌ BOTÓN ELIMINAR
                               Positioned(
                                 top: 4,
                                 right: 4,
@@ -203,6 +202,19 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return const Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.photo_library_outlined, size: 48, color: Colors.grey),
+          SizedBox(height: 12),
+          Text("No hay imágenes aún", style: TextStyle(color: Colors.grey)),
+        ],
       ),
     );
   }

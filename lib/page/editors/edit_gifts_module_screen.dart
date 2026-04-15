@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:invitaty/providers/invitation_provider.dart';
 
@@ -24,7 +25,7 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
   late TextEditingController bizumController;
   late TextEditingController linkController;
 
-  List<String> items = [];
+  List<TextEditingController> itemControllers = [];
 
   @override
   void initState() {
@@ -33,16 +34,13 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
     final data = widget.section["data"] ?? {};
 
     titleController = TextEditingController(text: data["title"] ?? "Regalos");
-
     messageController = TextEditingController(text: data["message"] ?? "");
-
     ibanController = TextEditingController(text: data["iban"] ?? "");
-
     bizumController = TextEditingController(text: data["bizum"] ?? "");
-
     linkController = TextEditingController(text: data["link"] ?? "");
 
-    items = List<String>.from(data["items"] ?? []);
+    final items = List<String>.from(data["items"] ?? []);
+    itemControllers = items.map((e) => TextEditingController(text: e)).toList();
   }
 
   @override
@@ -52,26 +50,37 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
     ibanController.dispose();
     bizumController.dispose();
     linkController.dispose();
+
+    for (final c in itemControllers) {
+      c.dispose();
+    }
+
     super.dispose();
   }
 
-  // ➕ AÑADIR ITEM
+  // ➕ ITEM
   void _addItem() {
     setState(() {
-      items.add("");
+      itemControllers.add(TextEditingController(text: ""));
     });
   }
 
-  // ❌ ELIMINAR ITEM
+  // ❌ ITEM
   void _removeItem(int index) {
     setState(() {
-      items.removeAt(index);
+      itemControllers[index].dispose();
+      itemControllers.removeAt(index);
     });
   }
 
   // 💾 GUARDAR
   void _save() {
     final provider = context.read<InvitationProvider>();
+
+    final items = itemControllers
+        .map((c) => c.text.trim())
+        .where((e) => e.isNotEmpty)
+        .toList();
 
     final updatedSection = {
       ...widget.section,
@@ -81,7 +90,7 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
         "iban": ibanController.text,
         "bizum": bizumController.text,
         "link": linkController.text,
-        "items": items.where((e) => e.trim().isNotEmpty).toList(),
+        "items": items,
       },
     };
 
@@ -89,8 +98,8 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
     Navigator.pop(context);
   }
 
-  // ❌ ELIMINAR MÓDULO
-  void _deleteModule() async {
+  // ❌ DELETE MODULO
+  Future<void> _deleteModule() async {
     final provider = context.read<InvitationProvider>();
 
     final confirm = await showDialog<bool>(
@@ -99,7 +108,7 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
         return AlertDialog(
           title: const Text("Eliminar módulo de regalos"),
           content: const Text(
-            "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer.",
+            "¿Estás seguro? Esta acción no se puede deshacer.",
           ),
           actions: [
             TextButton(
@@ -121,7 +130,17 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
     }
   }
 
-  // 🔹 ITEM
+  // 🌐 OPEN LINK SAFE
+  Future<void> _openLink(String link) async {
+    if (link.isEmpty) return;
+
+    final uri = Uri.tryParse(link.startsWith("http") ? link : "https://$link");
+
+    if (uri == null) return;
+
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
   Widget _buildItem(int index) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -131,15 +150,14 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
           children: [
             const Icon(Icons.card_giftcard),
             const SizedBox(width: 8),
+
             Expanded(
               child: TextField(
-                controller: TextEditingController(text: items[index]),
+                controller: itemControllers[index],
                 decoration: const InputDecoration(labelText: "Regalo"),
-                onChanged: (value) {
-                  items[index] = value;
-                },
               ),
             ),
+
             IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () => _removeItem(index),
@@ -170,54 +188,53 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
           IconButton(icon: const Icon(Icons.save), onPressed: _save),
         ],
       ),
-      body: Padding(
+
+      body: ListView(
         padding: const EdgeInsets.all(16),
-        child: ListView(
-          children: [
-            const SizedBox(height: 8),
-            TextField(
-              controller: titleController,
-              decoration: const InputDecoration(labelText: "Título"),
-            ),
-            const SizedBox(height: 12),
+        children: [
+          TextField(
+            controller: titleController,
+            decoration: const InputDecoration(labelText: "Título"),
+          ),
 
-            TextField(
-              controller: messageController,
-              decoration: const InputDecoration(labelText: "Mensaje"),
-            ),
+          const SizedBox(height: 12),
 
-            _sectionTitle("Opciones de regalo"),
+          TextField(
+            controller: messageController,
+            decoration: const InputDecoration(labelText: "Mensaje"),
+          ),
 
-            TextField(
-              controller: ibanController,
-              decoration: const InputDecoration(labelText: "IBAN"),
-            ),
+          _sectionTitle("Opciones"),
+          TextField(
+            controller: ibanController,
+            decoration: const InputDecoration(labelText: "IBAN"),
+          ),
 
-            const SizedBox(height: 12),
+          const SizedBox(height: 12),
 
-            TextField(
-              controller: bizumController,
-              decoration: const InputDecoration(labelText: "Bizum"),
-            ),
+          TextField(
+            controller: bizumController,
+            decoration: const InputDecoration(labelText: "Bizum"),
+          ),
 
-            const SizedBox(height: 12),
+          const SizedBox(height: 12),
 
-            TextField(
-              controller: linkController,
-              decoration: const InputDecoration(labelText: "Link"),
-            ),
+          TextField(
+            controller: linkController,
+            decoration: const InputDecoration(labelText: "Link"),
+            onTap: () => _openLink(linkController.text),
+          ),
 
-            _sectionTitle("Ideas de regalo (Lista manual)"),
+          _sectionTitle("Ideas de regalo"),
 
-            ...List.generate(items.length, _buildItem),
+          ...List.generate(itemControllers.length, _buildItem),
 
-            ElevatedButton.icon(
-              onPressed: _addItem,
-              icon: const Icon(Icons.add),
-              label: const Text("Añadir regalo"),
-            ),
-          ],
-        ),
+          ElevatedButton.icon(
+            onPressed: _addItem,
+            icon: const Icon(Icons.add),
+            label: const Text("Añadir regalo"),
+          ),
+        ],
       ),
     );
   }

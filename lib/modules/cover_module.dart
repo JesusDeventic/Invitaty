@@ -21,12 +21,10 @@ class CoverModule extends StatelessWidget {
     return Container(
       height: 300,
       width: double.infinity,
-
       decoration: BoxDecoration(
         image: imageUrl.isNotEmpty
             ? DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover)
             : null,
-
         gradient: imageUrl.isEmpty
             ? const LinearGradient(
                 colors: [Color(0xFF6A11CB), Color(0xFF2575FC)],
@@ -35,11 +33,9 @@ class CoverModule extends StatelessWidget {
               )
             : null,
       ),
-
       child: Container(
         padding: const EdgeInsets.all(20),
         alignment: Alignment.center,
-
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -69,7 +65,6 @@ class CoverModule extends StatelessWidget {
     );
   }
 
-  // 🎨 HEX → COLOR
   Color _hexToColor(String hex) {
     hex = hex.replaceAll("#", "");
     if (hex.length == 6) hex = "FF$hex";
