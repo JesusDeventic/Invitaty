@@ -49,10 +49,25 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
     fontSize = (data["fontSize"] ?? 18).toDouble().clamp(18.0, 48.0);
 
     textColor = data["color"] != null
-        ? Color(int.parse(data["color"]))
+        ? _hexToColor(data["color"])
         : Colors.black;
   }
 
+  // 🎨 HEX → COLOR
+  Color _hexToColor(String hex) {
+    hex = hex.replaceAll("#", "");
+    if (hex.length == 6) hex = "FF$hex";
+    return Color(int.parse(hex, radix: 16));
+  }
+
+  // 🎨 COLOR → HEX (SIN deprecated)
+  String _colorToHex(Color color) {
+    final int value = color.toARGB32();
+    final hex = value.toRadixString(16).padLeft(8, '0');
+    return "#${hex.substring(2).toUpperCase()}";
+  }
+
+  // 🎨 COLOR PICKER
   void _pickColor() {
     Color tempColor = textColor;
 
@@ -87,6 +102,7 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
     );
   }
 
+  // 💾 GUARDAR
   void _save() {
     final provider = context.read<InvitationProvider>();
 
@@ -97,7 +113,7 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
         "body": bodyController.text,
         "font": selectedFont,
         "fontSize": fontSize,
-        "color": textColor.value.toString(),
+        "color": _colorToHex(textColor),
       },
     };
 
@@ -105,12 +121,51 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
     Navigator.pop(context);
   }
 
+  // ❌ ELIMINAR
+  Future<void> _delete() async {
+    final provider = context.read<InvitationProvider>();
+
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Eliminar módulo"),
+          content: const Text(
+            "¿Seguro que quieres eliminar este módulo? Esta acción no se puede deshacer.",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context, false),
+              child: const Text("Cancelar"),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              onPressed: () => Navigator.pop(context, true),
+              child: const Text("Eliminar"),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirm == true) {
+      provider.removeSection(widget.index);
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Editar texto"),
-        actions: [IconButton(icon: const Icon(Icons.save), onPressed: _save)],
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.red),
+            onPressed: _delete,
+          ),
+          IconButton(icon: const Icon(Icons.save), onPressed: _save),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -118,12 +173,12 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 📝 INPUTS
               TextField(
                 controller: titleController,
                 decoration: const InputDecoration(labelText: "Título"),
                 onChanged: (_) => setState(() {}),
               ),
+
               const SizedBox(height: 16),
 
               TextField(
@@ -135,7 +190,6 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
               const SizedBox(height: 16),
 
-              // 🔤 FUENTE
               const Text(
                 "Fuente",
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -155,7 +209,6 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
               const SizedBox(height: 16),
 
-              // 🔠 TAMAÑO
               const Text(
                 "Tamaño",
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -172,7 +225,6 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
               const SizedBox(height: 16),
 
-              // 🎨 COLOR
               const Text(
                 "Color",
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -201,7 +253,6 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
               const SizedBox(height: 24),
 
-              // 👀 PREVIEW (NUEVO)
               const Text(
                 "Vista previa",
                 style: TextStyle(fontWeight: FontWeight.bold),

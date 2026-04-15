@@ -3,24 +3,24 @@ import 'package:provider/provider.dart';
 
 import 'package:invitaty/providers/invitation_provider.dart';
 
-class EditAgendaModuleScreen extends StatefulWidget {
+class EditVideoModuleScreen extends StatefulWidget {
   final int index;
   final Map<String, dynamic> section;
 
-  const EditAgendaModuleScreen({
+  const EditVideoModuleScreen({
     super.key,
     required this.index,
     required this.section,
   });
 
   @override
-  State<EditAgendaModuleScreen> createState() => _EditAgendaModuleScreenState();
+  State<EditVideoModuleScreen> createState() => _EditVideoModuleScreenState();
 }
 
-class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
+class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
   late TextEditingController titleController;
 
-  List<Map<String, dynamic>> items = [];
+  List<Map<String, dynamic>> videos = [];
 
   @override
   void initState() {
@@ -28,8 +28,12 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
 
     final data = widget.section["data"] ?? {};
 
-    titleController = TextEditingController(text: data["title"] ?? "Agenda");
-    items = List<Map<String, dynamic>>.from(data["items"] ?? []);
+    titleController = TextEditingController(text: data["title"] ?? "Vídeos");
+
+    // 🔥 COPIA MUTABLE (evita error unmodifiable map)
+    videos = (data["videos"] as List? ?? [])
+        .map((v) => Map<String, dynamic>.from(v))
+        .toList();
   }
 
   @override
@@ -38,17 +42,17 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
     super.dispose();
   }
 
-  // ➕ AÑADIR EVENTO
-  void _addItem() {
+  // ➕ AÑADIR VIDEO
+  void _addVideo() {
     setState(() {
-      items.add({"time": "", "title": "", "description": ""});
+      videos.add({"title": "", "url": ""});
     });
   }
 
-  // ❌ ELIMINAR EVENTO
-  void _removeItem(int index) {
+  // ❌ ELIMINAR VIDEO
+  void _removeVideo(int index) {
     setState(() {
-      items.removeAt(index);
+      videos.removeAt(index);
     });
   }
 
@@ -58,7 +62,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
 
     final updatedSection = {
       ...widget.section,
-      "data": {"title": titleController.text, "items": items},
+      "data": {"title": titleController.text, "videos": videos},
     };
 
     provider.updateSection(widget.index, updatedSection);
@@ -72,7 +76,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Eliminar agenda"),
+        title: const Text("Eliminar vídeos"),
         content: const Text(
           "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer.",
         ),
@@ -95,8 +99,22 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
     }
   }
 
-  Widget _buildItem(int index) {
-    final item = items[index];
+  // 🧠 EXTRAER ID YOUTUBE
+  String? _getYoutubeId(String url) {
+    if (url.contains("youtu.be/")) {
+      return url.split("youtu.be/").last.split("?").first;
+    } else if (url.contains("youtube.com/watch?v=")) {
+      return url.split("v=").last.split("&").first;
+    }
+    return null;
+  }
+
+  // 🎨 ITEM VIDEO
+  Widget _buildVideoItem(int index) {
+    final video = videos[index];
+
+    final url = video["url"] ?? "";
+    final videoId = _getYoutubeId(url);
 
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
@@ -109,49 +127,63 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Evento ${index + 1}",
+                  "Vídeo ${index + 1}",
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 IconButton(
                   icon: const Icon(Icons.delete),
-                  onPressed: () => _removeItem(index),
+                  onPressed: () => _removeVideo(index),
                 ),
               ],
             ),
 
-            const SizedBox(height: 12),
-
-            // 🔹 HORA
-            TextField(
-              controller: TextEditingController(text: item["time"]),
-              decoration: const InputDecoration(labelText: "Hora (ej: 18:00)"),
-              onChanged: (value) {
-                item["time"] = value;
-              },
-            ),
-
-            const SizedBox(height: 12),
+            const SizedBox(height: 8),
 
             // 🔹 TÍTULO
-            TextField(
-              controller: TextEditingController(text: item["title"]),
+            TextFormField(
+              initialValue: video["title"],
               decoration: const InputDecoration(labelText: "Título"),
               onChanged: (value) {
-                item["title"] = value;
+                video["title"] = value;
+              },
+            ),
+
+            const SizedBox(height: 8),
+
+            // 🔹 URL
+            TextFormField(
+              initialValue: video["url"],
+              decoration: const InputDecoration(
+                labelText: "URL (YouTube / Vimeo)",
+              ),
+              onChanged: (value) {
+                video["url"] = value;
+                setState(() {}); // 🔥 refresca preview
               },
             ),
 
             const SizedBox(height: 12),
 
-            // 🔹 DESCRIPCIÓN
-            TextField(
-              controller: TextEditingController(text: item["description"]),
-              decoration: const InputDecoration(labelText: "Descripción"),
-              maxLines: 2,
-              onChanged: (value) {
-                item["description"] = value;
-              },
-            ),
+            // 🔹 PREVIEW
+            if (videoId != null)
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: AspectRatio(
+                  aspectRatio: 16 / 9,
+                  child: Container(
+                    color: Colors.black,
+                    child: Image.network(
+                      "https://img.youtube.com/vi/$videoId/0.jpg",
+                      fit: BoxFit.contain, // 🔥 FIX ZOOM
+                    ),
+                  ),
+                ),
+              )
+            else if (url.isNotEmpty)
+              const Text(
+                "Preview no disponible",
+                style: TextStyle(color: Colors.grey),
+              ),
           ],
         ),
       ),
@@ -162,7 +194,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Editar agenda"),
+        title: const Text("Editar vídeos"),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
@@ -180,24 +212,26 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
             // 🔹 TÍTULO
             TextField(
               controller: titleController,
-              textAlign: TextAlign.center, // 🔥 centrado
               decoration: const InputDecoration(labelText: "Título"),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
 
             // 🔹 LISTA
             Expanded(
               child: ListView(
                 children: [
-                  ...List.generate(items.length, (index) => _buildItem(index)),
+                  ...List.generate(
+                    videos.length,
+                    (index) => _buildVideoItem(index),
+                  ),
 
                   const SizedBox(height: 12),
 
                   ElevatedButton.icon(
-                    onPressed: _addItem,
+                    onPressed: _addVideo,
                     icon: const Icon(Icons.add),
-                    label: const Text("Añadir evento"),
+                    label: const Text("Añadir vídeo"),
                   ),
                 ],
               ),
