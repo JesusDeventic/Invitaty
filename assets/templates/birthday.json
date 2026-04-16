@@ -1,0 +1,48 @@
+{
+    "id": "birthday",
+    "name": "Cumpleaños",
+    "theme": "fun",
+    "sections": [
+      {
+        "type": "cover",
+        "data": {
+          "title": "¡Estás invitado!",
+          "subtitle": "Mi cumpleaños",
+          "image": ""
+        }
+      },
+      {
+        "type": "countdown",
+        "data": {
+          "title": "Faltan",
+          "eventDateTime": ""
+        }
+      },
+      {
+        "type": "location",
+        "data": {
+          "name": "Ubicación",
+          "address": "",
+          "mapsUrl": ""
+        }
+      },
+      {
+        "type": "agenda",
+        "data": {
+          "title": "Plan del día",
+          "items": []
+        }
+      },
+      {
+        "type": "gallery",
+        "data": {
+          "title": "Fotos",
+          "images": []
+        }
+      },
+      {
+        "type": "rsvp",
+        "data": {}
+      }
+    ]
+  }

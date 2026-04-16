@@ -1,0 +1,29 @@
+{
+    "id": "christmas",
+    "name": "Navidad / Felicitación",
+    "theme": "christmas",
+    "sections": [
+      {
+        "type": "cover",
+        "data": {
+          "title": "¡Feliz Navidad!",
+          "subtitle": "Nuestros mejores deseos",
+          "image": ""
+        }
+      },
+      {
+        "type": "gallery",
+        "data": {
+          "title": "Recuerdos",
+          "images": []
+        }
+      },
+      {
+        "type": "music",
+        "data": {
+          "title": "Villancico",
+          "url": ""
+        }
+      }
+    ]
+  }

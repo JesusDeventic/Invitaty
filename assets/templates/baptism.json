@@ -1,0 +1,49 @@
+{
+    "id": "baptism",
+    "name": "Bautizo / Comunión",
+    "theme": "classic",
+    "sections": [
+      {
+        "type": "cover",
+        "data": {
+          "title": "Celebración especial",
+          "subtitle": "Nos encantaría que vinieras",
+          "image": ""
+        }
+      },
+      {
+        "type": "countdown",
+        "data": {
+          "title": "Faltan",
+          "eventDateTime": ""
+        }
+      },
+      {
+        "type": "location",
+        "data": {
+          "name": "Ubicación",
+          "address": "",
+          "mapsUrl": ""
+        }
+      },
+      {
+        "type": "location",
+        "data": {
+          "name": "Celebración",
+          "address": "",
+          "mapsUrl": ""
+        }
+      },
+      {
+        "type": "gallery",
+        "data": {
+          "title": "Galería",
+          "images": []
+        }
+      },
+      {
+        "type": "rsvp",
+        "data": {}
+      }
+    ]
+  }

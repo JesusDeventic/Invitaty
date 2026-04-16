@@ -575,11 +575,7 @@ class _HomePageState extends State<HomePage> {
                 _showAuthRequiredSnackbar();
                 return;
               }*/
-              final invitationProvider = context.read<InvitationProvider>();
-
-              invitationProvider.setInvitation(invitationMock);
-
-              context.push(AppRoutes.editor);
+              context.push('/templates');
             },
             icon: const Icon(Icons.add_rounded),
             label: Text(S.current.homeCreateInvitationButton),

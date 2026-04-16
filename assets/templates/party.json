@@ -1,0 +1,34 @@
+{
+    "id": "party",
+    "name": "Cena / Fiesta",
+    "theme": "minimal",
+    "sections": [
+      {
+        "type": "cover",
+        "data": {
+          "title": "Estás invitado",
+          "subtitle": "Cena / Fiesta",
+          "image": ""
+        }
+      },
+      {
+        "type": "location",
+        "data": {
+          "name": "Lugar",
+          "address": "",
+          "mapsUrl": ""
+        }
+      },
+      {
+        "type": "agenda",
+        "data": {
+          "title": "Agenda",
+          "items": []
+        }
+      },
+      {
+        "type": "rsvp",
+        "data": {}
+      }
+    ]
+  }

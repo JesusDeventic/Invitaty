@@ -1,0 +1,15 @@
+{
+    "id": "custom",
+    "name": "Personalizada",
+    "theme": "default",
+    "sections": [
+      {
+        "type": "cover",
+        "data": {
+          "title": "Tu evento",
+          "subtitle": "",
+          "image": ""
+        }
+      }
+    ]
+  }

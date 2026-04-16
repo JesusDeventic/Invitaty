@@ -21,6 +21,7 @@ import 'package:invitaty/page/editors/edit_cover_module_screen.dart';
 import 'package:invitaty/page/editors/edit_gallery_module_screen.dart';
 import 'package:invitaty/page/editors/edit_music_module_screen.dart';
 import 'package:invitaty/page/editors/edit_video_module_screen.dart';
+import 'package:invitaty/page/templates/select_template_screen.dart';
 
 import 'app_routes.dart';
 
@@ -173,6 +174,10 @@ GoRouter createAppRouter(GlobalKey<NavigatorState> navigatorKey) {
             section: extra["section"],
           );
         },
+      ),
+      GoRoute(
+        path: '/templates',
+        builder: (_, __) => const SelectTemplateScreen(),
       ),
     ],
 

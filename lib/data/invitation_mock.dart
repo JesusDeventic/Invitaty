@@ -13,7 +13,7 @@ const Map<String, dynamic> invitationMock = {
 
   "sections": [
     {
-      "id": "cover_1",
+      "id": "cover",
       "type": "cover",
       "data": {
         "title": "Cumple de Laura",
@@ -26,7 +26,7 @@ const Map<String, dynamic> invitationMock = {
       },
     },
     {
-      "id": "text_1",
+      "id": "text",
       "type": "text",
       "data": {
         "title": "Te esperamos",
@@ -36,7 +36,7 @@ const Map<String, dynamic> invitationMock = {
       },
     },
     {
-      "id": "countdown_1",
+      "id": "countdown",
       "type": "countdown",
       "data": {
         "title": "Falta para el gran día",
@@ -44,7 +44,7 @@ const Map<String, dynamic> invitationMock = {
       },
     },
     {
-      "id": "music_1",
+      "id": "music",
       "type": "music",
       "data": {
         "title": "Nuestra canción",
@@ -53,7 +53,7 @@ const Map<String, dynamic> invitationMock = {
       },
     },
     {
-      "id": "location_1",
+      "id": "location",
       "type": "location",
       "data": {
         "name": "Iglesia de San Pablo",
@@ -62,7 +62,7 @@ const Map<String, dynamic> invitationMock = {
       },
     },
     {
-      "id": "agenda_1",
+      "id": "agenda",
       "type": "agenda",
       "data": {
         "title": "Agenda del evento",
@@ -87,7 +87,7 @@ const Map<String, dynamic> invitationMock = {
     },
 
     {
-      "id": "gallery_1",
+      "id": "gallery",
       "type": "gallery",
       "data": {
         "images": [
@@ -99,7 +99,7 @@ const Map<String, dynamic> invitationMock = {
       },
     },
     {
-      "id": "video_1",
+      "id": "video",
       "type": "video",
       "data": {
         "videos": [
@@ -112,7 +112,7 @@ const Map<String, dynamic> invitationMock = {
     },
 
     {
-      "id": "dress_1",
+      "id": "dress",
       "type": "dressCode",
       "data": {
         "title": "Código de vestimenta",
@@ -121,7 +121,7 @@ const Map<String, dynamic> invitationMock = {
       },
     },
     {
-      "id": "gifts_1",
+      "id": "gifts",
       "type": "gifts",
       "data": {
         "title": "Regalos",
@@ -134,7 +134,7 @@ const Map<String, dynamic> invitationMock = {
       },
     },
     {
-      "id": "rsvp_1",
+      "id": "rsvp",
       "type": "rsvp",
       "data": {
         "fields": ["name", "email", "attending", "guests", "notes"],

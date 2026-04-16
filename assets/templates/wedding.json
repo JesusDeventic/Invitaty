@@ -1,0 +1,74 @@
+{
+    "id": "wedding",
+    "name": "Boda",
+    "theme": "elegant",
+    "sections": [
+      {
+        "type": "cover",
+        "data": {
+          "title": "Nuestra boda",
+          "subtitle": "Nombre & Nombre",
+          "image": ""
+        }
+      },
+      {
+        "type": "countdown",
+        "data": {
+          "title": "Faltan",
+          "eventDateTime": ""
+        }
+      },
+      {
+        "type": "location",
+        "data": {
+          "name": "Ceremonia",
+          "address": "",
+          "mapsUrl": ""
+        }
+      },
+      {
+        "type": "location",
+        "data": {
+          "name": "Celebración",
+          "address": "",
+          "mapsUrl": ""
+        }
+      },
+      {
+        "type": "agenda",
+        "data": {
+          "title": "Horario",
+          "items": []
+        }
+      },
+      {
+        "type": "gallery",
+        "data": {
+          "title": "Galería",
+          "images": []
+        }
+      },
+      {
+        "type": "music",
+        "data": {
+          "title": "Nuestra canción",
+          "url": ""
+        }
+      },
+      {
+        "type": "gifts",
+        "data": {
+          "title": "Regalos",
+          "message": "",
+          "iban": "",
+          "bizum": "",
+          "link": "",
+          "items": []
+        }
+      },
+      {
+        "type": "rsvp",
+        "data": {}
+      }
+    ]
+  }
