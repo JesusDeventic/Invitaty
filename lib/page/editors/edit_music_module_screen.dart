@@ -51,12 +51,49 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
     Navigator.pop(context);
   }
 
+  Future<void> _delete() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Eliminar música"),
+        content: const Text(
+          "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer.",
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Cancelar"),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("Eliminar"),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      context.read<InvitationProvider>().removeSection(widget.index);
+      Navigator.pop(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final url = urlController.text;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Editar música")),
+      appBar: AppBar(
+        title: const Text("Editar música"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.red),
+            onPressed: _delete,
+          ),
+          IconButton(icon: const Icon(Icons.save), onPressed: _save),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

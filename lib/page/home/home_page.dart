@@ -13,9 +13,6 @@ import 'package:invitaty/routes/app_routes.dart';
 import 'package:invitaty/widget/components_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
-import 'package:invitaty/providers/invitation_provider.dart';
-import 'package:invitaty/data/invitation_mock.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

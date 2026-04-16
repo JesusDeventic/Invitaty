@@ -66,7 +66,9 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text("Eliminar ubicación"),
-        content: const Text("¿Estás seguro? Esta acción no se puede deshacer."),
+        content: const Text(
+          "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer.",
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -116,7 +118,16 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Editar ubicación")),
+      appBar: AppBar(
+        title: const Text("Editar ubicación"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.red),
+            onPressed: _delete,
+          ),
+          IconButton(icon: const Icon(Icons.save), onPressed: _save),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(

@@ -13,19 +13,17 @@ class TextModule extends StatelessWidget {
     final font = data["font"] ?? "Poppins";
     final fontSize = (data["fontSize"] ?? 16).toDouble();
 
-    final color = data["color"] != null
-        ? Color(int.parse(data["color"]))
-        : Colors.black;
+    final color = _parseColor(data["color"]) ?? Colors.black;
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if (title.isNotEmpty)
             Text(
               title,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: fontSize + 4,
                 fontWeight: FontWeight.bold,
@@ -39,6 +37,7 @@ class TextModule extends StatelessWidget {
           if (body.isNotEmpty)
             Text(
               body,
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: fontSize,
                 fontFamily: font,
@@ -48,5 +47,33 @@ class TextModule extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// 🔧 Convierte "#RRGGBB" o "0xFFRRGGBB" a Color seguro
+  Color? _parseColor(dynamic value) {
+    if (value == null) return null;
+
+    try {
+      String hex = value.toString().trim();
+
+      // formato #RRGGBB
+      if (hex.startsWith("#")) {
+        hex = hex.substring(1);
+      }
+
+      // si viene solo RRGGBB
+      if (hex.length == 6) {
+        hex = "FF$hex"; // alpha completo
+      }
+
+      // si viene 0xFF...
+      if (hex.startsWith("0x")) {
+        hex = hex.substring(2);
+      }
+
+      return Color(int.parse(hex, radix: 16));
+    } catch (_) {
+      return Colors.black;
+    }
   }
 }

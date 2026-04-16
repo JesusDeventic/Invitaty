@@ -32,7 +32,9 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
     );
 
     final parsed = DateTime.tryParse(data["eventDateTime"] ?? "");
-    if (parsed != null) selectedDateTime = parsed;
+    if (parsed != null) {
+      selectedDateTime = parsed;
+    }
   }
 
   @override
@@ -41,6 +43,50 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
     super.dispose();
   }
 
+  // 💾 SAVE
+  void _save() {
+    final provider = context.read<InvitationProvider>();
+
+    final updatedSection = {
+      ...widget.section,
+      "data": {
+        "title": titleController.text,
+        "eventDateTime": selectedDateTime.toIso8601String(),
+      },
+    };
+
+    provider.updateSection(widget.index, updatedSection);
+    Navigator.pop(context);
+  }
+
+  // 🗑 DELETE
+  Future<void> _delete() async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text("Eliminar cuenta atrás"),
+        content: const Text("¿Seguro que quieres eliminar este módulo?"),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text("Cancelar"),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text("Eliminar"),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      context.read<InvitationProvider>().removeSection(widget.index);
+      Navigator.pop(context);
+    }
+  }
+
+  // 📅 PICK DATE
   Future<void> _pickDate() async {
     final picked = await showDatePicker(
       context: context,
@@ -62,6 +108,7 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
     });
   }
 
+  // ⏰ PICK TIME
   Future<void> _pickTime() async {
     final picked = await showTimePicker(
       context: context,
@@ -81,21 +128,6 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
     });
   }
 
-  void _save() {
-    final provider = context.read<InvitationProvider>();
-
-    final updatedSection = {
-      ...widget.section,
-      "data": {
-        "title": titleController.text,
-        "eventDateTime": selectedDateTime.toIso8601String(),
-      },
-    };
-
-    provider.updateSection(widget.index, updatedSection);
-    Navigator.pop(context);
-  }
-
   @override
   Widget build(BuildContext context) {
     final dateText =
@@ -103,19 +135,27 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
     final timeText =
         "${selectedDateTime.hour.toString().padLeft(2, '0')}:${selectedDateTime.minute.toString().padLeft(2, '0')}";
 
-    final previewDiff = selectedDateTime.difference(DateTime.now());
-    final safe = previewDiff.isNegative ? Duration.zero : previewDiff;
+    final diff = selectedDateTime.difference(DateTime.now());
+    final safe = diff.isNegative ? Duration.zero : diff;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Editar cuenta atrás")),
+      appBar: AppBar(
+        title: const Text("Editar cuenta atrás"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete, color: Colors.red),
+            onPressed: _delete,
+          ),
+          IconButton(icon: const Icon(Icons.save), onPressed: _save),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 🔥 FIX
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             TextField(
               controller: titleController,
-              textAlign: TextAlign.left, // 🔥 FIX
               decoration: const InputDecoration(labelText: "Título"),
               onChanged: (_) => setState(() {}),
             ),
