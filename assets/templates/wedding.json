@@ -6,22 +6,22 @@
       {
         "type": "cover",
         "data": {
-          "title": "Nuestra boda",
-          "subtitle": "Nombre & Nombre",
+          "title": "",
+          "subtitle": "",
           "image": ""
         }
       },
       {
         "type": "countdown",
         "data": {
-          "title": "Faltan",
+          "title": "",
           "eventDateTime": ""
         }
       },
       {
         "type": "location",
         "data": {
-          "name": "Ceremonia",
+          "name": "",
           "address": "",
           "mapsUrl": ""
         }
@@ -29,7 +29,7 @@
       {
         "type": "location",
         "data": {
-          "name": "Celebración",
+          "name": "",
           "address": "",
           "mapsUrl": ""
         }
@@ -37,28 +37,21 @@
       {
         "type": "agenda",
         "data": {
-          "title": "Horario",
+          "title": "",
           "items": []
         }
       },
       {
         "type": "gallery",
         "data": {
-          "title": "Galería",
+          "title": "",
           "images": []
-        }
-      },
-      {
-        "type": "music",
-        "data": {
-          "title": "Nuestra canción",
-          "url": ""
         }
       },
       {
         "type": "gifts",
         "data": {
-          "title": "Regalos",
+          "title": "",
           "message": "",
           "iban": "",
           "bizum": "",

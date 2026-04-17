@@ -6,22 +6,22 @@
       {
         "type": "cover",
         "data": {
-          "title": "¡Estás invitado!",
-          "subtitle": "Mi cumpleaños",
+          "title": "",
+          "subtitle": "",
           "image": ""
         }
       },
       {
         "type": "countdown",
         "data": {
-          "title": "Faltan",
+          "title": "",
           "eventDateTime": ""
         }
       },
       {
         "type": "location",
         "data": {
-          "name": "Ubicación",
+          "name": "",
           "address": "",
           "mapsUrl": ""
         }
@@ -29,14 +29,14 @@
       {
         "type": "agenda",
         "data": {
-          "title": "Plan del día",
+          "title": "",
           "items": []
         }
       },
       {
         "type": "gallery",
         "data": {
-          "title": "Fotos",
+          "title": "",
           "images": []
         }
       },

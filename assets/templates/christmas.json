@@ -6,22 +6,22 @@
       {
         "type": "cover",
         "data": {
-          "title": "¡Feliz Navidad!",
-          "subtitle": "Nuestros mejores deseos",
+          "title": "",
+          "subtitle": "",
           "image": ""
         }
       },
       {
         "type": "gallery",
         "data": {
-          "title": "Recuerdos",
+          "title": "",
           "images": []
         }
       },
       {
         "type": "music",
         "data": {
-          "title": "Villancico",
+          "title": "",
           "url": ""
         }
       }

@@ -350,7 +350,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "privateMessages": MessageLookupByLibrary.simpleMessage("Private messages"),
     "profileShareSubject": m1,
-    "prueba": MessageLookupByLibrary.simpleMessage("Prueba"),
     "publicProfileAppBarTitle": MessageLookupByLibrary.simpleMessage(
       "User profile",
     ),
@@ -378,6 +377,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Remove country",
     ),
     "retryPublicProfile": MessageLookupByLibrary.simpleMessage("Retry"),
+    "selectTemplateTitle": MessageLookupByLibrary.simpleMessage(
+      "Choose a template",
+    ),
     "sendCode": MessageLookupByLibrary.simpleMessage("Send code"),
     "sendMessageTooltip": MessageLookupByLibrary.simpleMessage("Send message"),
     "settingsLabel": MessageLookupByLibrary.simpleMessage("Settings"),
@@ -401,6 +403,36 @@ class MessageLookup extends MessageLookupByLibrary {
     "socialWhatsappLabel": MessageLookupByLibrary.simpleMessage("WhatsApp"),
     "statusLabel": MessageLookupByLibrary.simpleMessage("Status"),
     "subjectSupport": MessageLookupByLibrary.simpleMessage("Invitaty contact"),
+    "templateBaptismDesc": MessageLookupByLibrary.simpleMessage(
+      "Estilo suave y familiar",
+    ),
+    "templateBaptismName": MessageLookupByLibrary.simpleMessage(
+      "Bautizo / Comunión",
+    ),
+    "templateBirthdayDesc": MessageLookupByLibrary.simpleMessage(
+      "Colorido y divertido",
+    ),
+    "templateBirthdayName": MessageLookupByLibrary.simpleMessage("Cumpleaños"),
+    "templateChristmasDesc": MessageLookupByLibrary.simpleMessage(
+      "Ambiente festivo navideño",
+    ),
+    "templateChristmasName": MessageLookupByLibrary.simpleMessage(
+      "Felicitación estacional",
+    ),
+    "templateCustomDesc": MessageLookupByLibrary.simpleMessage(
+      "Empieza desde cero",
+    ),
+    "templateCustomName": MessageLookupByLibrary.simpleMessage("Personalizada"),
+    "templatePartyDesc": MessageLookupByLibrary.simpleMessage(
+      "Perfecto para eventos sociales",
+    ),
+    "templatePartyName": MessageLookupByLibrary.simpleMessage("Cena / Fiesta"),
+    "templateWeddingDesc": MessageLookupByLibrary.simpleMessage(
+      "Diseño clásico y romántico",
+    ),
+    "templateWeddingName": MessageLookupByLibrary.simpleMessage(
+      "Boda elegante",
+    ),
     "termsAndConditionsLabel": MessageLookupByLibrary.simpleMessage(
       "Terms and conditions",
     ),

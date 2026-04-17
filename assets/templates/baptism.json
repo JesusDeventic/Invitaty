@@ -6,22 +6,22 @@
       {
         "type": "cover",
         "data": {
-          "title": "Celebración especial",
-          "subtitle": "Nos encantaría que vinieras",
+          "title": "",
+          "subtitle": "",
           "image": ""
         }
       },
       {
         "type": "countdown",
         "data": {
-          "title": "Faltan",
+          "title": "",
           "eventDateTime": ""
         }
       },
       {
         "type": "location",
         "data": {
-          "name": "Ubicación",
+          "name": "",
           "address": "",
           "mapsUrl": ""
         }
@@ -29,7 +29,7 @@
       {
         "type": "location",
         "data": {
-          "name": "Celebración",
+          "name": "",
           "address": "",
           "mapsUrl": ""
         }
@@ -37,7 +37,7 @@
       {
         "type": "gallery",
         "data": {
-          "title": "Galería",
+          "title": "",
           "images": []
         }
       },

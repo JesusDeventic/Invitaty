@@ -332,7 +332,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "No se pudo marcar la notificación como leída",
     ),
     "notificationMarkedRead": MessageLookupByLibrary.simpleMessage(
-      "Notificación marcada como leída.",
+      "Notificación marcada como leída",
     ),
     "notificationsAllMarkedRead": MessageLookupByLibrary.simpleMessage(
       "Todas las notificaciones marcadas como leídas",
@@ -407,6 +407,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "removeCountryTooltip": MessageLookupByLibrary.simpleMessage("Quitar país"),
     "retryPublicProfile": MessageLookupByLibrary.simpleMessage("Reintentar"),
+    "selectTemplateTitle": MessageLookupByLibrary.simpleMessage(
+      "Elige una plantilla",
+    ),
     "sendCode": MessageLookupByLibrary.simpleMessage("Enviar código"),
     "sendMessageTooltip": MessageLookupByLibrary.simpleMessage(
       "Enviar mensaje",

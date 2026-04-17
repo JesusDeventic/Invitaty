@@ -215,5 +215,18 @@
     "removeBirthdateTooltip":  "Remove date",
     "authRequiredFunctionMessage":  "This feature requires you to sign in",
     "authRequiredFunctionAction":  "GO",
-    "enterWithoutUser":  "Enter without user"
+    "enterWithoutUser":  "Enter without user",
+    "selectTemplateTitle": "Elije una plantilla",
+    "templateWeddingName": "Boda elegante",
+    "templateWeddingDesc": "Diseño clásico y romántico",
+    "templateBirthdayName": "Cumpleaños",
+    "templateBirthdayDesc": "Colorido y divertido",
+    "templateBaptismName": "Bautizo / Comunión",
+    "templateBaptismDesc": "Estilo suave y familiar",
+    "templatePartyName": "Cena / Fiesta",
+    "templatePartyDesc": "Perfecto para eventos sociales",
+    "templateChristmasName": "Felicitación estacional",
+    "templateChristmasDesc": "Ambiente festivo navideño",
+    "templateCustomName": "Personalizada",
+    "templateCustomDesc": "Empieza desde cero"
 }

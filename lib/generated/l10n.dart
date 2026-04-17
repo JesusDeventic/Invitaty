@@ -1879,9 +1879,134 @@ class S {
     );
   }
 
-  /// `Prueba`
-  String get prueba {
-    return Intl.message('Prueba', name: 'prueba', desc: '', args: []);
+  /// `Choose a template`
+  String get selectTemplateTitle {
+    return Intl.message(
+      'Choose a template',
+      name: 'selectTemplateTitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Boda elegante`
+  String get templateWeddingName {
+    return Intl.message(
+      'Boda elegante',
+      name: 'templateWeddingName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Diseño clásico y romántico`
+  String get templateWeddingDesc {
+    return Intl.message(
+      'Diseño clásico y romántico',
+      name: 'templateWeddingDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cumpleaños`
+  String get templateBirthdayName {
+    return Intl.message(
+      'Cumpleaños',
+      name: 'templateBirthdayName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Colorido y divertido`
+  String get templateBirthdayDesc {
+    return Intl.message(
+      'Colorido y divertido',
+      name: 'templateBirthdayDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Bautizo / Comunión`
+  String get templateBaptismName {
+    return Intl.message(
+      'Bautizo / Comunión',
+      name: 'templateBaptismName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Estilo suave y familiar`
+  String get templateBaptismDesc {
+    return Intl.message(
+      'Estilo suave y familiar',
+      name: 'templateBaptismDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Cena / Fiesta`
+  String get templatePartyName {
+    return Intl.message(
+      'Cena / Fiesta',
+      name: 'templatePartyName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Perfecto para eventos sociales`
+  String get templatePartyDesc {
+    return Intl.message(
+      'Perfecto para eventos sociales',
+      name: 'templatePartyDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Felicitación estacional`
+  String get templateChristmasName {
+    return Intl.message(
+      'Felicitación estacional',
+      name: 'templateChristmasName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ambiente festivo navideño`
+  String get templateChristmasDesc {
+    return Intl.message(
+      'Ambiente festivo navideño',
+      name: 'templateChristmasDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Personalizada`
+  String get templateCustomName {
+    return Intl.message(
+      'Personalizada',
+      name: 'templateCustomName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Empieza desde cero`
+  String get templateCustomDesc {
+    return Intl.message(
+      'Empieza desde cero',
+      name: 'templateCustomDesc',
+      desc: '',
+      args: [],
+    );
   }
 }
 

@@ -6,15 +6,15 @@
       {
         "type": "cover",
         "data": {
-          "title": "Estás invitado",
-          "subtitle": "Cena / Fiesta",
+          "title": "",
+          "subtitle": "",
           "image": ""
         }
       },
       {
         "type": "location",
         "data": {
-          "name": "Lugar",
+          "name": "",
           "address": "",
           "mapsUrl": ""
         }
@@ -22,7 +22,7 @@
       {
         "type": "agenda",
         "data": {
-          "title": "Agenda",
+          "title": "",
           "items": []
         }
       },
