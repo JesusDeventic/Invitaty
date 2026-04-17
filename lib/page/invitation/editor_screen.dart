@@ -18,7 +18,6 @@ class EditorScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Editor de invitación"),
         actions: [
-          // 👁️ PREVISUALIZAR INVITACIÓN
           IconButton(
             icon: const Icon(Icons.visibility),
             onPressed: () {
@@ -28,17 +27,15 @@ class EditorScreen extends StatelessWidget {
         ],
       ),
 
-      // 🔥 LISTA ORDENABLE DE MÓDULOS
       body: ReorderableListView.builder(
         itemCount: sections.length,
-
-        // ❗ Permite arrastrar desde cualquier parte del módulo
         buildDefaultDragHandles: false,
 
-        // 🔄 REORDENAR MÓDULOS
         onReorder: (oldIndex, newIndex) {
-          final provider = context.read<InvitationProvider>();
-          provider.reorderSections(oldIndex, newIndex);
+          context.read<InvitationProvider>().reorderSections(
+            oldIndex,
+            newIndex,
+          );
         },
 
         itemBuilder: (context, index) {
@@ -47,28 +44,21 @@ class EditorScreen extends StatelessWidget {
           return ReorderableDragStartListener(
             key: ValueKey(section["id"]),
             index: index,
-
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-
               child: Card(
                 elevation: 3,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
-
                 child: InkWell(
                   borderRadius: BorderRadius.circular(12),
-
-                  // ✏️ EDITAR MÓDULO
                   onTap: () => _editModule(context, index, section),
-
                   child: Padding(
                     padding: const EdgeInsets.all(16),
-
                     child: Row(
                       children: [
-                        // 🔹 ICONO DEL MÓDULO
+                        // 🔹 ICONO
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
@@ -80,31 +70,17 @@ class EditorScreen extends StatelessWidget {
 
                         const SizedBox(width: 16),
 
-                        // 🔹 INFO DEL MÓDULO
+                        // 🔹 NOMBRE BONITO + NUMERADO
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                section["type"] ?? "unknown",
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                section["id"] ?? "no-id",
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  color: Colors.grey.shade600,
-                                ),
-                              ),
-                            ],
+                          child: Text(
+                            _getDisplayName(sections, index),
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
 
-                        // 🔹 ICONO VISUAL DE DRAG
                         const Icon(Icons.drag_indicator),
                       ],
                     ),
@@ -116,7 +92,6 @@ class EditorScreen extends StatelessWidget {
         },
       ),
 
-      // ➕ BOTÓN AÑADIR MÓDULO
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showModulePicker(context),
         child: const Icon(Icons.add),
@@ -124,89 +99,139 @@ class EditorScreen extends StatelessWidget {
     );
   }
 
-  // 🔽 ABRIR SELECTOR DE MÓDULOS
+  // ===============================
+  // 🔽 MODULE PICKER
+  // ===============================
   void _showModulePicker(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // 🔥 importante para evitar overflow
-
+      isScrollControlled: true,
       builder: (_) => FractionallySizedBox(
-        heightFactor: 0.6, // 🔥 ocupa el 60% de la pantalla
+        heightFactor: 0.6,
         child: ModulePicker(onSelected: (type) => _addModule(context, type)),
       ),
     );
   }
 
-  // ➕ AÑADIR NUEVO MÓDULO
+  // ===============================
+  // ➕ ADD MODULE
+  // ===============================
   void _addModule(BuildContext context, ModuleType type) {
     final provider = context.read<InvitationProvider>();
+    final sections = provider.sections;
+
+    // 🔥 contar cuántos hay de este tipo
+    final count = sections.where((s) => s["type"] == type.name).length + 1;
 
     final newSection = {
       "id": "${type.name}_${DateTime.now().millisecondsSinceEpoch}",
       "type": type.name,
       "data": _getDefaultData(type),
+
+      // 👇 opcional: guardas el número
+      "order": count,
     };
 
     provider.addSection(newSection);
   }
 
-  // ✏️ EDITAR MÓDULO SEGÚN SU TIPO
+  // ===============================
+  // 🧠 NOMBRE BONITO + NUMERACIÓN
+  // ===============================
+  String _getDisplayName(List sections, int index) {
+    final section = sections[index];
+    final type = section["type"] ?? "";
+
+    final baseName = _getPrettyName(type);
+
+    // 🔥 calcular número dinámicamente
+    int count = 0;
+    for (int i = 0; i <= index; i++) {
+      if (sections[i]["type"] == type) {
+        count++;
+      }
+    }
+
+    return "$baseName $count";
+  }
+
+  // ===============================
+  // 🧾 NOMBRES BONITOS
+  // ===============================
+  String _getPrettyName(String type) {
+    switch (type) {
+      case "text":
+        return "Texto";
+      case "cover":
+        return "Portada";
+      case "countdown":
+        return "Cuenta atrás";
+      case "location":
+        return "Localización";
+      case "rsvp":
+        return "Confirmación";
+      case "gallery":
+        return "Galería";
+      case "video":
+        return "Vídeo";
+      case "agenda":
+        return "Agenda";
+      case "dressCode":
+        return "Vestimenta";
+      case "gifts":
+        return "Regalos";
+      case "music":
+        return "Música";
+      default:
+        return "Módulo";
+    }
+  }
+
+  // ===============================
+  // ✏️ EDIT MODULE
+  // ===============================
   void _editModule(
     BuildContext context,
     int index,
     Map<String, dynamic> section,
   ) {
-    // 🔥 IMPORTANTE: aseguramos que siempre es String
     final String type = section["type"] ?? "";
-
-    // 🔹 Extra reutilizable
     final extra = {"index": index, "section": section};
 
     switch (type) {
       case "text":
         context.push('/edit-text', extra: extra);
         break;
-
       case "countdown":
         context.push('/edit-countdown', extra: extra);
         break;
-
       case "location":
         context.push('/edit-location', extra: extra);
         break;
-
       case "music":
         context.push('/edit-music', extra: extra);
         break;
-
       case "agenda":
         context.push('/edit-agenda', extra: extra);
         break;
-
       case "dressCode":
         context.push('/edit-dress', extra: extra);
         break;
-
       case "gifts":
         context.push('/edit-gifts', extra: extra);
         break;
-
       case "gallery":
         context.push('/edit-gallery', extra: extra);
         break;
-
       case "video":
         context.push('/edit-video', extra: extra);
         break;
-
       case "rsvp":
         context.push('/edit-rsvp', extra: extra);
         break;
-
       case "cover":
         context.push('/edit-cover', extra: extra);
         break;
-
       default:
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -216,13 +241,15 @@ class EditorScreen extends StatelessWidget {
     }
   }
 
-  // 🎨 ICONOS SEGÚN TIPO DE MÓDULO
+  // ===============================
+  // 🎨 ICONOS
+  // ===============================
   IconData _getIconForType(String type) {
     switch (type) {
       case "text":
         return Icons.text_fields;
       case "cover":
-        return Icons.image;
+        return Icons.panorama_rounded;
       case "countdown":
         return Icons.timer;
       case "location":
@@ -246,7 +273,9 @@ class EditorScreen extends StatelessWidget {
     }
   }
 
-  // 🧠 DATOS POR DEFECTO DE CADA MÓDULO
+  // ===============================
+  // 🧠 DEFAULT DATA
+  // ===============================
   Map<String, dynamic> _getDefaultData(ModuleType type) {
     switch (type) {
       case ModuleType.text:

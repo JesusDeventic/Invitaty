@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:invitaty/providers/invitation_provider.dart';
 
@@ -130,17 +129,6 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
     }
   }
 
-  // 🌐 OPEN LINK SAFE
-  Future<void> _openLink(String link) async {
-    if (link.isEmpty) return;
-
-    final uri = Uri.tryParse(link.startsWith("http") ? link : "https://$link");
-
-    if (uri == null) return;
-
-    await launchUrl(uri, mode: LaunchMode.externalApplication);
-  }
-
   Widget _buildItem(int index) {
     return Card(
       margin: const EdgeInsets.only(bottom: 12),
@@ -222,7 +210,6 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
           TextField(
             controller: linkController,
             decoration: const InputDecoration(labelText: "Link"),
-            onTap: () => _openLink(linkController.text),
           ),
 
           _sectionTitle("Ideas de regalo"),
