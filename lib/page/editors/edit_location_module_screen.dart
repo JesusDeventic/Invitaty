@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 import 'package:invitaty/providers/invitation_provider.dart';
 
@@ -65,19 +66,17 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Eliminar ubicación"),
-        content: const Text(
-          "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer.",
-        ),
+        title: Text(S.of(context).deleteLocation),
+        content: Text(S.of(context).deleteModuleConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text("Cancelar"),
+            child: Text(S.of(context).buttonCancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text("Eliminar"),
+            child: Text(S.of(context).messagesDelete),
           ),
         ],
       ),
@@ -109,9 +108,9 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     final uri = Uri.parse(url);
 
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("No se pudo abrir el enlace")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(S.of(context).errorOpenLink)));
     }
   }
 
@@ -119,7 +118,7 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Editar ubicación"),
+        title: Text(S.of(context).editLocation),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
@@ -137,7 +136,9 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
             TextField(
               controller: nameController,
               textAlign: TextAlign.left, // 🔥 FIX
-              decoration: const InputDecoration(labelText: "Nombre del lugar"),
+              decoration: InputDecoration(
+                labelText: S.of(context).locationName,
+              ),
               onChanged: (_) => setState(() {}),
             ),
 
@@ -147,7 +148,9 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
             TextField(
               controller: addressController,
               textAlign: TextAlign.left, // 🔥 FIX
-              decoration: const InputDecoration(labelText: "Dirección"),
+              decoration: InputDecoration(
+                labelText: S.of(context).locationAddress,
+              ),
               onChanged: (_) => setState(() {}),
             ),
 
@@ -156,7 +159,7 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
             ElevatedButton.icon(
               onPressed: _generateMapsUrl,
               icon: const Icon(Icons.map),
-              label: const Text("Generar enlace de Google Maps"),
+              label: Text(S.of(context).locationGenerator),
             ),
 
             const SizedBox(height: 16),
@@ -165,16 +168,16 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
             TextField(
               controller: mapsUrlController,
               textAlign: TextAlign.left, // 🔥 FIX
-              decoration: const InputDecoration(
-                labelText: "Enlace de Google Maps",
+              decoration: InputDecoration(
+                labelText: S.of(context).locationMaps,
               ),
               onChanged: (_) => setState(() {}),
             ),
 
             const SizedBox(height: 24),
 
-            const Text(
-              "Vista previa",
+            Text(
+              S.of(context).actionPreview,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
 
@@ -212,11 +215,11 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
                       onTap: _openMaps,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [
+                        children: [
                           Icon(Icons.map, size: 16),
                           SizedBox(width: 6),
                           Text(
-                            "Abrir en Google Maps",
+                            S.of(context).openMaps,
                             style: TextStyle(
                               decoration: TextDecoration.underline,
                             ),

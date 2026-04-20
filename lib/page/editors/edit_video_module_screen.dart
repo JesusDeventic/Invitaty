@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 import 'package:invitaty/providers/invitation_provider.dart';
 
@@ -28,7 +29,9 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
 
     final data = widget.section["data"] ?? {};
 
-    titleController = TextEditingController(text: data["title"] ?? "Vídeos");
+    titleController = TextEditingController(
+      text: data["title"] ?? S.of(context).moduleNameVideo,
+    );
 
     // 🔥 COPIA MUTABLE (evita error unmodifiable map)
     videos = (data["videos"] as List? ?? [])
@@ -76,18 +79,16 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Eliminar vídeos"),
-        content: const Text(
-          "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer.",
-        ),
+        title: Text(S.of(context).deleteVideo),
+        content: Text(S.of(context).deleteModuleConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text("Cancelar"),
+            child: Text(S.of(context).buttonCancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text("Eliminar"),
+            child: Text(S.of(context).messagesDelete),
           ),
         ],
       ),
@@ -127,7 +128,7 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Vídeo ${index + 1}",
+                  S.of(context).moduleNameVideo,
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 IconButton(
@@ -142,7 +143,7 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
             // 🔹 TÍTULO
             TextFormField(
               initialValue: video["title"],
-              decoration: const InputDecoration(labelText: "Título"),
+              decoration: InputDecoration(labelText: S.of(context).editTitle),
               onChanged: (value) {
                 video["title"] = value;
               },
@@ -194,7 +195,7 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Editar vídeos"),
+        title: Text(S.of(context).editVideo),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
@@ -212,7 +213,7 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
             // 🔹 TÍTULO
             TextField(
               controller: titleController,
-              decoration: const InputDecoration(labelText: "Título"),
+              decoration: InputDecoration(labelText: S.of(context).editTitle),
             ),
 
             const SizedBox(height: 16),
@@ -231,7 +232,7 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
                   ElevatedButton.icon(
                     onPressed: _addVideo,
                     icon: const Icon(Icons.add),
-                    label: const Text("Añadir vídeo"),
+                    label: Text(S.of(context).addVideo),
                   ),
                 ],
               ),

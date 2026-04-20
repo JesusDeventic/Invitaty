@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 import 'package:invitaty/providers/invitation_provider.dart';
 import 'package:invitaty/modules/module_type.dart';
+import 'package:invitaty/modules/module_catalog.dart'; // 👈 IMPORTANTE
 import 'package:invitaty/widget/module_picker.dart';
 
 class EditorScreen extends StatelessWidget {
@@ -16,7 +18,7 @@ class EditorScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Editor de invitación"),
+        title: Text(S.of(context).invitationEditor),
         actions: [
           IconButton(
             icon: const Icon(Icons.visibility),
@@ -40,6 +42,7 @@ class EditorScreen extends StatelessWidget {
 
         itemBuilder: (context, index) {
           final section = sections[index];
+          final typeString = section["type"] ?? "";
 
           return ReorderableDragStartListener(
             key: ValueKey(section["id"]),
@@ -58,14 +61,14 @@ class EditorScreen extends StatelessWidget {
                     padding: const EdgeInsets.all(16),
                     child: Row(
                       children: [
-                        // 🔹 ICONO
+                        // 🔹 ICONO (AHORA DESDE CATALOG)
                         Container(
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                             color: Colors.grey.shade200,
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Icon(_getIconForType(section["type"] ?? "")),
+                          child: Icon(_getIconFromCatalog(typeString)),
                         ),
 
                         const SizedBox(width: 16),
@@ -73,7 +76,7 @@ class EditorScreen extends StatelessWidget {
                         // 🔹 NOMBRE BONITO + NUMERADO
                         Expanded(
                           child: Text(
-                            _getDisplayName(sections, index),
+                            _getDisplayName(context, sections, index),
                             style: const TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
@@ -120,15 +123,12 @@ class EditorScreen extends StatelessWidget {
     final provider = context.read<InvitationProvider>();
     final sections = provider.sections;
 
-    // 🔥 contar cuántos hay de este tipo
     final count = sections.where((s) => s["type"] == type.name).length + 1;
 
     final newSection = {
       "id": "${type.name}_${DateTime.now().millisecondsSinceEpoch}",
       "type": type.name,
       "data": _getDefaultData(type),
-
-      // 👇 opcional: guardas el número
       "order": count,
     };
 
@@ -138,13 +138,12 @@ class EditorScreen extends StatelessWidget {
   // ===============================
   // 🧠 NOMBRE BONITO + NUMERACIÓN
   // ===============================
-  String _getDisplayName(List sections, int index) {
+  String _getDisplayName(BuildContext context, List sections, int index) {
     final section = sections[index];
     final type = section["type"] ?? "";
 
-    final baseName = _getPrettyName(type);
+    final baseName = _getPrettyName(context, type);
 
-    // 🔥 calcular número dinámicamente
     int count = 0;
     for (int i = 0; i <= index; i++) {
       if (sections[i]["type"] == type) {
@@ -158,32 +157,37 @@ class EditorScreen extends StatelessWidget {
   // ===============================
   // 🧾 NOMBRES BONITOS
   // ===============================
-  String _getPrettyName(String type) {
-    switch (type) {
-      case "text":
-        return "Texto";
-      case "cover":
-        return "Portada";
-      case "countdown":
-        return "Cuenta atrás";
-      case "location":
-        return "Localización";
-      case "rsvp":
-        return "Confirmación";
-      case "gallery":
-        return "Galería";
-      case "video":
-        return "Vídeo";
-      case "agenda":
-        return "Agenda";
-      case "dressCode":
-        return "Vestimenta";
-      case "gifts":
-        return "Regalos";
-      case "music":
-        return "Música";
-      default:
-        return "Módulo";
+  String _getPrettyName(BuildContext context, String type) {
+    final s = S.of(context);
+
+    final map = {
+      "text": s.moduleNameText,
+      "cover": s.moduleNameCover,
+      "countdown": s.moduleNameCountdown,
+      "location": s.moduleNameLocation,
+      "rsvp": s.moduleNameRsvp,
+      "gallery": s.moduleNameGallery,
+      "video": s.moduleNameVideo,
+      "agenda": s.moduleNameAgenda,
+      "dressCode": s.moduleNameDressCode,
+      "gifts": s.moduleNameGifts,
+      "music": s.moduleNameMusic,
+    };
+
+    return map[type] ?? s.moduleNameDefault;
+  }
+
+  // ===============================
+  // 🔥 NUEVO: ICONO DESDE CATALOG
+  // ===============================
+  IconData _getIconFromCatalog(String type) {
+    try {
+      final module = ModuleCatalog.modules.firstWhere(
+        (m) => m.type.name == type,
+      );
+      return module.icon;
+    } catch (e) {
+      return Icons.widgets;
     }
   }
 
@@ -238,38 +242,6 @@ class EditorScreen extends StatelessWidget {
             content: Text("Edición no implementada para este módulo"),
           ),
         );
-    }
-  }
-
-  // ===============================
-  // 🎨 ICONOS
-  // ===============================
-  IconData _getIconForType(String type) {
-    switch (type) {
-      case "text":
-        return Icons.text_fields;
-      case "cover":
-        return Icons.panorama_rounded;
-      case "countdown":
-        return Icons.timer;
-      case "location":
-        return Icons.location_on;
-      case "rsvp":
-        return Icons.check_circle;
-      case "gallery":
-        return Icons.photo_library;
-      case "video":
-        return Icons.videocam;
-      case "agenda":
-        return Icons.event;
-      case "dressCode":
-        return Icons.checkroom;
-      case "gifts":
-        return Icons.card_giftcard;
-      case "music":
-        return Icons.music_note;
-      default:
-        return Icons.widgets;
     }
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 class LocationModule extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -16,7 +17,7 @@ class LocationModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final name = data["name"] ?? "Ubicación";
+    final name = data["name"] ?? S.of(context).moduleNameLocation;
     final address = data["address"] ?? "";
     final mapsUrl = data["mapsUrl"];
 
@@ -35,7 +36,7 @@ class LocationModule extends StatelessWidget {
           if (mapsUrl != null)
             ElevatedButton(
               onPressed: () => _openMap(mapsUrl),
-              child: const Text("Ver en Google Maps"),
+              child: Text(S.of(context).openMaps),
             ),
         ],
       ),

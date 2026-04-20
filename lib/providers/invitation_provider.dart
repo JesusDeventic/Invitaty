@@ -65,8 +65,6 @@ class InvitationProvider extends ChangeNotifier {
         "sections": sections,
       };
 
-      debugPrint("✅ TEMPLATE CARGADO: ${sections.length} secciones");
-
       notifyListeners();
     } catch (e) {
       debugPrint("❌ Error loading template: $e");

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 class GiftsModule extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -9,7 +10,7 @@ class GiftsModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = data["title"] ?? "Regalos";
+    final title = data["title"] ?? S.of(context).moduleNameGifts;
     final message = data["message"] ?? "";
     final iban = data["iban"];
     final bizum = data["bizum"];
@@ -51,10 +52,10 @@ class GiftsModule extends StatelessWidget {
               const SizedBox(height: 16),
 
               if (iban != null && iban.toString().isNotEmpty)
-                _buildCopyBox(context, "IBAN", iban),
+                _buildCopyBox(context, S.of(context).labelIban, iban),
 
               if (bizum != null && bizum.toString().isNotEmpty)
-                _buildCopyBox(context, "Bizum", bizum),
+                _buildCopyBox(context, S.of(context).labelBizum, bizum),
 
               if (link != null && link.toString().isNotEmpty) ...[
                 const SizedBox(height: 12),
@@ -64,15 +65,15 @@ class GiftsModule extends StatelessWidget {
                     await launchUrl(uri);
                   },
                   icon: const Icon(Icons.open_in_new),
-                  label: const Text("Ver lista de regalos"),
+                  label: Text(S.of(context).giftsList),
                 ),
               ],
 
               if (items.isNotEmpty) ...[
                 const SizedBox(height: 16),
 
-                const Text(
-                  "Ideas de regalo",
+                Text(
+                  S.of(context).editGiftIdeas,
                   style: TextStyle(fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
@@ -114,10 +115,6 @@ class GiftsModule extends StatelessWidget {
             icon: const Icon(Icons.copy),
             onPressed: () {
               Clipboard.setData(ClipboardData(text: value));
-
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text("$label copiado")));
             },
           ),
         ],

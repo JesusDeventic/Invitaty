@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:invitaty/providers/invitation_provider.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 class EditMusicModuleScreen extends StatefulWidget {
   final int index;
@@ -55,19 +56,17 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Eliminar música"),
-        content: const Text(
-          "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer.",
-        ),
+        title: Text(S.of(context).deleteMusic),
+        content: Text(S.of(context).deleteModuleConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text("Cancelar"),
+            child: Text(S.of(context).buttonCancel),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text("Eliminar"),
+            child: Text(S.of(context).messagesDelete),
           ),
         ],
       ),
@@ -85,7 +84,7 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Editar música"),
+        title: Text(S.of(context).editMusic),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
@@ -102,7 +101,7 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
             TextField(
               controller: titleController,
               textAlign: TextAlign.left,
-              decoration: const InputDecoration(labelText: "Título"),
+              decoration: InputDecoration(labelText: S.of(context).editTitle),
               onChanged: (_) => setState(() {}),
             ),
 
@@ -117,8 +116,8 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
 
             const SizedBox(height: 24),
 
-            const Text(
-              "Vista previa",
+            Text(
+              S.of(context).actionPreview,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
 
@@ -139,7 +138,7 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
 
                   Text(
                     titleController.text.isEmpty
-                        ? "Título"
+                        ? S.of(context).editTitle
                         : titleController.text,
                     textAlign: TextAlign.center,
                     style: const TextStyle(
@@ -153,7 +152,11 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
                   ElevatedButton.icon(
                     onPressed: url.isEmpty ? null : () {},
                     icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
-                    label: Text(isPlaying ? "Pausar" : "Reproducir"),
+                    label: Text(
+                      isPlaying
+                          ? S.of(context).actionPause
+                          : S.of(context).actionPlay,
+                    ),
                   ),
                 ],
               ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 class VideoModule extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -8,7 +9,7 @@ class VideoModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = data["title"] ?? "Vídeos";
+    final title = data["title"] ?? S.of(context).moduleNameVideo;
     final videos = List<Map<String, dynamic>>.from(data["videos"] ?? []);
 
     if (videos.isEmpty) return const SizedBox();
@@ -36,7 +37,7 @@ class VideoModule extends StatelessWidget {
 
           ...videos.map((video) {
             final url = video["url"] as String?;
-            final videoTitle = video["title"] ?? "Vídeo";
+            final videoTitle = video["title"] ?? S.of(context).moduleNameVideo;
 
             final videoId = _extractYoutubeId(url);
             final thumbnail = videoId != null
@@ -95,7 +96,7 @@ class VideoModule extends StatelessWidget {
                     ElevatedButton.icon(
                       onPressed: () => _openVideo(context, url),
                       icon: const Icon(Icons.play_arrow),
-                      label: const Text("Ver vídeo"),
+                      label: Text(S.of(context).actionPlayVideo),
                     ),
                 ],
               ),
@@ -114,9 +115,9 @@ class VideoModule extends StatelessWidget {
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri, mode: LaunchMode.externalApplication);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("No se pudo abrir el vídeo")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text(S.of(context).errorVideoPlay)));
     }
   }
 

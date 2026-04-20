@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 import 'package:invitaty/providers/invitation_provider.dart';
 
@@ -32,7 +33,9 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
     final rawImages = data["images"];
     images = rawImages is List ? List<String>.from(rawImages) : [];
 
-    titleController = TextEditingController(text: data["title"] ?? "Galería");
+    titleController = TextEditingController(
+      text: data["title"] ?? S.of(context).moduleNameGallery,
+    );
   }
 
   @override
@@ -59,19 +62,17 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text("Eliminar galería"),
-        content: const Text(
-          "¿Estás seguro de que quieres eliminar este módulo?",
-        ),
+        title: Text(S.of(context).deleteGallery),
+        content: Text(S.of(context).deleteModuleConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text("Cancelar"),
+            child: Text(S.of(context).buttonCancel),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text("Eliminar"),
+            child: Text(S.of(context).messagesDelete),
           ),
         ],
       ),
@@ -112,7 +113,7 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Editar galería"),
+        title: Text(S.of(context).editGallery),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
@@ -134,15 +135,13 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
           children: [
             TextField(
               controller: titleController,
-              decoration: const InputDecoration(
-                labelText: "Título de la galería",
-              ),
+              decoration: InputDecoration(labelText: S.of(context).editTitle),
             ),
 
             const SizedBox(height: 16),
 
-            const Text(
-              "Imágenes (mantén pulsado para mover)",
+            Text(
+              S.of(context).editGalleryInstructions,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
 
@@ -207,13 +206,16 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
   }
 
   Widget _buildEmptyState() {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Icon(Icons.photo_library_outlined, size: 48, color: Colors.grey),
           SizedBox(height: 12),
-          Text("No hay imágenes aún", style: TextStyle(color: Colors.grey)),
+          Text(
+            S.of(context).editGalleryNoImages,
+            style: TextStyle(color: Colors.grey),
+          ),
         ],
       ),
     );

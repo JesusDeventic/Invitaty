@@ -20,6 +20,11 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
+  static String m3(number) => "Evento ${number}";
+
+  static String m4(days, hours, minutes) =>
+      "${days} días · ${hours} horas · ${minutes} minutos";
+
   static String m0(seconds) =>
       "Incorrect username or password.\nPlease wait ${seconds} seconds before trying again.";
 
@@ -31,7 +36,15 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "accountSettings": MessageLookupByLibrary.simpleMessage("Account settings"),
     "actionNo": MessageLookupByLibrary.simpleMessage("No"),
+    "actionPause": MessageLookupByLibrary.simpleMessage("Pausar"),
+    "actionPlay": MessageLookupByLibrary.simpleMessage("Reproducir"),
+    "actionPlayVideo": MessageLookupByLibrary.simpleMessage("Ver vídeo"),
+    "actionPreview": MessageLookupByLibrary.simpleMessage("Vista previa"),
     "actionYes": MessageLookupByLibrary.simpleMessage("Yes"),
+    "addEventAgenda": MessageLookupByLibrary.simpleMessage("Añadir evento"),
+    "addModule": MessageLookupByLibrary.simpleMessage("Añadir módulo"),
+    "addVideo": MessageLookupByLibrary.simpleMessage("Añadir vídeo"),
+    "agendaEventNumber": m3,
     "andLabel": MessageLookupByLibrary.simpleMessage("and"),
     "appName": MessageLookupByLibrary.simpleMessage("Invitaty"),
     "appVersion10Code": MessageLookupByLibrary.simpleMessage("v1.0.0"),
@@ -73,6 +86,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Link copied",
     ),
     "copyProfileLink": MessageLookupByLibrary.simpleMessage("Copy link"),
+    "countdownFull": m4,
     "currentAppVersionText": MessageLookupByLibrary.simpleMessage(
       "Current version",
     ),
@@ -80,10 +94,30 @@ class MessageLookup extends MessageLookupByLibrary {
     "currentServerVersionText": MessageLookupByLibrary.simpleMessage(
       "Available version",
     ),
+    "dateCountdown": MessageLookupByLibrary.simpleMessage("Fecha"),
     "dateFormat": MessageLookupByLibrary.simpleMessage("Date format"),
+    "dateNotSet": MessageLookupByLibrary.simpleMessage("Fecha no definida"),
+    "deleteAgenda": MessageLookupByLibrary.simpleMessage("Eliminar agenda"),
     "deleteAllNotifications": MessageLookupByLibrary.simpleMessage(
       "Delete all notifications",
     ),
+    "deleteCountdown": MessageLookupByLibrary.simpleMessage(
+      "Eliminar cuenta atrás",
+    ),
+    "deleteDresscode": MessageLookupByLibrary.simpleMessage(
+      "Eliminar código de vestimenta",
+    ),
+    "deleteGallery": MessageLookupByLibrary.simpleMessage("Eliminar galería"),
+    "deleteGifts": MessageLookupByLibrary.simpleMessage("Eliminar regalos"),
+    "deleteLocation": MessageLookupByLibrary.simpleMessage(
+      "Eliminar ubicación",
+    ),
+    "deleteModuleConfirmation": MessageLookupByLibrary.simpleMessage(
+      "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer",
+    ),
+    "deleteMusic": MessageLookupByLibrary.simpleMessage("Eliminar música"),
+    "deleteText": MessageLookupByLibrary.simpleMessage("Eliminar texto"),
+    "deleteVideo": MessageLookupByLibrary.simpleMessage("Eliminar vídeos"),
     "dialogCloseAppContent": MessageLookupByLibrary.simpleMessage(
       "Are you sure you want to exit the app?",
     ),
@@ -114,6 +148,43 @@ class MessageLookup extends MessageLookupByLibrary {
     "displayName": MessageLookupByLibrary.simpleMessage(
       "Display name (optional)",
     ),
+    "dressCodeCasual": MessageLookupByLibrary.simpleMessage("Casual"),
+    "dressCodeCostume": MessageLookupByLibrary.simpleMessage("Disfraces"),
+    "dressCodeElegant": MessageLookupByLibrary.simpleMessage("Elegante"),
+    "dressCodeFormal": MessageLookupByLibrary.simpleMessage("Formal"),
+    "dressCodeFree": MessageLookupByLibrary.simpleMessage("Libre"),
+    "dressCodeSwimwear": MessageLookupByLibrary.simpleMessage("Traje de baño"),
+    "dressCodeThematic": MessageLookupByLibrary.simpleMessage("Temático"),
+    "editAddGift": MessageLookupByLibrary.simpleMessage("Añadir regalo"),
+    "editAgenda": MessageLookupByLibrary.simpleMessage("Editar agenda"),
+    "editColor": MessageLookupByLibrary.simpleMessage("Color"),
+    "editContent": MessageLookupByLibrary.simpleMessage("Contenido"),
+    "editCountdown": MessageLookupByLibrary.simpleMessage(
+      "Editar cuenta atrás",
+    ),
+    "editCover": MessageLookupByLibrary.simpleMessage("Editar portada"),
+    "editDescription": MessageLookupByLibrary.simpleMessage("Descripción"),
+    "editDressType": MessageLookupByLibrary.simpleMessage("Tipo de vestimenta"),
+    "editDresscode": MessageLookupByLibrary.simpleMessage(
+      "Editar código de vestimenta",
+    ),
+    "editFont": MessageLookupByLibrary.simpleMessage("Fuente"),
+    "editGallery": MessageLookupByLibrary.simpleMessage("Editar galería"),
+    "editGalleryInstructions": MessageLookupByLibrary.simpleMessage(
+      "Imágenes (mantén pulsado para arrastrar y mover)",
+    ),
+    "editGalleryNoImages": MessageLookupByLibrary.simpleMessage(
+      "No hay imágenes",
+    ),
+    "editGiftIdeas": MessageLookupByLibrary.simpleMessage("Ideas de regalos"),
+    "editGifts": MessageLookupByLibrary.simpleMessage("Editar regalos"),
+    "editLocation": MessageLookupByLibrary.simpleMessage("Editar ubicación"),
+    "editMusic": MessageLookupByLibrary.simpleMessage("Editar música"),
+    "editSubtitle": MessageLookupByLibrary.simpleMessage("Subtítulo"),
+    "editText": MessageLookupByLibrary.simpleMessage("Editar texto"),
+    "editTime": MessageLookupByLibrary.simpleMessage("Hora (ej: 18:00)"),
+    "editTitle": MessageLookupByLibrary.simpleMessage("Título"),
+    "editVideo": MessageLookupByLibrary.simpleMessage("Editar vídeos"),
     "email": MessageLookupByLibrary.simpleMessage("Email"),
     "enterWithoutUser": MessageLookupByLibrary.simpleMessage(
       "Enter without user",
@@ -169,8 +240,17 @@ class MessageLookup extends MessageLookupByLibrary {
     "errorAuthWrongPassword": MessageLookupByLibrary.simpleMessage(
       "Incorrect password.",
     ),
+    "errorOpenLink": MessageLookupByLibrary.simpleMessage(
+      "No se pudo abrir el enlace",
+    ),
     "errorProcessingImage": MessageLookupByLibrary.simpleMessage(
       "Could not process the image.",
+    ),
+    "errorVideoPlay": MessageLookupByLibrary.simpleMessage(
+      "No se pudo reproducir el vídeo",
+    ),
+    "eventAlreadyStarted": MessageLookupByLibrary.simpleMessage(
+      "El evento ya ha comenzado",
     ),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Expand"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
@@ -205,6 +285,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "generalSettingsSaveSuccess": MessageLookupByLibrary.simpleMessage(
       "Settings saved successfully.",
     ),
+    "giftsList": MessageLookupByLibrary.simpleMessage("Ver lista de regalos"),
     "goToHome": MessageLookupByLibrary.simpleMessage("Go to home"),
     "homeCreateInvitationButton": MessageLookupByLibrary.simpleMessage(
       "Create invitation",
@@ -216,7 +297,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "No invitations created yet",
     ),
     "invalidEmail": MessageLookupByLibrary.simpleMessage("Invalid email"),
+    "invitationEditor": MessageLookupByLibrary.simpleMessage(
+      "Editor de invitación",
+    ),
     "keepSession": MessageLookupByLibrary.simpleMessage("Keep me signed in"),
+    "labelBizum": MessageLookupByLibrary.simpleMessage("Bizum"),
+    "labelIban": MessageLookupByLibrary.simpleMessage("IBAN"),
+    "labelLink": MessageLookupByLibrary.simpleMessage("Enlace"),
+    "labelOptions": MessageLookupByLibrary.simpleMessage("Opciones"),
+    "labelSize": MessageLookupByLibrary.simpleMessage("Tamaño"),
     "language": MessageLookupByLibrary.simpleMessage("Language"),
     "languageArabic": MessageLookupByLibrary.simpleMessage("Arabic"),
     "languageCatalan": MessageLookupByLibrary.simpleMessage("Catalan"),
@@ -241,6 +330,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "lastAccessChipPrefix": MessageLookupByLibrary.simpleMessage("Last seen"),
     "legalNoticeLabel": MessageLookupByLibrary.simpleMessage("Legal notice"),
     "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
+    "locationAddress": MessageLookupByLibrary.simpleMessage("Dirección"),
+    "locationGenerator": MessageLookupByLibrary.simpleMessage(
+      "Generar enlace a Google Maps",
+    ),
+    "locationMaps": MessageLookupByLibrary.simpleMessage("Enlace Google Maps"),
+    "locationName": MessageLookupByLibrary.simpleMessage("Nombre del lugar"),
     "loginCountdownMessage": m0,
     "logout": MessageLookupByLibrary.simpleMessage("Log out"),
     "markAllAsRead": MessageLookupByLibrary.simpleMessage("Mark all as read"),
@@ -294,6 +389,26 @@ class MessageLookup extends MessageLookupByLibrary {
     "messagesTypeHint": MessageLookupByLibrary.simpleMessage(
       "Write a message...",
     ),
+    "moduleNameAgenda": MessageLookupByLibrary.simpleMessage("Agenda"),
+    "moduleNameCountdown": MessageLookupByLibrary.simpleMessage("Cuenta atrás"),
+    "moduleNameCover": MessageLookupByLibrary.simpleMessage("Portada"),
+    "moduleNameDefault": MessageLookupByLibrary.simpleMessage("Módulo"),
+    "moduleNameDressCode": MessageLookupByLibrary.simpleMessage(
+      "Código de vestimenta",
+    ),
+    "moduleNameGallery": MessageLookupByLibrary.simpleMessage("Galería"),
+    "moduleNameGifts": MessageLookupByLibrary.simpleMessage("Regalos"),
+    "moduleNameLocation": MessageLookupByLibrary.simpleMessage("Localización"),
+    "moduleNameMusic": MessageLookupByLibrary.simpleMessage("Música"),
+    "moduleNameRsvp": MessageLookupByLibrary.simpleMessage(
+      "Formulario de asistencia",
+    ),
+    "moduleNameText": MessageLookupByLibrary.simpleMessage("Texto"),
+    "moduleNameVideo": MessageLookupByLibrary.simpleMessage("Vídeo"),
+    "musicErrorPlay": MessageLookupByLibrary.simpleMessage(
+      "No se pudo reproducir la música",
+    ),
+    "nameGift": MessageLookupByLibrary.simpleMessage("Regalo"),
     "newPassword": MessageLookupByLibrary.simpleMessage("New password"),
     "noMoreRecords": MessageLookupByLibrary.simpleMessage("No more items."),
     "notificationDeleteAllAsk": MessageLookupByLibrary.simpleMessage(
@@ -335,6 +450,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "notificationsWebSettingsTitle": MessageLookupByLibrary.simpleMessage(
       "Notifications in the browser",
     ),
+    "openMaps": MessageLookupByLibrary.simpleMessage("Ver en Google Maps"),
     "password": MessageLookupByLibrary.simpleMessage("Password"),
     "passwordChanged": MessageLookupByLibrary.simpleMessage(
       "Password reset successfully.",
@@ -377,8 +493,12 @@ class MessageLookup extends MessageLookupByLibrary {
       "Remove country",
     ),
     "retryPublicProfile": MessageLookupByLibrary.simpleMessage("Retry"),
+    "selectImage": MessageLookupByLibrary.simpleMessage("Seleccionar imagen"),
     "selectTemplateTitle": MessageLookupByLibrary.simpleMessage(
-      "Choose a template",
+      "Elije una plantilla",
+    ),
+    "selectTextColor": MessageLookupByLibrary.simpleMessage(
+      "Seleccionar color texto",
     ),
     "sendCode": MessageLookupByLibrary.simpleMessage("Send code"),
     "sendMessageTooltip": MessageLookupByLibrary.simpleMessage("Send message"),
@@ -389,6 +509,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "showQrOption": MessageLookupByLibrary.simpleMessage("Show QR"),
     "signIn": MessageLookupByLibrary.simpleMessage("Sign in"),
     "signUp": MessageLookupByLibrary.simpleMessage("Create account"),
+    "sizeSubtitle": MessageLookupByLibrary.simpleMessage("Tamaño subtítulo"),
+    "sizeTitle": MessageLookupByLibrary.simpleMessage("Tamaño título"),
     "socialMailLabel": MessageLookupByLibrary.simpleMessage("Email"),
     "socialNetworksText": MessageLookupByLibrary.simpleMessage(
       "Follow us on social media.",
@@ -455,6 +577,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "theme": MessageLookupByLibrary.simpleMessage("Theme"),
     "themeDark": MessageLookupByLibrary.simpleMessage("Dark mode"),
     "themeLight": MessageLookupByLibrary.simpleMessage("Light mode"),
+    "timeCountdown": MessageLookupByLibrary.simpleMessage("Hora"),
     "userAvatar": MessageLookupByLibrary.simpleMessage("Avatar"),
     "userDescription": MessageLookupByLibrary.simpleMessage("Bio"),
     "userEmail": MessageLookupByLibrary.simpleMessage("Email"),

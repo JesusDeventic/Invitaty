@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 import 'package:invitaty/providers/invitation_provider.dart';
 
@@ -32,7 +33,9 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
 
     final data = widget.section["data"] ?? {};
 
-    titleController = TextEditingController(text: data["title"] ?? "Regalos");
+    titleController = TextEditingController(
+      text: data["title"] ?? S.of(context).moduleNameGifts,
+    );
     messageController = TextEditingController(text: data["message"] ?? "");
     ibanController = TextEditingController(text: data["iban"] ?? "");
     bizumController = TextEditingController(text: data["bizum"] ?? "");
@@ -105,18 +108,17 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Eliminar módulo de regalos"),
-          content: const Text(
-            "¿Estás seguro? Esta acción no se puede deshacer.",
-          ),
+          title: Text(S.of(context).deleteGifts),
+          content: Text(S.of(context).deleteModuleConfirmation),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text("Cancelar"),
+              child: Text(S.of(context).buttonCancel),
             ),
             TextButton(
               onPressed: () => Navigator.pop(context, true),
-              child: const Text("Eliminar"),
+              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+              child: Text(S.of(context).messagesDelete),
             ),
           ],
         );
@@ -142,7 +144,7 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
             Expanded(
               child: TextField(
                 controller: itemControllers[index],
-                decoration: const InputDecoration(labelText: "Regalo"),
+                decoration: InputDecoration(labelText: S.of(context).nameGift),
               ),
             ),
 
@@ -167,7 +169,7 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Editar regalos"),
+        title: Text(S.of(context).editGifts),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
@@ -182,44 +184,46 @@ class _EditGiftsModuleScreenState extends State<EditGiftsModuleScreen> {
         children: [
           TextField(
             controller: titleController,
-            decoration: const InputDecoration(labelText: "Título"),
+            decoration: InputDecoration(labelText: S.of(context).editTitle),
           ),
 
           const SizedBox(height: 12),
 
           TextField(
             controller: messageController,
-            decoration: const InputDecoration(labelText: "Mensaje"),
+            decoration: InputDecoration(
+              labelText: S.of(context).messagesTypeHint,
+            ),
           ),
 
-          _sectionTitle("Opciones"),
+          _sectionTitle(S.of(context).labelOptions),
           TextField(
             controller: ibanController,
-            decoration: const InputDecoration(labelText: "IBAN"),
+            decoration: InputDecoration(labelText: S.of(context).labelIban),
           ),
 
           const SizedBox(height: 12),
 
           TextField(
             controller: bizumController,
-            decoration: const InputDecoration(labelText: "Bizum"),
+            decoration: InputDecoration(labelText: S.of(context).labelBizum),
           ),
 
           const SizedBox(height: 12),
 
           TextField(
             controller: linkController,
-            decoration: const InputDecoration(labelText: "Link"),
+            decoration: InputDecoration(labelText: S.of(context).labelLink),
           ),
 
-          _sectionTitle("Ideas de regalo"),
+          _sectionTitle(S.of(context).editGiftIdeas),
 
           ...List.generate(itemControllers.length, _buildItem),
 
           ElevatedButton.icon(
             onPressed: _addItem,
             icon: const Icon(Icons.add),
-            label: const Text("Añadir regalo"),
+            label: Text(S.of(context).editAddGift),
           ),
         ],
       ),

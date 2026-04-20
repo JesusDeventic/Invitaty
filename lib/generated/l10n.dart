@@ -1879,10 +1879,10 @@ class S {
     );
   }
 
-  /// `Choose a template`
+  /// `Elije una plantilla`
   String get selectTemplateTitle {
     return Intl.message(
-      'Choose a template',
+      'Elije una plantilla',
       name: 'selectTemplateTitle',
       desc: '',
       args: [],
@@ -2004,6 +2004,696 @@ class S {
     return Intl.message(
       'Empieza desde cero',
       name: 'templateCustomDesc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Editor de invitación`
+  String get invitationEditor {
+    return Intl.message(
+      'Editor de invitación',
+      name: 'invitationEditor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Texto`
+  String get moduleNameText {
+    return Intl.message('Texto', name: 'moduleNameText', desc: '', args: []);
+  }
+
+  /// `Portada`
+  String get moduleNameCover {
+    return Intl.message('Portada', name: 'moduleNameCover', desc: '', args: []);
+  }
+
+  /// `Cuenta atrás`
+  String get moduleNameCountdown {
+    return Intl.message(
+      'Cuenta atrás',
+      name: 'moduleNameCountdown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Localización`
+  String get moduleNameLocation {
+    return Intl.message(
+      'Localización',
+      name: 'moduleNameLocation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Formulario de asistencia`
+  String get moduleNameRsvp {
+    return Intl.message(
+      'Formulario de asistencia',
+      name: 'moduleNameRsvp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Galería`
+  String get moduleNameGallery {
+    return Intl.message(
+      'Galería',
+      name: 'moduleNameGallery',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Vídeo`
+  String get moduleNameVideo {
+    return Intl.message('Vídeo', name: 'moduleNameVideo', desc: '', args: []);
+  }
+
+  /// `Agenda`
+  String get moduleNameAgenda {
+    return Intl.message('Agenda', name: 'moduleNameAgenda', desc: '', args: []);
+  }
+
+  /// `Código de vestimenta`
+  String get moduleNameDressCode {
+    return Intl.message(
+      'Código de vestimenta',
+      name: 'moduleNameDressCode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Regalos`
+  String get moduleNameGifts {
+    return Intl.message('Regalos', name: 'moduleNameGifts', desc: '', args: []);
+  }
+
+  /// `Música`
+  String get moduleNameMusic {
+    return Intl.message('Música', name: 'moduleNameMusic', desc: '', args: []);
+  }
+
+  /// `Módulo`
+  String get moduleNameDefault {
+    return Intl.message(
+      'Módulo',
+      name: 'moduleNameDefault',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer`
+  String get deleteModuleConfirmation {
+    return Intl.message(
+      '¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer',
+      name: 'deleteModuleConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Añadir evento`
+  String get addEventAgenda {
+    return Intl.message(
+      'Añadir evento',
+      name: 'addEventAgenda',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Editar agenda`
+  String get editAgenda {
+    return Intl.message(
+      'Editar agenda',
+      name: 'editAgenda',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Descripción`
+  String get editDescription {
+    return Intl.message(
+      'Descripción',
+      name: 'editDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Título`
+  String get editTitle {
+    return Intl.message('Título', name: 'editTitle', desc: '', args: []);
+  }
+
+  /// `Hora (ej: 18:00)`
+  String get editTime {
+    return Intl.message(
+      'Hora (ej: 18:00)',
+      name: 'editTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Evento {number}`
+  String agendaEventNumber(Object number) {
+    return Intl.message(
+      'Evento $number',
+      name: 'agendaEventNumber',
+      desc: '',
+      args: [number],
+    );
+  }
+
+  /// `Eliminar agenda`
+  String get deleteAgenda {
+    return Intl.message(
+      'Eliminar agenda',
+      name: 'deleteAgenda',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Eliminar cuenta atrás`
+  String get deleteCountdown {
+    return Intl.message(
+      'Eliminar cuenta atrás',
+      name: 'deleteCountdown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Editar cuenta atrás`
+  String get editCountdown {
+    return Intl.message(
+      'Editar cuenta atrás',
+      name: 'editCountdown',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fecha`
+  String get dateCountdown {
+    return Intl.message('Fecha', name: 'dateCountdown', desc: '', args: []);
+  }
+
+  /// `Hora`
+  String get timeCountdown {
+    return Intl.message('Hora', name: 'timeCountdown', desc: '', args: []);
+  }
+
+  /// `Vista previa`
+  String get actionPreview {
+    return Intl.message(
+      'Vista previa',
+      name: 'actionPreview',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `El evento ya ha comenzado`
+  String get eventAlreadyStarted {
+    return Intl.message(
+      'El evento ya ha comenzado',
+      name: 'eventAlreadyStarted',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `{days} días · {hours} horas · {minutes} minutos`
+  String countdownFull(Object days, Object hours, Object minutes) {
+    return Intl.message(
+      '$days días · $hours horas · $minutes minutos',
+      name: 'countdownFull',
+      desc: '',
+      args: [days, hours, minutes],
+    );
+  }
+
+  /// `Seleccionar color texto`
+  String get selectTextColor {
+    return Intl.message(
+      'Seleccionar color texto',
+      name: 'selectTextColor',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Editar portada`
+  String get editCover {
+    return Intl.message(
+      'Editar portada',
+      name: 'editCover',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subtítulo`
+  String get editSubtitle {
+    return Intl.message('Subtítulo', name: 'editSubtitle', desc: '', args: []);
+  }
+
+  /// `Fuente`
+  String get editFont {
+    return Intl.message('Fuente', name: 'editFont', desc: '', args: []);
+  }
+
+  /// `Tamaño título`
+  String get sizeTitle {
+    return Intl.message('Tamaño título', name: 'sizeTitle', desc: '', args: []);
+  }
+
+  /// `Tamaño subtítulo`
+  String get sizeSubtitle {
+    return Intl.message(
+      'Tamaño subtítulo',
+      name: 'sizeSubtitle',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Color`
+  String get editColor {
+    return Intl.message('Color', name: 'editColor', desc: '', args: []);
+  }
+
+  /// `Seleccionar imagen`
+  String get selectImage {
+    return Intl.message(
+      'Seleccionar imagen',
+      name: 'selectImage',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Eliminar código de vestimenta`
+  String get deleteDresscode {
+    return Intl.message(
+      'Eliminar código de vestimenta',
+      name: 'deleteDresscode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Editar código de vestimenta`
+  String get editDresscode {
+    return Intl.message(
+      'Editar código de vestimenta',
+      name: 'editDresscode',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tipo de vestimenta`
+  String get editDressType {
+    return Intl.message(
+      'Tipo de vestimenta',
+      name: 'editDressType',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Formal`
+  String get dressCodeFormal {
+    return Intl.message('Formal', name: 'dressCodeFormal', desc: '', args: []);
+  }
+
+  /// `Casual`
+  String get dressCodeCasual {
+    return Intl.message('Casual', name: 'dressCodeCasual', desc: '', args: []);
+  }
+
+  /// `Elegante`
+  String get dressCodeElegant {
+    return Intl.message(
+      'Elegante',
+      name: 'dressCodeElegant',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Temático`
+  String get dressCodeThematic {
+    return Intl.message(
+      'Temático',
+      name: 'dressCodeThematic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Disfraces`
+  String get dressCodeCostume {
+    return Intl.message(
+      'Disfraces',
+      name: 'dressCodeCostume',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Traje de baño`
+  String get dressCodeSwimwear {
+    return Intl.message(
+      'Traje de baño',
+      name: 'dressCodeSwimwear',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Libre`
+  String get dressCodeFree {
+    return Intl.message('Libre', name: 'dressCodeFree', desc: '', args: []);
+  }
+
+  /// `Añadir módulo`
+  String get addModule {
+    return Intl.message('Añadir módulo', name: 'addModule', desc: '', args: []);
+  }
+
+  /// `Eliminar galería`
+  String get deleteGallery {
+    return Intl.message(
+      'Eliminar galería',
+      name: 'deleteGallery',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Editar galería`
+  String get editGallery {
+    return Intl.message(
+      'Editar galería',
+      name: 'editGallery',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Imágenes (mantén pulsado para arrastrar y mover)`
+  String get editGalleryInstructions {
+    return Intl.message(
+      'Imágenes (mantén pulsado para arrastrar y mover)',
+      name: 'editGalleryInstructions',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No hay imágenes`
+  String get editGalleryNoImages {
+    return Intl.message(
+      'No hay imágenes',
+      name: 'editGalleryNoImages',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Eliminar regalos`
+  String get deleteGifts {
+    return Intl.message(
+      'Eliminar regalos',
+      name: 'deleteGifts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Regalo`
+  String get nameGift {
+    return Intl.message('Regalo', name: 'nameGift', desc: '', args: []);
+  }
+
+  /// `Editar regalos`
+  String get editGifts {
+    return Intl.message(
+      'Editar regalos',
+      name: 'editGifts',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Opciones`
+  String get labelOptions {
+    return Intl.message('Opciones', name: 'labelOptions', desc: '', args: []);
+  }
+
+  /// `IBAN`
+  String get labelIban {
+    return Intl.message('IBAN', name: 'labelIban', desc: '', args: []);
+  }
+
+  /// `Bizum`
+  String get labelBizum {
+    return Intl.message('Bizum', name: 'labelBizum', desc: '', args: []);
+  }
+
+  /// `Enlace`
+  String get labelLink {
+    return Intl.message('Enlace', name: 'labelLink', desc: '', args: []);
+  }
+
+  /// `Ideas de regalos`
+  String get editGiftIdeas {
+    return Intl.message(
+      'Ideas de regalos',
+      name: 'editGiftIdeas',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Añadir regalo`
+  String get editAddGift {
+    return Intl.message(
+      'Añadir regalo',
+      name: 'editAddGift',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ver lista de regalos`
+  String get giftsList {
+    return Intl.message(
+      'Ver lista de regalos',
+      name: 'giftsList',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Eliminar ubicación`
+  String get deleteLocation {
+    return Intl.message(
+      'Eliminar ubicación',
+      name: 'deleteLocation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No se pudo abrir el enlace`
+  String get errorOpenLink {
+    return Intl.message(
+      'No se pudo abrir el enlace',
+      name: 'errorOpenLink',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Editar ubicación`
+  String get editLocation {
+    return Intl.message(
+      'Editar ubicación',
+      name: 'editLocation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nombre del lugar`
+  String get locationName {
+    return Intl.message(
+      'Nombre del lugar',
+      name: 'locationName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dirección`
+  String get locationAddress {
+    return Intl.message(
+      'Dirección',
+      name: 'locationAddress',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Generar enlace a Google Maps`
+  String get locationGenerator {
+    return Intl.message(
+      'Generar enlace a Google Maps',
+      name: 'locationGenerator',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Enlace Google Maps`
+  String get locationMaps {
+    return Intl.message(
+      'Enlace Google Maps',
+      name: 'locationMaps',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ver en Google Maps`
+  String get openMaps {
+    return Intl.message(
+      'Ver en Google Maps',
+      name: 'openMaps',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Eliminar música`
+  String get deleteMusic {
+    return Intl.message(
+      'Eliminar música',
+      name: 'deleteMusic',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Editar música`
+  String get editMusic {
+    return Intl.message('Editar música', name: 'editMusic', desc: '', args: []);
+  }
+
+  /// `Pausar`
+  String get actionPause {
+    return Intl.message('Pausar', name: 'actionPause', desc: '', args: []);
+  }
+
+  /// `Reproducir`
+  String get actionPlay {
+    return Intl.message('Reproducir', name: 'actionPlay', desc: '', args: []);
+  }
+
+  /// `No se pudo reproducir la música`
+  String get musicErrorPlay {
+    return Intl.message(
+      'No se pudo reproducir la música',
+      name: 'musicErrorPlay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Eliminar texto`
+  String get deleteText {
+    return Intl.message(
+      'Eliminar texto',
+      name: 'deleteText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Editar texto`
+  String get editText {
+    return Intl.message('Editar texto', name: 'editText', desc: '', args: []);
+  }
+
+  /// `Contenido`
+  String get editContent {
+    return Intl.message('Contenido', name: 'editContent', desc: '', args: []);
+  }
+
+  /// `Tamaño`
+  String get labelSize {
+    return Intl.message('Tamaño', name: 'labelSize', desc: '', args: []);
+  }
+
+  /// `Eliminar vídeos`
+  String get deleteVideo {
+    return Intl.message(
+      'Eliminar vídeos',
+      name: 'deleteVideo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Editar vídeos`
+  String get editVideo {
+    return Intl.message('Editar vídeos', name: 'editVideo', desc: '', args: []);
+  }
+
+  /// `Añadir vídeo`
+  String get addVideo {
+    return Intl.message('Añadir vídeo', name: 'addVideo', desc: '', args: []);
+  }
+
+  /// `Ver vídeo`
+  String get actionPlayVideo {
+    return Intl.message(
+      'Ver vídeo',
+      name: 'actionPlayVideo',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No se pudo reproducir el vídeo`
+  String get errorVideoPlay {
+    return Intl.message(
+      'No se pudo reproducir el vídeo',
+      name: 'errorVideoPlay',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fecha no definida`
+  String get dateNotSet {
+    return Intl.message(
+      'Fecha no definida',
+      name: 'dateNotSet',
       desc: '',
       args: [],
     );

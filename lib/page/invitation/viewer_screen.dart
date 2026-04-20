@@ -3,6 +3,7 @@ import 'package:invitaty/modules/module_registry.dart';
 import 'package:invitaty/modules/module_type.dart';
 import 'package:provider/provider.dart';
 import 'package:invitaty/providers/invitation_provider.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 class ViewerScreen extends StatelessWidget {
   const ViewerScreen({super.key});
@@ -13,7 +14,7 @@ class ViewerScreen extends StatelessWidget {
     final sections = invitationProvider.sections;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Invitaty")),
+      appBar: AppBar(title: Text(S.current.appName)),
       body: ListView(
         children: sections.map((section) {
           final typeString = section["type"] as String;

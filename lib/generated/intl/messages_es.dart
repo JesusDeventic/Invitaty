@@ -407,9 +407,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "removeCountryTooltip": MessageLookupByLibrary.simpleMessage("Quitar país"),
     "retryPublicProfile": MessageLookupByLibrary.simpleMessage("Reintentar"),
-    "selectTemplateTitle": MessageLookupByLibrary.simpleMessage(
-      "Elige una plantilla",
-    ),
     "sendCode": MessageLookupByLibrary.simpleMessage("Enviar código"),
     "sendMessageTooltip": MessageLookupByLibrary.simpleMessage(
       "Enviar mensaje",

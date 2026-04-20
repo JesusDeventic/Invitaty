@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 class CountdownModule extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -12,7 +13,7 @@ class CountdownModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = data["title"] ?? "Cuenta atrás";
+    final title = data["title"] ?? S.of(context).moduleNameCountdown;
     final eventDateTime = _parseDate(data["eventDateTime"]);
 
     if (eventDateTime == null) {
@@ -23,7 +24,7 @@ class CountdownModule extends StatelessWidget {
           color: Colors.grey.shade50,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: const Text("Fecha no definida"),
+        child: Text(S.of(context).dateNotSet),
       );
     }
 
@@ -57,8 +58,8 @@ class CountdownModule extends StatelessWidget {
 
           Text(
             isPast
-                ? "El evento ya ha comenzado"
-                : "$days días · $hours horas · $minutes minutos",
+                ? S.of(context).eventAlreadyStarted
+                : S.of(context).countdownFull(days, hours, minutes),
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 18,

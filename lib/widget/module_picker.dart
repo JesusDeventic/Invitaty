@@ -1,11 +1,33 @@
 import 'package:flutter/material.dart';
 import '../modules/module_catalog.dart';
 import '../modules/module_type.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 class ModulePicker extends StatelessWidget {
   final Function(ModuleType type) onSelected;
 
   const ModulePicker({super.key, required this.onSelected});
+
+  // 🔥 Función de traducción
+  String _getModuleTitle(BuildContext context, ModuleType type) {
+    final s = S.of(context);
+
+    final map = {
+      ModuleType.text: s.moduleNameText,
+      ModuleType.cover: s.moduleNameCover,
+      ModuleType.countdown: s.moduleNameCountdown,
+      ModuleType.location: s.moduleNameLocation,
+      ModuleType.rsvp: s.moduleNameRsvp,
+      ModuleType.gallery: s.moduleNameGallery,
+      ModuleType.video: s.moduleNameVideo,
+      ModuleType.agenda: s.moduleNameAgenda,
+      ModuleType.dressCode: s.moduleNameDressCode,
+      ModuleType.gifts: s.moduleNameGifts,
+      ModuleType.music: s.moduleNameMusic,
+    };
+
+    return map[type] ?? s.moduleNameDefault;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +51,8 @@ class ModulePicker extends StatelessWidget {
             ),
           ),
 
-          const Text(
-            "Añadir módulo",
+          Text(
+            S.of(context).addModule,
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
           ),
 
@@ -63,7 +85,11 @@ class ModulePicker extends StatelessWidget {
                       children: [
                         Icon(module.icon, size: 28),
                         const SizedBox(height: 8),
-                        Text(module.title, textAlign: TextAlign.center),
+
+                        Text(
+                          _getModuleTitle(context, module.type),
+                          textAlign: TextAlign.center,
+                        ),
                       ],
                     ),
                   ),

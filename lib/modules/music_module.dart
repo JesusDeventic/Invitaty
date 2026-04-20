@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 import 'package:invitaty/music_controller/music_controller.dart';
 
@@ -16,7 +17,7 @@ class _MusicModuleState extends State<MusicModule> {
 
   @override
   Widget build(BuildContext context) {
-    final title = widget.data["title"] ?? "Música";
+    final title = widget.data["title"] ?? S.of(context).moduleNameMusic;
     final url = widget.data["url"] as String?;
 
     final isPlaying = controller.isPlaying;
@@ -64,15 +65,15 @@ class _MusicModuleState extends State<MusicModule> {
 
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("No se pudo reproducir la música"),
-                    ),
+                    SnackBar(content: Text(S.of(context).musicErrorPlay)),
                   );
                 }
               }
             },
             icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
-            label: Text(isPlaying ? "Pausar" : "Reproducir"),
+            label: Text(
+              isPlaying ? S.of(context).actionPause : S.of(context).actionPlay,
+            ),
           ),
         ],
       ),

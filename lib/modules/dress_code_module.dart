@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 class DressCodeModule extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -7,7 +8,7 @@ class DressCodeModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = data["title"] ?? "Dress Code";
+    final title = data["title"] ?? S.of(context).moduleNameDressCode;
     final style = data["style"] ?? "";
     final description = data["description"] ?? "";
 

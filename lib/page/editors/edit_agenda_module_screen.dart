@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 import 'package:invitaty/providers/invitation_provider.dart';
 
@@ -32,7 +33,9 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
 
     final data = widget.section["data"] ?? {};
 
-    titleController = TextEditingController(text: data["title"] ?? "Agenda");
+    titleController = TextEditingController(
+      text: data["title"] ?? S.of(context).moduleNameAgenda,
+    );
 
     final rawItems = List<Map<String, dynamic>>.from(data["items"] ?? []);
     items = List<Map<String, dynamic>>.from(rawItems);
@@ -97,18 +100,17 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Eliminar agenda"),
-        content: const Text(
-          "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer.",
-        ),
+        title: Text(S.of(context).deleteAgenda),
+        content: Text(S.of(context).deleteModuleConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text("Cancelar"),
+            child: Text(S.of(context).buttonCancel),
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text("Eliminar"),
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            child: Text(S.of(context).messagesDelete),
           ),
         ],
       ),
@@ -131,7 +133,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Evento ${index + 1}",
+                  S.of(context).agendaEventNumber(index + 1),
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
                 IconButton(
@@ -146,7 +148,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
             TextField(
               controller: timeControllers[index],
               textAlign: TextAlign.left, // 🔥 FIX
-              decoration: const InputDecoration(labelText: "Hora (ej: 18:00)"),
+              decoration: InputDecoration(labelText: S.of(context).editTime),
               onChanged: (value) {
                 items[index]["time"] = value;
               },
@@ -157,7 +159,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
             TextField(
               controller: titleControllers[index],
               textAlign: TextAlign.left, // 🔥 FIX
-              decoration: const InputDecoration(labelText: "Título"),
+              decoration: InputDecoration(labelText: S.of(context).editTitle),
               onChanged: (value) {
                 items[index]["title"] = value;
               },
@@ -168,7 +170,9 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
             TextField(
               controller: descControllers[index],
               textAlign: TextAlign.left, // 🔥 FIX
-              decoration: const InputDecoration(labelText: "Descripción"),
+              decoration: InputDecoration(
+                labelText: S.of(context).editDescription,
+              ),
               maxLines: 2,
               onChanged: (value) {
                 items[index]["description"] = value;
@@ -184,7 +188,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Editar agenda"),
+        title: Text(S.of(context).editAgenda),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
@@ -202,7 +206,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
             TextField(
               controller: titleController,
               textAlign: TextAlign.left, // 🔥 FIX
-              decoration: const InputDecoration(labelText: "Título"),
+              decoration: InputDecoration(labelText: S.of(context).editTitle),
             ),
 
             const SizedBox(height: 20),
@@ -217,7 +221,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
                   ElevatedButton.icon(
                     onPressed: _addItem,
                     icon: const Icon(Icons.add),
-                    label: const Text("Añadir evento"),
+                    label: Text(S.of(context).addEventAgenda),
                   ),
                 ],
               ),

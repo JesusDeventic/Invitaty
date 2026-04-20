@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 import 'package:invitaty/providers/invitation_provider.dart';
 
@@ -86,7 +87,7 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Seleccionar color"),
+          title: Text(S.of(context).selectTextColor),
           content: SingleChildScrollView(
             child: ColorPicker(
               pickerColor: tempColor,
@@ -98,14 +99,14 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Cancelar"),
+              child: Text(S.of(context).buttonCancel),
             ),
             ElevatedButton(
               onPressed: () {
                 setState(() => textColor = tempColor);
                 Navigator.pop(context);
               },
-              child: const Text("Seleccionar"),
+              child: Text(S.of(context).buttonConfirm),
             ),
           ],
         );
@@ -138,19 +139,17 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Eliminar módulo"),
-          content: const Text(
-            "¿Seguro que quieres eliminar este módulo? Esta acción no se puede deshacer.",
-          ),
+          title: Text(S.of(context).deleteText),
+          content: Text(S.of(context).deleteModuleConfirmation),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text("Cancelar"),
+              child: Text(S.of(context).buttonCancel),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
               onPressed: () => Navigator.pop(context, true),
-              child: const Text("Eliminar"),
+              child: Text(S.of(context).messagesDelete),
             ),
           ],
         );
@@ -167,7 +166,7 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Editar texto"),
+        title: Text(S.of(context).editText),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
@@ -184,7 +183,7 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
             children: [
               TextField(
                 controller: titleController,
-                decoration: const InputDecoration(labelText: "Título"),
+                decoration: InputDecoration(labelText: S.of(context).editTitle),
                 onChanged: (_) => setState(() {}),
               ),
 
@@ -192,15 +191,17 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
               TextField(
                 controller: bodyController,
-                decoration: const InputDecoration(labelText: "Contenido"),
+                decoration: InputDecoration(
+                  labelText: S.of(context).editContent,
+                ),
                 maxLines: 4,
                 onChanged: (_) => setState(() {}),
               ),
 
               const SizedBox(height: 16),
 
-              const Text(
-                "Fuente",
+              Text(
+                S.of(context).editFont,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
 
@@ -218,8 +219,8 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
               const SizedBox(height: 16),
 
-              const Text(
-                "Tamaño",
+              Text(
+                S.of(context).labelSize,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
 
@@ -234,8 +235,8 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
               const SizedBox(height: 16),
 
-              const Text(
-                "Color",
+              Text(
+                S.of(context).editColor,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
 
@@ -256,14 +257,14 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const Text("Seleccionar color"),
+                  Text(S.of(context).selectTextColor),
                 ],
               ),
 
               const SizedBox(height: 24),
 
-              const Text(
-                "Vista previa",
+              Text(
+                S.of(context).actionPreview,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
 

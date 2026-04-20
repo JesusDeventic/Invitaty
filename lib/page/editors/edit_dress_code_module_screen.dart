@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:invitaty/providers/invitation_provider.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 class EditDressCodeModuleScreen extends StatefulWidget {
   final int index;
@@ -21,16 +22,18 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
   late TextEditingController titleController;
   late TextEditingController descriptionController;
 
-  String selectedStyle = "Formal";
+  // 🔥 CAMBIO: usar clave interna
+  String selectedStyle = "formal";
 
+  // 🔥 CAMBIO: lista con claves internas
   final List<String> styles = [
-    "Formal",
-    "Casual",
-    "Elegante",
-    "Temático",
-    "Disfraces",
-    "Traje de baño",
-    "Libre",
+    "formal",
+    "casual",
+    "elegant",
+    "thematic",
+    "costume",
+    "swimwear",
+    "free",
   ];
 
   @override
@@ -40,14 +43,15 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
     final data = widget.section["data"] ?? {};
 
     titleController = TextEditingController(
-      text: data["title"] ?? "Código de vestimenta",
+      text: data["title"] ?? S.of(context).moduleNameDressCode,
     );
 
     descriptionController = TextEditingController(
       text: data["description"] ?? "",
     );
 
-    selectedStyle = data["style"] ?? "Formal";
+    // 🔥 CAMBIO: valor por defecto interno
+    selectedStyle = (data["style"] ?? "formal").toLowerCase();
   }
 
   @override
@@ -55,6 +59,23 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
     titleController.dispose();
     descriptionController.dispose();
     super.dispose();
+  }
+
+  // 🔥 NUEVO: mapper de traducción
+  String _getStyleLabel(BuildContext context, String style) {
+    final s = S.of(context);
+
+    final map = {
+      "formal": s.dressCodeFormal,
+      "casual": s.dressCodeCasual,
+      "elegant": s.dressCodeElegant,
+      "thematic": s.dressCodeThematic,
+      "costume": s.dressCodeCostume,
+      "swimwear": s.dressCodeSwimwear,
+      "free": s.dressCodeFree,
+    };
+
+    return map[style] ?? style;
   }
 
   // 💾 SAVE
@@ -79,17 +100,17 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
     final confirm = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text("Eliminar dress code"),
-        content: const Text("¿Seguro que quieres eliminar este módulo?"),
+        title: Text(S.of(context).deleteDresscode),
+        content: Text(S.of(context).deleteModuleConfirmation),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text("Cancelar"),
+            child: Text(S.of(context).buttonCancel),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text("Eliminar"),
+            child: Text(S.of(context).messagesDelete),
           ),
         ],
       ),
@@ -105,7 +126,8 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
     final isSelected = selectedStyle == style;
 
     return ChoiceChip(
-      label: Text(style),
+      // 🔥 CAMBIO: usar traducción
+      label: Text(_getStyleLabel(context, style)),
       selected: isSelected,
       onSelected: (_) => setState(() => selectedStyle = style),
     );
@@ -115,7 +137,7 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Editar vestimenta"),
+        title: Text(S.of(context).editDresscode),
         actions: [
           IconButton(
             icon: const Icon(Icons.delete, color: Colors.red),
@@ -132,14 +154,14 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
             children: [
               TextField(
                 controller: titleController,
-                decoration: const InputDecoration(labelText: "Título"),
+                decoration: InputDecoration(labelText: S.of(context).editTitle),
                 onChanged: (_) => setState(() {}),
               ),
 
               const SizedBox(height: 20),
 
-              const Text(
-                "Tipo de vestimenta",
+              Text(
+                S.of(context).editDressType,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
 
@@ -155,8 +177,8 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
 
               TextField(
                 controller: descriptionController,
-                decoration: const InputDecoration(
-                  labelText: "Descripción (opcional)",
+                decoration: InputDecoration(
+                  labelText: S.of(context).editDescription,
                 ),
                 maxLines: 3,
                 onChanged: (_) => setState(() {}),
@@ -164,8 +186,8 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
 
               const SizedBox(height: 24),
 
-              const Text(
-                "Vista previa",
+              Text(
+                S.of(context).actionPreview,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
 
@@ -206,7 +228,8 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        selectedStyle,
+                        // 🔥 CAMBIO: usar traducción
+                        _getStyleLabel(context, selectedStyle),
                         style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 class AgendaModule extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -7,7 +8,7 @@ class AgendaModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = data["title"] ?? "Agenda";
+    final title = data["title"] ?? S.of(context).moduleNameAgenda;
     final items = List<Map<String, dynamic>>.from(data["items"] ?? []);
 
     return Container(

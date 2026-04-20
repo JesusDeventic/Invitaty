@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 class GalleryModule extends StatelessWidget {
   final Map<String, dynamic> data;
@@ -7,7 +8,7 @@ class GalleryModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = data["title"] ?? "Galería";
+    final title = data["title"] ?? S.of(context).moduleNameGallery;
     final images = List<String>.from(data["images"] ?? []);
 
     return Container(
@@ -28,7 +29,10 @@ class GalleryModule extends StatelessWidget {
 
           // 🖼️ GRID
           if (images.isEmpty)
-            const Text("No hay imágenes", style: TextStyle(color: Colors.grey))
+            Text(
+              S.of(context).editGalleryNoImages,
+              style: TextStyle(color: Colors.grey),
+            )
           else
             GridView.builder(
               shrinkWrap: true,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:invitaty/generated/l10n.dart';
 
 import 'package:invitaty/providers/invitation_provider.dart';
 
@@ -86,7 +87,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text("Seleccionar color texto"),
+          title: Text(S.of(context).selectTextColor),
           content: SingleChildScrollView(
             child: Column(
               children: [
@@ -102,7 +103,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text("Cancelar"),
+              child: Text(S.of(context).buttonCancel),
             ),
             ElevatedButton(
               onPressed: () {
@@ -111,7 +112,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
                 });
                 Navigator.pop(context);
               },
-              child: const Text("Aceptar"),
+              child: Text(S.of(context).buttonConfirm),
             ),
           ],
         );
@@ -129,7 +130,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Editar portada"),
+        title: Text(S.of(context).editCover),
         actions: [IconButton(icon: const Icon(Icons.save), onPressed: _save)],
       ),
       body: Padding(
@@ -140,18 +141,20 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
             children: [
               TextField(
                 controller: titleController,
-                decoration: const InputDecoration(labelText: "Título"),
+                decoration: InputDecoration(labelText: S.of(context).editTitle),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: subtitleController,
-                decoration: const InputDecoration(labelText: "Subtítulo"),
+                decoration: InputDecoration(
+                  labelText: S.of(context).editSubtitle,
+                ),
               ),
 
               const SizedBox(height: 24),
 
-              const Text(
-                "Fuente",
+              Text(
+                S.of(context).editFont,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
 
@@ -182,7 +185,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
 
               const SizedBox(height: 16),
 
-              const Text("Tamaño título"),
+              Text(S.of(context).sizeTitle),
               Slider(
                 value: titleSize,
                 min: 18,
@@ -191,7 +194,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
                 onChanged: (v) => setState(() => titleSize = v),
               ),
 
-              const Text("Tamaño subtítulo"),
+              Text(S.of(context).sizeSubtitle),
               Slider(
                 value: subtitleSize,
                 min: 14,
@@ -202,8 +205,8 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
 
               const SizedBox(height: 16),
 
-              const Text(
-                "Color",
+              Text(
+                S.of(context).editColor,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
 
@@ -224,7 +227,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const Text("Seleccionar color texto"),
+                  Text(S.of(context).selectTextColor),
                 ],
               ),
 
@@ -233,13 +236,13 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
               ElevatedButton.icon(
                 onPressed: _setFakeImage,
                 icon: const Icon(Icons.image),
-                label: const Text("Seleccionar imagen"),
+                label: Text(S.of(context).selectImage),
               ),
 
               const SizedBox(height: 24),
 
-              const Text(
-                "Vista previa",
+              Text(
+                S.of(context).actionPreview,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
 
