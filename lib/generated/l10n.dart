@@ -2698,6 +2698,141 @@ class S {
       args: [],
     );
   }
+
+  /// `Campo obligatorio`
+  String get fieldMandatory {
+    return Intl.message(
+      'Campo obligatorio',
+      name: 'fieldMandatory',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirmación enviada`
+  String get sentConfirmation {
+    return Intl.message(
+      'Confirmación enviada',
+      name: 'sentConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirmación de asistencia`
+  String get attendanceConfirmation {
+    return Intl.message(
+      'Confirmación de asistencia',
+      name: 'attendanceConfirmation',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Confirmar asistencia`
+  String get agreeAttendance {
+    return Intl.message(
+      'Confirmar asistencia',
+      name: 'agreeAttendance',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Eliminar formulario de asistencia`
+  String get deleteRsvp {
+    return Intl.message(
+      'Eliminar formulario de asistencia',
+      name: 'deleteRsvp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Editar formulario de asistencia`
+  String get editRsvp {
+    return Intl.message(
+      'Editar formulario de asistencia',
+      name: 'editRsvp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Nombre`
+  String get labelName {
+    return Intl.message('Nombre', name: 'labelName', desc: '', args: []);
+  }
+
+  /// `Invitados`
+  String get labelGuests {
+    return Intl.message('Invitados', name: 'labelGuests', desc: '', args: []);
+  }
+
+  /// `Notas adicionales`
+  String get additionalNotes {
+    return Intl.message(
+      'Notas adicionales',
+      name: 'additionalNotes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Editar campo`
+  String get editField {
+    return Intl.message('Editar campo', name: 'editField', desc: '', args: []);
+  }
+
+  /// `Nombre del campo`
+  String get fieldName {
+    return Intl.message(
+      'Nombre del campo',
+      name: 'fieldName',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Guardar`
+  String get save {
+    return Intl.message('Guardar', name: 'save', desc: '', args: []);
+  }
+
+  /// `Obligatorio`
+  String get labelRequired {
+    return Intl.message(
+      'Obligatorio',
+      name: 'labelRequired',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Opcional`
+  String get labelOptional {
+    return Intl.message('Opcional', name: 'labelOptional', desc: '', args: []);
+  }
+
+  /// `Añade los campos que quieras que aparezcan en el formulario`
+  String get addFieldsRsvp {
+    return Intl.message(
+      'Añade los campos que quieras que aparezcan en el formulario',
+      name: 'addFieldsRsvp',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Campos añadidos`
+  String get fieldsAdded {
+    return Intl.message(
+      'Campos añadidos',
+      name: 'fieldsAdded',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

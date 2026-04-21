@@ -21,6 +21,7 @@ import 'package:invitaty/page/editors/edit_cover_module_screen.dart';
 import 'package:invitaty/page/editors/edit_gallery_module_screen.dart';
 import 'package:invitaty/page/editors/edit_music_module_screen.dart';
 import 'package:invitaty/page/editors/edit_video_module_screen.dart';
+import 'package:invitaty/page/editors/edit_rsvp_module_screen.dart';
 import 'package:invitaty/page/templates/select_template_screen.dart';
 
 import 'app_routes.dart';
@@ -173,6 +174,35 @@ GoRouter createAppRouter(GlobalKey<NavigatorState> navigatorKey) {
             index: extra["index"],
             section: extra["section"],
           );
+        },
+      ),
+      GoRoute(
+        path: '/edit-rsvp',
+        builder: (context, state) {
+          final extra = state.extra;
+          if (extra is! Map) {
+            return Scaffold(
+              appBar: AppBar(title: Text(S.of(context).editRsvp)),
+              body: Center(child: Text(S.of(context).messageGeneralError)),
+            );
+          }
+
+          final indexAny = extra["index"];
+          final sectionAny = extra["section"];
+
+          final index = indexAny is int ? indexAny : int.tryParse("$indexAny");
+          final section = sectionAny is Map
+              ? Map<String, dynamic>.from(sectionAny)
+              : <String, dynamic>{};
+
+          if (index == null) {
+            return Scaffold(
+              appBar: AppBar(title: Text(S.of(context).editRsvp)),
+              body: Center(child: Text(S.of(context).messageGeneralError)),
+            );
+          }
+
+          return EditRsvpModuleScreen(index: index, section: section);
         },
       ),
       GoRoute(

@@ -312,5 +312,21 @@
     "addVideo": "Añadir vídeo",
     "actionPlayVideo": "Ver vídeo",
     "errorVideoPlay": "No se pudo reproducir el vídeo",
-    "dateNotSet": "Fecha no definida"
+    "dateNotSet": "Fecha no definida",
+    "fieldMandatory": "Campo obligatorio",
+    "sentConfirmation": "Confirmación enviada",
+    "attendanceConfirmation": "Confirmación de asistencia",
+    "agreeAttendance": "Confirmar asistencia",
+    "deleteRsvp": "Eliminar formulario de asistencia",
+    "editRsvp": "Editar formulario de asistencia",
+    "labelName": "Nombre",
+    "labelGuests": "Invitados",
+    "additionalNotes": "Notas adicionales",
+    "editField": "Editar campo",
+    "fieldName": "Nombre del campo",
+    "save": "Guardar",
+    "labelRequired": "Obligatorio",
+    "labelOptional": "Opcional",
+    "addFieldsRsvp": "Añade los campos que quieras que aparezcan en el formulario",
+    "fieldsAdded": "Campos añadidos"
 }

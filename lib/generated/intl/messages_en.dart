@@ -42,9 +42,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "actionPreview": MessageLookupByLibrary.simpleMessage("Vista previa"),
     "actionYes": MessageLookupByLibrary.simpleMessage("Yes"),
     "addEventAgenda": MessageLookupByLibrary.simpleMessage("Añadir evento"),
+    "addFieldsRsvp": MessageLookupByLibrary.simpleMessage(
+      "Añade los campos que quieras que aparezcan en el formulario",
+    ),
     "addModule": MessageLookupByLibrary.simpleMessage("Añadir módulo"),
     "addVideo": MessageLookupByLibrary.simpleMessage("Añadir vídeo"),
+    "additionalNotes": MessageLookupByLibrary.simpleMessage(
+      "Notas adicionales",
+    ),
     "agendaEventNumber": m3,
+    "agreeAttendance": MessageLookupByLibrary.simpleMessage(
+      "Confirmar asistencia",
+    ),
     "andLabel": MessageLookupByLibrary.simpleMessage("and"),
     "appName": MessageLookupByLibrary.simpleMessage("Invitaty"),
     "appVersion10Code": MessageLookupByLibrary.simpleMessage("v1.0.0"),
@@ -53,6 +62,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "appVersionChangeLogTitle": MessageLookupByLibrary.simpleMessage(
       "Changelog",
+    ),
+    "attendanceConfirmation": MessageLookupByLibrary.simpleMessage(
+      "Confirmación de asistencia",
     ),
     "authRequiredFunctionAction": MessageLookupByLibrary.simpleMessage("GO"),
     "authRequiredFunctionMessage": MessageLookupByLibrary.simpleMessage(
@@ -116,6 +128,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer",
     ),
     "deleteMusic": MessageLookupByLibrary.simpleMessage("Eliminar música"),
+    "deleteRsvp": MessageLookupByLibrary.simpleMessage(
+      "Eliminar formulario de asistencia",
+    ),
     "deleteText": MessageLookupByLibrary.simpleMessage("Eliminar texto"),
     "deleteVideo": MessageLookupByLibrary.simpleMessage("Eliminar vídeos"),
     "dialogCloseAppContent": MessageLookupByLibrary.simpleMessage(
@@ -168,6 +183,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "editDresscode": MessageLookupByLibrary.simpleMessage(
       "Editar código de vestimenta",
     ),
+    "editField": MessageLookupByLibrary.simpleMessage("Editar campo"),
     "editFont": MessageLookupByLibrary.simpleMessage("Fuente"),
     "editGallery": MessageLookupByLibrary.simpleMessage("Editar galería"),
     "editGalleryInstructions": MessageLookupByLibrary.simpleMessage(
@@ -180,6 +196,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "editGifts": MessageLookupByLibrary.simpleMessage("Editar regalos"),
     "editLocation": MessageLookupByLibrary.simpleMessage("Editar ubicación"),
     "editMusic": MessageLookupByLibrary.simpleMessage("Editar música"),
+    "editRsvp": MessageLookupByLibrary.simpleMessage(
+      "Editar formulario de asistencia",
+    ),
     "editSubtitle": MessageLookupByLibrary.simpleMessage("Subtítulo"),
     "editText": MessageLookupByLibrary.simpleMessage("Editar texto"),
     "editTime": MessageLookupByLibrary.simpleMessage("Hora (ej: 18:00)"),
@@ -267,9 +286,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "faq3Question": MessageLookupByLibrary.simpleMessage(
       "How do I delete my account?",
     ),
+    "fieldMandatory": MessageLookupByLibrary.simpleMessage("Campo obligatorio"),
+    "fieldName": MessageLookupByLibrary.simpleMessage("Nombre del campo"),
     "fieldRequired": MessageLookupByLibrary.simpleMessage(
       "This field is required",
     ),
+    "fieldsAdded": MessageLookupByLibrary.simpleMessage("Campos añadidos"),
     "forgotPassword": MessageLookupByLibrary.simpleMessage(
       "Forgot your password?",
     ),
@@ -302,9 +324,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "keepSession": MessageLookupByLibrary.simpleMessage("Keep me signed in"),
     "labelBizum": MessageLookupByLibrary.simpleMessage("Bizum"),
+    "labelGuests": MessageLookupByLibrary.simpleMessage("Invitados"),
     "labelIban": MessageLookupByLibrary.simpleMessage("IBAN"),
     "labelLink": MessageLookupByLibrary.simpleMessage("Enlace"),
+    "labelName": MessageLookupByLibrary.simpleMessage("Nombre"),
+    "labelOptional": MessageLookupByLibrary.simpleMessage("Opcional"),
     "labelOptions": MessageLookupByLibrary.simpleMessage("Opciones"),
+    "labelRequired": MessageLookupByLibrary.simpleMessage("Obligatorio"),
     "labelSize": MessageLookupByLibrary.simpleMessage("Tamaño"),
     "language": MessageLookupByLibrary.simpleMessage("Language"),
     "languageArabic": MessageLookupByLibrary.simpleMessage("Arabic"),
@@ -493,6 +519,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Remove country",
     ),
     "retryPublicProfile": MessageLookupByLibrary.simpleMessage("Retry"),
+    "save": MessageLookupByLibrary.simpleMessage("Guardar"),
     "selectImage": MessageLookupByLibrary.simpleMessage("Seleccionar imagen"),
     "selectTemplateTitle": MessageLookupByLibrary.simpleMessage(
       "Elije una plantilla",
@@ -502,6 +529,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "sendCode": MessageLookupByLibrary.simpleMessage("Send code"),
     "sendMessageTooltip": MessageLookupByLibrary.simpleMessage("Send message"),
+    "sentConfirmation": MessageLookupByLibrary.simpleMessage(
+      "Confirmación enviada",
+    ),
     "settingsLabel": MessageLookupByLibrary.simpleMessage("Settings"),
     "shareOption": MessageLookupByLibrary.simpleMessage("Share"),
     "shareTooltip": MessageLookupByLibrary.simpleMessage("Share"),
