@@ -18,13 +18,30 @@ class EditRsvpModuleScreen extends StatefulWidget {
 }
 
 class _EditRsvpModuleScreenState extends State<EditRsvpModuleScreen> {
+  /// 📝 Controllers principales del formulario del editor (título y descripción del módulo RSVP)
   late TextEditingController titleController;
   late TextEditingController descriptionController;
 
+  /// 📦 Lista dinámica de campos del formulario (estructura editable del RSVP)
   List<Map<String, dynamic>> fields = [];
+
+  /// 🌍 Flag para inicializar valores por defecto solo una vez tras cargar localización
   bool _didInitLocalizedDefaults = false;
 
-  // ✅ FIX: ahora el catálogo depende de context
+  // ============================
+  // 👁️ PREVIEW SYSTEM (NUEVO)
+  // ============================
+
+  /// 🧪 Form key para validar el formulario de preview (simulación real del usuario final)
+  final _previewFormKey = GlobalKey<FormState>();
+
+  /// 🧠 Controllers del preview (solo para simulación visual del formulario final)
+  final Map<String, TextEditingController> previewControllers = {};
+
+  /// 🔁 Valores reactivos (especialmente para switches)
+  final Map<String, dynamic> previewValues = {};
+
+  /// 📋 Catálogo de campos disponibles para añadir al RSVP
   List<Map<String, dynamic>> _getFieldCatalog(BuildContext context) {
     final s = S.of(context);
 
@@ -61,15 +78,20 @@ class _EditRsvpModuleScreenState extends State<EditRsvpModuleScreen> {
   void initState() {
     super.initState();
 
+    /// 📥 Cargamos datos existentes del módulo desde el provider
     final data = widget.section["data"] ?? {};
 
-    // Don't depend on inherited widgets (like Localizations) in initState.
-    titleController = TextEditingController(text: (data["title"] ?? "").toString());
+    /// 📝 Inicialización de título del módulo
+    titleController = TextEditingController(
+      text: (data["title"] ?? "").toString(),
+    );
 
+    /// 📝 Inicialización de descripción del módulo
     descriptionController = TextEditingController(
       text: (data["description"] ?? "").toString(),
     );
 
+    /// 📦 Carga de campos previamente configurados (si existen)
     final rawFields = data["fields"];
     if (rawFields is List) {
       fields = rawFields
@@ -84,10 +106,12 @@ class _EditRsvpModuleScreenState extends State<EditRsvpModuleScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
+    /// 🌍 Evita re-inicialización múltiple tras cambios de idioma
     if (_didInitLocalizedDefaults) return;
     _didInitLocalizedDefaults = true;
 
-    // If no title was provided, set a localized default once Localizations is ready.
+    /// 🧠 Valor por defecto del título si no existe
     if (titleController.text.trim().isEmpty) {
       titleController.text = S.of(context).attendanceConfirmation;
     }
@@ -95,12 +119,38 @@ class _EditRsvpModuleScreenState extends State<EditRsvpModuleScreen> {
 
   @override
   void dispose() {
+    /// 🧹 Liberación de memoria de controllers principales
     titleController.dispose();
     descriptionController.dispose();
     super.dispose();
   }
 
-  // ➕ añadir campo
+  // ============================
+  // 👁️ PREVIEW LOGIC
+  // ============================
+
+  /// 🔄 Inicializa controllers del preview según los campos actuales del formulario
+  /// (esto simula cómo se comportará el formulario en la vista final del usuario)
+  void _initPreviewControllers() {
+    previewControllers.clear();
+    previewValues.clear();
+
+    for (final field in fields) {
+      final key = field["key"] ?? "";
+
+      if (field["type"] == "switch") {
+        previewValues[key] = false;
+      } else {
+        previewControllers[key] = TextEditingController();
+      }
+    }
+  }
+
+  // ============================
+  // ➕ CRUD CAMPOS
+  // ============================
+
+  /// ➕ Añadir nuevo campo al formulario RSVP
   void _addField(Map<String, dynamic> field) {
     setState(() {
       fields.add({
@@ -108,53 +158,101 @@ class _EditRsvpModuleScreenState extends State<EditRsvpModuleScreen> {
         "type": field["type"],
         "label": field["label"],
         "required": false,
+        "placeholder": "",
       });
     });
   }
 
-  // ❌ eliminar campo
+  /// ❌ Eliminar campo del formulario
   void _removeField(int index) {
     setState(() {
       fields.removeAt(index);
     });
   }
 
-  // ✏️ EDITAR CAMPO
+  /// ✏️ Editar configuración de un campo (label, placeholder, required)
   void _editField(int index) {
     final field = fields[index];
 
-    final controller = TextEditingController(text: field["label"]);
+    final labelController = TextEditingController(text: field["label"] ?? "");
+    final placeholderController = TextEditingController(
+      text: field["placeholder"] ?? "",
+    );
+
+    bool isRequired = field["required"] ?? false;
 
     showDialog(
       context: context,
       builder: (_) {
-        return AlertDialog(
-          title: Text(S.of(context).editField),
-          content: TextField(
-            controller: controller,
-            decoration: InputDecoration(labelText: S.of(context).fieldName),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(S.of(context).buttonCancel),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() {
-                  fields[index]["label"] = controller.text;
-                });
-                Navigator.pop(context);
-              },
-              child: Text(S.of(context).save),
-            ),
-          ],
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return AlertDialog(
+              title: Text(S.of(context).editField),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    /// 🏷️ Nombre del campo
+                    TextField(
+                      controller: labelController,
+                      decoration: InputDecoration(
+                        labelText: S.of(context).fieldName,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    /// 📝 Placeholder del campo
+                    TextField(
+                      controller: placeholderController,
+                      decoration: InputDecoration(
+                        labelText: S.of(context).placeholderText,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+
+                    /// 🔒 Campo obligatorio
+                    SwitchListTile(
+                      value: isRequired,
+                      onChanged: (value) {
+                        setModalState(() {
+                          isRequired = value;
+                        });
+                      },
+                      title: Text(S.of(context).fieldMandatory),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(S.of(context).buttonCancel),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    setState(() {
+                      fields[index]["label"] = labelController.text;
+                      fields[index]["placeholder"] = placeholderController.text;
+                      fields[index]["required"] = isRequired;
+                    });
+
+                    Navigator.pop(context);
+                  },
+                  child: Text(S.of(context).labelSave),
+                ),
+              ],
+            );
+          },
         );
       },
     );
   }
 
-  // 💾 guardar
+  // ============================
+  // 💾 SAVE + DELETE
+  // ============================
+
+  /// 💾 Guardar cambios en provider (persistencia del módulo RSVP)
   void _save() {
     final provider = context.read<InvitationProvider>();
 
@@ -171,7 +269,7 @@ class _EditRsvpModuleScreenState extends State<EditRsvpModuleScreen> {
     Navigator.pop(context);
   }
 
-  // 🗑 eliminar módulo
+  /// 🗑️ Eliminar módulo completo RSVP
   Future<void> _deleteModule() async {
     final provider = context.read<InvitationProvider>();
 
@@ -203,57 +301,79 @@ class _EditRsvpModuleScreenState extends State<EditRsvpModuleScreen> {
     }
   }
 
-  // 🧩 preview campo
+  // ============================
+  // 👁️ PREVIEW FIELD BUILDER
+  // ============================
+
+  /// 🧩 Renderiza cada campo en modo preview (simulación del formulario final)
   Widget _buildPreviewField(Map<String, dynamic> field) {
-    final index = fields.indexOf(field);
+    final type = field["type"];
+    final key = field["key"] ?? "";
+    final label = field["label"] ?? "";
+    final placeholder = field["placeholder"] ?? "";
+    final required = field["required"] ?? false;
 
-    return Card(
-      child: ListTile(
-        leading: Icon(_getIcon(field["type"] ?? "")),
-        title: Text(field["label"] ?? ""),
-        subtitle: Text(
-          field["required"] == true
-              ? S.of(context).fieldRequired
-              : S.of(context).labelOptional,
-        ),
-        onTap: () => _editField(index),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IconButton(
-              icon: const Icon(Icons.edit),
-              onPressed: () => _editField(index),
-            ),
-            IconButton(
-              icon: const Icon(Icons.delete),
-              onPressed: () => _removeField(index),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  IconData _getIcon(String type) {
     switch (type) {
       case "text":
-        return Icons.text_fields;
       case "email":
-        return Icons.email;
       case "number":
-        return Icons.onetwothree;
+        return TextFormField(
+          controller: previewControllers[key],
+          decoration: InputDecoration(labelText: label, hintText: placeholder),
+          keyboardType: type == "email"
+              ? TextInputType.emailAddress
+              : type == "number"
+              ? TextInputType.number
+              : TextInputType.text,
+          validator: (value) {
+            if (required && (value == null || value.trim().isEmpty)) {
+              return "Campo obligatorio";
+            }
+            if (type == "email" &&
+                value != null &&
+                value.isNotEmpty &&
+                !value.contains("@")) {
+              return "Email inválido";
+            }
+            return null;
+          },
+        );
+
       case "textarea":
-        return Icons.notes;
+        return TextFormField(
+          controller: previewControllers[key],
+          maxLines: 3,
+          decoration: InputDecoration(labelText: label, hintText: placeholder),
+          validator: (value) {
+            if (required && (value == null || value.trim().isEmpty)) {
+              return "Campo obligatorio";
+            }
+            return null;
+          },
+        );
+
       case "switch":
-        return Icons.toggle_on;
+        return SwitchListTile(
+          title: Text(label),
+          value: previewValues[key] ?? false,
+          onChanged: (value) {
+            setState(() {
+              previewValues[key] = value;
+            });
+          },
+        );
+
       default:
-        return Icons.help;
+        return const SizedBox.shrink();
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final fieldCatalog = _getFieldCatalog(context); // ✅ aquí se usa
+    final fieldCatalog = _getFieldCatalog(context);
+
+    /// 🔄 Re-inicializa preview cada build (temporalmente válido para prototipo)
+    _initPreviewControllers();
 
     return Scaffold(
       appBar: AppBar(
@@ -271,6 +391,7 @@ class _EditRsvpModuleScreenState extends State<EditRsvpModuleScreen> {
         padding: const EdgeInsets.all(16),
         child: ListView(
           children: [
+            /// 📝 TÍTULO DEL MÓDULO
             TextField(
               controller: titleController,
               decoration: InputDecoration(labelText: S.of(context).editTitle),
@@ -278,6 +399,7 @@ class _EditRsvpModuleScreenState extends State<EditRsvpModuleScreen> {
 
             const SizedBox(height: 12),
 
+            /// 📝 DESCRIPCIÓN DEL MÓDULO
             TextField(
               controller: descriptionController,
               decoration: InputDecoration(
@@ -288,6 +410,7 @@ class _EditRsvpModuleScreenState extends State<EditRsvpModuleScreen> {
 
             const SizedBox(height: 20),
 
+            /// ➕ SECCIÓN: añadir campos al formulario
             Text(
               S.of(context).addFieldsRsvp,
               style: const TextStyle(fontWeight: FontWeight.bold),
@@ -295,6 +418,7 @@ class _EditRsvpModuleScreenState extends State<EditRsvpModuleScreen> {
 
             const SizedBox(height: 10),
 
+            /// 🧩 catálogo de campos disponibles
             Wrap(
               spacing: 8,
               children: fieldCatalog.map((field) {
@@ -308,6 +432,7 @@ class _EditRsvpModuleScreenState extends State<EditRsvpModuleScreen> {
 
             const SizedBox(height: 20),
 
+            /// 📦 campos ya añadidos
             Text(
               S.of(context).fieldsAdded,
               style: const TextStyle(fontWeight: FontWeight.bold),
@@ -315,10 +440,123 @@ class _EditRsvpModuleScreenState extends State<EditRsvpModuleScreen> {
 
             const SizedBox(height: 10),
 
-            ...fields.map(_buildPreviewField),
+            ...fields.map((field) {
+              final index = fields.indexOf(field);
+
+              return Card(
+                child: ListTile(
+                  leading: Icon(_getIcon(field["type"] ?? "")),
+                  title: Text(field["label"] ?? ""),
+                  onTap: () => _editField(index),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: () => _editField(index),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete),
+                        onPressed: () => _removeField(index),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+
+            const SizedBox(height: 20),
+
+            /// 👁️ PREVIEW FINAL DEL FORMULARIO
+            Text(
+              "Preview",
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+
+            const SizedBox(height: 10),
+
+            Form(
+              key: _previewFormKey,
+              child: Card(
+                elevation: 2,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      /// 🧠 preview título dinámico
+                      Text(
+                        titleController.text,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+
+                      /// 🧠 preview descripción dinámica
+                      if (descriptionController.text.isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Text(
+                          descriptionController.text,
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+
+                      const SizedBox(height: 16),
+
+                      /// 🧩 preview campos dinámicos
+                      ...fields.map(
+                        (f) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: _buildPreviewField(f),
+                        ),
+                      ),
+
+                      const SizedBox(height: 10),
+
+                      /// 📤 botón simulación envío
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (!_previewFormKey.currentState!.validate())
+                              return;
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Formulario válido"),
+                              ),
+                            );
+                          },
+                          child: const Text("Enviar"),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  /// 🎯 helper iconos por tipo de campo
+  IconData _getIcon(String type) {
+    switch (type) {
+      case "text":
+        return Icons.text_fields;
+      case "email":
+        return Icons.email;
+      case "number":
+        return Icons.onetwothree;
+      case "textarea":
+        return Icons.notes;
+      case "switch":
+        return Icons.toggle_on;
+      default:
+        return Icons.help;
+    }
   }
 }

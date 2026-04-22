@@ -8,7 +8,11 @@ class AgendaModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = data["title"] ?? S.of(context).moduleNameAgenda;
+    // 🧠 TITULO DEL MÓDULO (fallback internacionalizado)
+    final title = (data["title"] ?? S.of(context).moduleNameAgenda).toString();
+
+    // 📦 ITEMS DEL BACKEND (lista de eventos)
+    // Cada item: { time, title, description }
     final items = List<Map<String, dynamic>>.from(data["items"] ?? []);
 
     return Container(
@@ -18,10 +22,11 @@ class AgendaModule extends StatelessWidget {
         color: Colors.grey.shade50,
         borderRadius: BorderRadius.circular(12),
       ),
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // 🔹 TÍTULO
+          // 🧾 TITULO PRINCIPAL DEL MÓDULO
           Text(
             title,
             textAlign: TextAlign.center,
@@ -30,13 +35,15 @@ class AgendaModule extends StatelessWidget {
 
           const SizedBox(height: 24),
 
-          // 🔥 CONTENEDOR CENTRADO VISUALMENTE
+          // 📍 CONTENEDOR CENTRADO (limita ancho para legibilidad)
           Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 500),
+
+              // 🧭 TIMELINE VISUAL
               child: Stack(
                 children: [
-                  // 🔴 LÍNEA VERTICAL GLOBAL
+                  // 🧵 línea vertical de la agenda
                   Positioned(
                     left: 20,
                     top: 0,
@@ -48,16 +55,19 @@ class AgendaModule extends StatelessWidget {
                     children: List.generate(items.length, (index) {
                       final item = items[index];
 
-                      final time = item["time"] ?? "";
-                      final itemTitle = item["title"] ?? "";
-                      final description = item["description"] ?? "";
+                      // 🧠 CAMPOS DEL EVENTO (backend-ready)
+                      final time = (item["time"] ?? "").toString();
+                      final itemTitle = (item["title"] ?? "").toString();
+                      final description = (item["description"] ?? "")
+                          .toString();
 
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 24),
+
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // 🔴 PUNTO
+                            // 🔴 marcador del evento
                             SizedBox(
                               width: 40,
                               child: Center(
@@ -74,7 +84,7 @@ class AgendaModule extends StatelessWidget {
 
                             const SizedBox(width: 12),
 
-                            // 🔹 CONTENIDO
+                            // 📝 contenido del evento
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,

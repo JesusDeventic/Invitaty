@@ -328,5 +328,7 @@
     "labelRequired": "Obligatorio",
     "labelOptional": "Opcional",
     "addFieldsRsvp": "Añade los campos que quieras que aparezcan en el formulario",
-    "fieldsAdded": "Campos añadidos"
+    "fieldsAdded": "Campos añadidos al formulario",
+    "labelSave": "Guardar",
+    "placeholderText": "Texto de ayuda (opcional)"
 }

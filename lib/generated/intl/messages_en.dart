@@ -291,7 +291,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "fieldRequired": MessageLookupByLibrary.simpleMessage(
       "This field is required",
     ),
-    "fieldsAdded": MessageLookupByLibrary.simpleMessage("Campos añadidos"),
+    "fieldsAdded": MessageLookupByLibrary.simpleMessage(
+      "Campos añadidos al formulario",
+    ),
     "forgotPassword": MessageLookupByLibrary.simpleMessage(
       "Forgot your password?",
     ),
@@ -331,6 +333,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "labelOptional": MessageLookupByLibrary.simpleMessage("Opcional"),
     "labelOptions": MessageLookupByLibrary.simpleMessage("Opciones"),
     "labelRequired": MessageLookupByLibrary.simpleMessage("Obligatorio"),
+    "labelSave": MessageLookupByLibrary.simpleMessage("Guardar"),
     "labelSize": MessageLookupByLibrary.simpleMessage("Tamaño"),
     "language": MessageLookupByLibrary.simpleMessage("Language"),
     "languageArabic": MessageLookupByLibrary.simpleMessage("Arabic"),
@@ -486,6 +489,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "passwordMismatch": MessageLookupByLibrary.simpleMessage(
       "Passwords do not match",
+    ),
+    "placeholderText": MessageLookupByLibrary.simpleMessage(
+      "Texto de ayuda (opcional)",
     ),
     "privacyPoliciesLabel": MessageLookupByLibrary.simpleMessage(
       "Privacy policy",

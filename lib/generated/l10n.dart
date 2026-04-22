@@ -2824,11 +2824,26 @@ class S {
     );
   }
 
-  /// `Campos añadidos`
+  /// `Campos añadidos al formulario`
   String get fieldsAdded {
     return Intl.message(
-      'Campos añadidos',
+      'Campos añadidos al formulario',
       name: 'fieldsAdded',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Guardar`
+  String get labelSave {
+    return Intl.message('Guardar', name: 'labelSave', desc: '', args: []);
+  }
+
+  /// `Texto de ayuda (opcional)`
+  String get placeholderText {
+    return Intl.message(
+      'Texto de ayuda (opcional)',
+      name: 'placeholderText',
       desc: '',
       args: [],
     );

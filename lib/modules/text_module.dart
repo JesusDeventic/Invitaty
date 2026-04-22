@@ -7,19 +7,24 @@ class TextModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = data["title"] ?? "";
-    final body = data["body"] ?? "";
+    // 🧠 CONTENIDO PRINCIPAL (si no viene → vacío)
+    final title = (data["title"] ?? "").toString();
+    final body = (data["body"] ?? "").toString();
 
-    final font = data["font"] ?? "Poppins";
+    // 🎨 CONFIGURACIÓN DE ESTILO (backend-ready)
+    final font = (data["font"] ?? "Poppins").toString();
     final fontSize = (data["fontSize"] ?? 16).toDouble();
 
+    // 🎨 color seguro (string HEX desde backend)
     final color = _parseColor(data["color"]) ?? Colors.black;
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          // 🔹 TÍTULO (opcional)
           if (title.isNotEmpty)
             Text(
               title,
@@ -34,6 +39,7 @@ class TextModule extends StatelessWidget {
 
           const SizedBox(height: 8),
 
+          // 🔹 CUERPO (opcional)
           if (body.isNotEmpty)
             Text(
               body,
@@ -49,24 +55,25 @@ class TextModule extends StatelessWidget {
     );
   }
 
-  /// 🔧 Convierte "#RRGGBB" o "0xFFRRGGBB" a Color seguro
+  /// 🎨 Convierte valores del backend a Color seguro
+  /// Soporta:
+  /// - "#RRGGBB"
+  /// - "0xFFRRGGBB"
+  /// - "RRGGBB"
   Color? _parseColor(dynamic value) {
     if (value == null) return null;
 
     try {
       String hex = value.toString().trim();
 
-      // formato #RRGGBB
       if (hex.startsWith("#")) {
         hex = hex.substring(1);
       }
 
-      // si viene solo RRGGBB
       if (hex.length == 6) {
-        hex = "FF$hex"; // alpha completo
+        hex = "FF$hex";
       }
 
-      // si viene 0xFF...
       if (hex.startsWith("0x")) {
         hex = hex.substring(2);
       }

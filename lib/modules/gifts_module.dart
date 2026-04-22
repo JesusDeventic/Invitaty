@@ -3,6 +3,13 @@ import 'package:flutter/services.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:invitaty/generated/l10n.dart';
 
+/// 📦 GIFT MODULE
+/// Muestra la sección de regalos en la invitación.
+/// Soporta:
+/// - Mensaje personalizado
+/// - IBAN / Bizum con copia
+/// - Enlace externo
+/// - Lista de ideas de regalo
 class GiftsModule extends StatelessWidget {
   final Map<String, dynamic> data;
 
@@ -10,11 +17,16 @@ class GiftsModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = data["title"] ?? S.of(context).moduleNameGifts;
-    final message = data["message"] ?? "";
+    /// 🧠 DATOS PRINCIPALES DEL MÓDULO
+    /// Se leen desde el JSON del backend/local storage
+    final title = (data["title"] ?? S.of(context).moduleNameGifts).toString();
+    final message = (data["message"] ?? "").toString();
     final iban = data["iban"];
     final bizum = data["bizum"];
     final link = data["link"];
+
+    /// 📋 LISTA DE IDEAS DE REGALO
+    /// Siempre se fuerza a List<String> aunque venga vacío/null
     final items = List<String>.from(data["items"] ?? []);
 
     return Container(
@@ -28,13 +40,16 @@ class GiftsModule extends StatelessWidget {
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 500),
+
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              /// 🎁 ICONO PRINCIPAL DEL MÓDULO
               const Icon(Icons.card_giftcard, size: 32),
 
               const SizedBox(height: 8),
 
+              /// 🏷️ TÍTULO DEL MÓDULO
               Text(
                 title,
                 textAlign: TextAlign.center,
@@ -44,6 +59,7 @@ class GiftsModule extends StatelessWidget {
                 ),
               ),
 
+              /// 💬 MENSAJE OPCIONAL
               if (message.isNotEmpty) ...[
                 const SizedBox(height: 12),
                 Text(message, textAlign: TextAlign.center),
@@ -51,17 +67,29 @@ class GiftsModule extends StatelessWidget {
 
               const SizedBox(height: 16),
 
+              /// 🏦 IBAN (SI EXISTE)
               if (iban != null && iban.toString().isNotEmpty)
-                _buildCopyBox(context, S.of(context).labelIban, iban),
+                _buildCopyBox(
+                  context,
+                  S.of(context).labelIban,
+                  iban.toString(),
+                ),
 
+              /// 📱 BIZUM (SI EXISTE)
               if (bizum != null && bizum.toString().isNotEmpty)
-                _buildCopyBox(context, S.of(context).labelBizum, bizum),
+                _buildCopyBox(
+                  context,
+                  S.of(context).labelBizum,
+                  bizum.toString(),
+                ),
 
+              /// 🔗 LINK EXTERNO
+              /// Abre navegador externo con url_launcher
               if (link != null && link.toString().isNotEmpty) ...[
                 const SizedBox(height: 12),
                 ElevatedButton.icon(
                   onPressed: () async {
-                    final uri = Uri.parse(link);
+                    final uri = Uri.parse(link.toString());
                     await launchUrl(uri);
                   },
                   icon: const Icon(Icons.open_in_new),
@@ -69,12 +97,13 @@ class GiftsModule extends StatelessWidget {
                 ),
               ],
 
+              /// 🎁 LISTA DE IDEAS DE REGALO
               if (items.isNotEmpty) ...[
                 const SizedBox(height: 16),
 
                 Text(
                   S.of(context).editGiftIdeas,
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
                 ),
 
@@ -82,6 +111,7 @@ class GiftsModule extends StatelessWidget {
 
                 Column(
                   children: items
+                      .where((e) => e.trim().isNotEmpty)
                       .map(
                         (item) => Padding(
                           padding: const EdgeInsets.symmetric(vertical: 2),
@@ -98,6 +128,9 @@ class GiftsModule extends StatelessWidget {
     );
   }
 
+  /// 📋 WIDGET AUXILIAR: BLOQUE COPIABLE
+  /// Se usa para IBAN y Bizum
+  /// Incluye botón de copiar al portapapeles
   Widget _buildCopyBox(BuildContext context, String label, String value) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
@@ -107,10 +140,14 @@ class GiftsModule extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         border: Border.all(color: Colors.grey.shade300),
       ),
+
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          /// Texto centrado con etiqueta + valor
           Expanded(child: Text("$label: $value", textAlign: TextAlign.center)),
+
+          /// 📋 COPIAR AL PORTAPAPELES
           IconButton(
             icon: const Icon(Icons.copy),
             onPressed: () {

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:invitaty/generated/l10n.dart';
-
 import 'package:invitaty/providers/invitation_provider.dart';
 
 class EditTextModuleScreen extends StatefulWidget {
@@ -20,13 +19,16 @@ class EditTextModuleScreen extends StatefulWidget {
 }
 
 class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
+  // 🧠 CONTENIDO
   late TextEditingController titleController;
   late TextEditingController bodyController;
 
+  // 🎨 CONFIGURACIÓN VISUAL
   String selectedFont = "Poppins";
   double fontSize = 18;
   Color textColor = Colors.black;
 
+  // 📦 CATÁLOGO DE FUENTES (frontend-driven)
   final List<String> availableFonts = [
     "Poppins",
     "Playfair",
@@ -42,29 +44,33 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
     final data = widget.section["data"] ?? {};
 
-    titleController = TextEditingController(text: data["title"] ?? "");
-    bodyController = TextEditingController(text: data["body"] ?? "");
+    // 🧠 inicialización desde backend
+    titleController = TextEditingController(
+      text: (data["title"] ?? "").toString(),
+    );
+    bodyController = TextEditingController(
+      text: (data["body"] ?? "").toString(),
+    );
 
-    selectedFont = data["font"] ?? "Poppins";
+    selectedFont = (data["font"] ?? "Poppins").toString();
 
+    // 🔧 clamp para evitar valores rotos del backend
     fontSize = (data["fontSize"] ?? 18).toDouble().clamp(18.0, 48.0);
 
     textColor = _parseColor(data["color"]);
   }
 
-  // 🎨 COLOR SAFE PARSER
+  // 🎨 parseo seguro de color desde backend
   Color _parseColor(dynamic value) {
     if (value == null) return Colors.black;
 
     try {
-      // HEX
       if (value is String) {
         String hex = value.replaceAll("#", "");
         if (hex.length == 6) hex = "FF$hex";
         return Color(int.parse(hex, radix: 16));
       }
 
-      // INT fallback
       if (value is int) {
         return Color(value);
       }
@@ -73,13 +79,14 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
     return Colors.black;
   }
 
-  // 🎨 COLOR → HEX (SIN deprecated)
+  // 🎨 convierte Color → HEX (#RRGGBB)
   String _colorToHex(Color color) {
     final int value = color.toARGB32();
     final hex = value.toRadixString(16).padLeft(8, '0');
     return "#${hex.substring(2).toUpperCase()}";
   }
 
+  // 🎨 selector visual de color
   void _pickColor() {
     Color tempColor = textColor;
 
@@ -88,6 +95,7 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
       builder: (context) {
         return AlertDialog(
           title: Text(S.of(context).selectTextColor),
+
           content: SingleChildScrollView(
             child: ColorPicker(
               pickerColor: tempColor,
@@ -96,6 +104,7 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
               displayThumbColor: true,
             ),
           ),
+
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -114,6 +123,7 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
     );
   }
 
+  // 💾 guardar en provider (estructura limpia backend-ready)
   void _save() {
     final provider = context.read<InvitationProvider>();
 
@@ -132,6 +142,7 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
     Navigator.pop(context);
   }
 
+  // 🗑 eliminar módulo
   Future<void> _delete() async {
     final provider = context.read<InvitationProvider>();
 
@@ -175,12 +186,16 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
           IconButton(icon: const Icon(Icons.save), onPressed: _save),
         ],
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(16),
+
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+
             children: [
+              // 🧠 título
               TextField(
                 controller: titleController,
                 decoration: InputDecoration(labelText: S.of(context).editTitle),
@@ -189,6 +204,7 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
               const SizedBox(height: 16),
 
+              // 📝 contenido
               TextField(
                 controller: bodyController,
                 decoration: InputDecoration(
@@ -200,9 +216,10 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
               const SizedBox(height: 16),
 
+              // 🎨 selector de fuente
               Text(
                 S.of(context).editFont,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
 
               DropdownButton<String>(
@@ -219,9 +236,10 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
               const SizedBox(height: 16),
 
+              // 📏 tamaño de fuente
               Text(
                 S.of(context).labelSize,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
 
               Slider(
@@ -235,9 +253,10 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
               const SizedBox(height: 16),
 
+              // 🎨 color
               Text(
                 S.of(context).editColor,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
 
               const SizedBox(height: 8),
@@ -263,9 +282,10 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
               const SizedBox(height: 24),
 
+              // 👁 PREVIEW (clave para UX)
               Text(
                 S.of(context).actionPreview,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
 
               const SizedBox(height: 12),
@@ -277,6 +297,7 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
                   color: Colors.grey.shade100,
                   borderRadius: BorderRadius.circular(12),
                 ),
+
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -289,7 +310,9 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
                         color: textColor,
                       ),
                     ),
+
                     const SizedBox(height: 8),
+
                     Text(
                       bodyController.text,
                       style: TextStyle(

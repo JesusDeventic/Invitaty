@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:invitaty/generated/l10n.dart';
-
 import 'package:invitaty/providers/invitation_provider.dart';
 
 class EditAgendaModuleScreen extends StatefulWidget {
@@ -19,10 +18,13 @@ class EditAgendaModuleScreen extends StatefulWidget {
 }
 
 class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
+  // 🧠 TITULO DEL MÓDULO
   late TextEditingController titleController;
 
+  // 📦 LISTA DE EVENTOS (estructura backend-ready)
   List<Map<String, dynamic>> items = [];
 
+  // 🧩 CONTROLADORES UI (sincronizados con items)
   final List<TextEditingController> timeControllers = [];
   final List<TextEditingController> titleControllers = [];
   final List<TextEditingController> descControllers = [];
@@ -33,26 +35,33 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
 
     final data = widget.section["data"] ?? {};
 
+    // 🧠 título con fallback internacionalizado
     titleController = TextEditingController(
-      text: data["title"] ?? S.of(context).moduleNameAgenda,
+      text: (data["title"] ?? S.of(context).moduleNameAgenda).toString(),
     );
 
+    // 📦 carga de items desde backend
     final rawItems = List<Map<String, dynamic>>.from(data["items"] ?? []);
     items = List<Map<String, dynamic>>.from(rawItems);
 
     _syncControllers();
   }
 
+  // 🔄 sincroniza UI controllers con modelo de datos
   void _syncControllers() {
     timeControllers.clear();
     titleControllers.clear();
     descControllers.clear();
 
     for (final item in items) {
-      timeControllers.add(TextEditingController(text: item["time"] ?? ""));
-      titleControllers.add(TextEditingController(text: item["title"] ?? ""));
+      timeControllers.add(
+        TextEditingController(text: (item["time"] ?? "").toString()),
+      );
+      titleControllers.add(
+        TextEditingController(text: (item["title"] ?? "").toString()),
+      );
       descControllers.add(
-        TextEditingController(text: item["description"] ?? ""),
+        TextEditingController(text: (item["description"] ?? "").toString()),
       );
     }
   }
@@ -68,6 +77,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
     super.dispose();
   }
 
+  // ➕ añadir evento (estructura backend consistente)
   void _addItem() {
     setState(() {
       items.add({"time": "", "title": "", "description": ""});
@@ -75,6 +85,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
     });
   }
 
+  // ❌ eliminar evento
   void _removeItem(int index) {
     setState(() {
       items.removeAt(index);
@@ -82,6 +93,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
     });
   }
 
+  // 💾 guardar en provider (estructura final backend-ready)
   void _save() {
     final provider = context.read<InvitationProvider>();
 
@@ -94,6 +106,7 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
     Navigator.pop(context);
   }
 
+  // 🗑 eliminar módulo completo
   Future<void> _deleteModule() async {
     final provider = context.read<InvitationProvider>();
 
@@ -122,13 +135,16 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
     }
   }
 
+  // 🧱 UI de cada evento
   Widget _buildItem(int index) {
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       child: Padding(
         padding: const EdgeInsets.all(12),
+
         child: Column(
           children: [
+            // 🔝 header del item
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -145,38 +161,32 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
 
             const SizedBox(height: 12),
 
+            // ⏰ hora del evento
             TextField(
               controller: timeControllers[index],
-              textAlign: TextAlign.left, // 🔥 FIX
               decoration: InputDecoration(labelText: S.of(context).editTime),
-              onChanged: (value) {
-                items[index]["time"] = value;
-              },
+              onChanged: (value) => items[index]["time"] = value,
             ),
 
             const SizedBox(height: 12),
 
+            // 📌 título del evento
             TextField(
               controller: titleControllers[index],
-              textAlign: TextAlign.left, // 🔥 FIX
               decoration: InputDecoration(labelText: S.of(context).editTitle),
-              onChanged: (value) {
-                items[index]["title"] = value;
-              },
+              onChanged: (value) => items[index]["title"] = value,
             ),
 
             const SizedBox(height: 12),
 
+            // 📝 descripción del evento
             TextField(
               controller: descControllers[index],
-              textAlign: TextAlign.left, // 🔥 FIX
               decoration: InputDecoration(
                 labelText: S.of(context).editDescription,
               ),
               maxLines: 2,
-              onChanged: (value) {
-                items[index]["description"] = value;
-              },
+              onChanged: (value) => items[index]["description"] = value,
             ),
           ],
         ),
@@ -200,21 +210,24 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
 
       body: Padding(
         padding: const EdgeInsets.all(16),
+
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 🔥 FIX GLOBAL
+          crossAxisAlignment: CrossAxisAlignment.start,
+
           children: [
+            // 🧠 título del módulo
             TextField(
               controller: titleController,
-              textAlign: TextAlign.left, // 🔥 FIX
               decoration: InputDecoration(labelText: S.of(context).editTitle),
             ),
 
             const SizedBox(height: 20),
 
+            // 📋 lista editable
             Expanded(
               child: ListView(
                 children: [
-                  ...List.generate(items.length, (index) => _buildItem(index)),
+                  ...List.generate(items.length, _buildItem),
 
                   const SizedBox(height: 12),
 
