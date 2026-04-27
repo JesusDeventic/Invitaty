@@ -20,6 +20,8 @@ class EditCountdownModuleScreen extends StatefulWidget {
 
 class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
   late TextEditingController titleController;
+
+  /// 🕒 Estado principal (fuente de verdad)
   DateTime selectedDateTime = DateTime.now();
 
   @override
@@ -28,11 +30,13 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
 
     final data = widget.section["data"] ?? {};
 
+    /// 🔹 INIT TITLE (normalizado)
     titleController = TextEditingController(
-      text: data["title"] ?? S.of(context).moduleNameCountdown,
+      text: (data["title"] ?? S.of(context).moduleNameCountdown).toString(),
     );
 
-    final parsed = DateTime.tryParse(data["eventDateTime"] ?? "");
+    /// 🔹 INIT FECHA DESDE BACKEND (ISO STRING)
+    final parsed = DateTime.tryParse(data["eventDateTime"]?.toString() ?? "");
     if (parsed != null) {
       selectedDateTime = parsed;
     }
@@ -44,7 +48,7 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
     super.dispose();
   }
 
-  // 💾 SAVE
+  // 💾 GUARDAR (backend-ready)
   void _save() {
     final provider = context.read<InvitationProvider>();
 
@@ -52,6 +56,8 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
       ...widget.section,
       "data": {
         "title": titleController.text,
+
+        /// 🔥 CLAVE: ISO STRING → estándar backend
         "eventDateTime": selectedDateTime.toIso8601String(),
       },
     };
@@ -87,7 +93,7 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
     }
   }
 
-  // 📅 PICK DATE
+  // 📅 SELECTOR DE FECHA
   Future<void> _pickDate() async {
     final picked = await showDatePicker(
       context: context,
@@ -98,6 +104,7 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
 
     if (picked == null) return;
 
+    /// 🔁 Mantiene la hora actual
     setState(() {
       selectedDateTime = DateTime(
         picked.year,
@@ -109,7 +116,7 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
     });
   }
 
-  // ⏰ PICK TIME
+  // ⏰ SELECTOR DE HORA
   Future<void> _pickTime() async {
     final picked = await showTimePicker(
       context: context,
@@ -131,11 +138,14 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    /// 🔹 FORMATO VISUAL (UI)
     final dateText =
         "${selectedDateTime.day}/${selectedDateTime.month}/${selectedDateTime.year}";
+
     final timeText =
         "${selectedDateTime.hour.toString().padLeft(2, '0')}:${selectedDateTime.minute.toString().padLeft(2, '0')}";
 
+    /// 🔹 PREVIEW (misma lógica que módulo)
     final diff = selectedDateTime.difference(DateTime.now());
     final safe = diff.isNegative ? Duration.zero : diff;
 
@@ -150,19 +160,22 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
           IconButton(icon: const Icon(Icons.save), onPressed: _save),
         ],
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            /// 🔹 TÍTULO
             TextField(
               controller: titleController,
               decoration: InputDecoration(labelText: S.of(context).editTitle),
-              onChanged: (_) => setState(() {}),
+              onChanged: (_) => setState(() {}), // refresca preview
             ),
 
             const SizedBox(height: 16),
 
+            /// 📅 FECHA
             ListTile(
               leading: const Icon(Icons.calendar_today),
               title: Text(S.of(context).dateCountdown),
@@ -170,6 +183,7 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
               onTap: _pickDate,
             ),
 
+            /// ⏰ HORA
             ListTile(
               leading: const Icon(Icons.access_time),
               title: Text(S.of(context).timeCountdown),
@@ -179,9 +193,10 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
 
             const SizedBox(height: 24),
 
+            /// 🔍 PREVIEW
             Text(
               S.of(context).actionPreview,
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 12),
@@ -193,8 +208,10 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
                 color: Colors.grey.shade100,
                 borderRadius: BorderRadius.circular(12),
               ),
+
               child: Column(
                 children: [
+                  /// 🔹 TÍTULO PREVIEW
                   Text(
                     titleController.text,
                     textAlign: TextAlign.center,
@@ -203,7 +220,10 @@ class _EditCountdownModuleScreenState extends State<EditCountdownModuleScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+
                   const SizedBox(height: 8),
+
+                  /// 🔹 CONTADOR PREVIEW
                   Text(
                     "${safe.inDays}d ${safe.inHours % 24}h ${safe.inMinutes % 60}m",
                   ),

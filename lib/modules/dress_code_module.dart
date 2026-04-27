@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:invitaty/generated/l10n.dart';
+import 'package:invitaty/themes/invitation_theme.dart';
 
 class DressCodeModule extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  const DressCodeModule({super.key, required this.data});
+  const DressCodeModule({
+    super.key,
+    required this.data,
+    required InvitationTheme theme,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final title = data["title"] ?? S.of(context).moduleNameDressCode;
-    final style = data["style"] ?? "";
-    final description = data["description"] ?? "";
+    // 🧠 NORMALIZACIÓN (evita errores de tipo desde backend)
+    final title = (data["title"] ?? S.of(context).moduleNameDressCode)
+        .toString();
+
+    final style = (data["style"] ?? "").toString();
+    final description = (data["description"] ?? "").toString();
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -24,12 +32,12 @@ class DressCodeModule extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // 🔹 ICONO
+          // 👕 ICONO VISUAL DEL MÓDULO
           const Icon(Icons.checkroom, size: 32),
 
           const SizedBox(height: 8),
 
-          // 🔹 TÍTULO
+          // 🏷️ TÍTULO DEL MÓDULO
           Text(
             title,
             textAlign: TextAlign.center,
@@ -38,7 +46,11 @@ class DressCodeModule extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          // 🔹 ESTILO (IMPORTANTE)
+          // 🎯 ESTILO PRINCIPAL (CLAVE IMPORTANTE)
+          // 🔥 IMPORTANTE BACKEND:
+          // - style es una CLAVE ("formal", "casual"...)
+          // - NO es texto traducido
+          // - el backend guarda la clave, no el label
           if (style.isNotEmpty)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
@@ -47,7 +59,7 @@ class DressCodeModule extends StatelessWidget {
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
-                style,
+                style, // 👉 aquí podrías mapear a traducción si quisieras en el futuro
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
@@ -55,7 +67,7 @@ class DressCodeModule extends StatelessWidget {
               ),
             ),
 
-          // 🔹 DESCRIPCIÓN
+          // 📝 DESCRIPCIÓN OPCIONAL
           if (description.isNotEmpty) ...[
             const SizedBox(height: 12),
             Text(description, textAlign: TextAlign.center),

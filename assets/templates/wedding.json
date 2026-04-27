@@ -1,67 +1,73 @@
 {
-    "id": "wedding",
-    "name": "Boda",
-    "theme": "elegant",
-    "sections": [
-      {
-        "type": "cover",
-        "data": {
-          "title": "",
-          "subtitle": "",
-          "image": ""
-        }
-      },
-      {
-        "type": "countdown",
-        "data": {
-          "title": "",
-          "eventDateTime": ""
-        }
-      },
-      {
-        "type": "location",
-        "data": {
-          "name": "",
-          "address": "",
-          "mapsUrl": ""
-        }
-      },
-      {
-        "type": "location",
-        "data": {
-          "name": "",
-          "address": "",
-          "mapsUrl": ""
-        }
-      },
-      {
-        "type": "agenda",
-        "data": {
-          "title": "",
-          "items": []
-        }
-      },
-      {
-        "type": "gallery",
-        "data": {
-          "title": "",
-          "images": []
-        }
-      },
-      {
-        "type": "gifts",
-        "data": {
-          "title": "",
-          "message": "",
-          "iban": "",
-          "bizum": "",
-          "link": "",
-          "items": []
-        }
-      },
-      {
-        "type": "rsvp",
-        "data": {}
+  "id": "wedding",
+  "name": "Boda",
+  "theme": "elegant",
+
+  "customTheme": {
+    "primaryColor": "",
+    "backgroundImage": ""
+  },
+
+  "sections": [
+    {
+      "type": "cover",
+      "data": {
+        "title": "",
+        "subtitle": "",
+        "image": ""
       }
-    ]
-  }
+    },
+    {
+      "type": "countdown",
+      "data": {
+        "title": "",
+        "eventDateTime": ""
+      }
+    },
+    {
+      "type": "location",
+      "data": {
+        "name": "",
+        "address": "",
+        "mapsUrl": ""
+      }
+    },
+    {
+      "type": "location",
+      "data": {
+        "name": "",
+        "address": "",
+        "mapsUrl": ""
+      }
+    },
+    {
+      "type": "agenda",
+      "data": {
+        "title": "",
+        "items": []
+      }
+    },
+    {
+      "type": "gallery",
+      "data": {
+        "title": "",
+        "images": []
+      }
+    },
+    {
+      "type": "gifts",
+      "data": {
+        "title": "",
+        "message": "",
+        "iban": "",
+        "bizum": "",
+        "link": "",
+        "items": []
+      }
+    },
+    {
+      "type": "rsvp",
+      "data": {}
+    }
+  ]
+}

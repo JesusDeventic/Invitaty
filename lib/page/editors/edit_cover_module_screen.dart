@@ -20,15 +20,21 @@ class EditCoverModuleScreen extends StatefulWidget {
 }
 
 class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
+  // 🔤 CONTROLADORES DE TEXTO
   late TextEditingController titleController;
   late TextEditingController subtitleController;
 
+  // 🎨 CONFIGURACIÓN VISUAL
   String selectedFont = "Poppins";
   double titleSize = 28;
   double subtitleSize = 18;
 
   Color selectedColor = Colors.white;
 
+  // 🖼️ URL DE IMAGEN
+  // 🔥 IMPORTANTE:
+  // - Ahora: URL externa (mock)
+  // - Futuro: vendrá del backend tras subir imagen
   String imageUrl = "";
 
   @override
@@ -37,15 +43,21 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
 
     final data = widget.section["data"] ?? {};
 
-    titleController = TextEditingController(text: data["title"] ?? "");
-    subtitleController = TextEditingController(text: data["subtitle"] ?? "");
+    // 🧠 NORMALIZACIÓN (importante para evitar errores de tipo)
+    titleController = TextEditingController(
+      text: (data["title"] ?? "").toString(),
+    );
 
-    selectedFont = data["font"] ?? "Poppins";
+    subtitleController = TextEditingController(
+      text: (data["subtitle"] ?? "").toString(),
+    );
+
+    selectedFont = (data["font"] ?? "Poppins").toString();
 
     titleSize = (data["fontSizeTitle"] ?? 28).toDouble();
     subtitleSize = (data["fontSizeSubtitle"] ?? 18).toDouble();
 
-    imageUrl = data["imageUrl"] ?? "";
+    imageUrl = (data["imageUrl"] ?? "").toString();
 
     final colorHex = data["textColor"] ?? "#FFFFFF";
     selectedColor = _hexToColor(colorHex);
@@ -62,6 +74,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
   void _save() {
     final provider = context.read<InvitationProvider>();
 
+    // 📦 ESTRUCTURA LISTA PARA BACKEND
     final updatedSection = {
       ...widget.section,
       "data": {
@@ -71,6 +84,9 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
         "fontSizeTitle": titleSize,
         "fontSizeSubtitle": subtitleSize,
         "textColor": _colorToHex(selectedColor),
+
+        // 🔥 BACKEND READY:
+        // Aquí guardaremos la URL que devuelva el backend
         "imageUrl": imageUrl,
       },
     };
@@ -79,7 +95,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
     Navigator.pop(context);
   }
 
-  // 🎨 COLOR PICKER (igual estilo text)
+  // 🎨 COLOR PICKER
   void _openColorPicker() {
     Color tempColor = selectedColor;
 
@@ -120,6 +136,11 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
     );
   }
 
+  // 🖼️ MOCK DE IMAGEN
+  // 🔥 FUTURO:
+  // - abrir galería
+  // - subir imagen
+  // - guardar URL del backend
   void _setFakeImage() {
     setState(() {
       imageUrl = "https://picsum.photos/800/400";
@@ -133,17 +154,22 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
         title: Text(S.of(context).editCover),
         actions: [IconButton(icon: const Icon(Icons.save), onPressed: _save)],
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // 🏷️ TÍTULO
               TextField(
                 controller: titleController,
                 decoration: InputDecoration(labelText: S.of(context).editTitle),
               ),
+
               const SizedBox(height: 12),
+
+              // 📝 SUBTÍTULO
               TextField(
                 controller: subtitleController,
                 decoration: InputDecoration(
@@ -153,6 +179,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
 
               const SizedBox(height: 24),
 
+              // 🔤 FUENTE
               Text(
                 S.of(context).editFont,
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -185,6 +212,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
 
               const SizedBox(height: 16),
 
+              // 🔠 TAMAÑOS
               Text(S.of(context).sizeTitle),
               Slider(
                 value: titleSize,
@@ -205,6 +233,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
 
               const SizedBox(height: 16),
 
+              // 🎨 COLOR
               Text(
                 S.of(context).editColor,
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -233,6 +262,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
 
               const SizedBox(height: 24),
 
+              // 🖼️ IMAGEN
               ElevatedButton.icon(
                 onPressed: _setFakeImage,
                 icon: const Icon(Icons.image),
@@ -241,6 +271,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
 
               const SizedBox(height: 24),
 
+              // 👁️ PREVIEW
               Text(
                 S.of(context).actionPreview,
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -266,9 +297,12 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
                 ),
                 child: Container(
                   padding: const EdgeInsets.all(16),
+
+                  // 🔥 overlay para mejorar legibilidad del texto
                   color: imageUrl.isNotEmpty
                       ? Colors.black.withValues(alpha: 0.3)
                       : null,
+
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -303,12 +337,14 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
     );
   }
 
+  // 🎨 HEX → COLOR
   Color _hexToColor(String hex) {
     hex = hex.replaceAll("#", "");
     if (hex.length == 6) hex = "FF$hex";
     return Color(int.parse(hex, radix: 16));
   }
 
+  // 🎨 COLOR → HEX (para guardar en backend)
   String _colorToHex(Color color) {
     final value = color.toARGB32();
     return "#${value.toRadixString(16).substring(2).toUpperCase()}";

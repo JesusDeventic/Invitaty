@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:invitaty/generated/l10n.dart';
+import 'package:invitaty/themes/invitation_theme.dart';
 
 class AgendaModule extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  const AgendaModule({super.key, required this.data});
+  const AgendaModule({
+    super.key,
+    required this.data,
+    required InvitationTheme theme,
+  });
 
   @override
   Widget build(BuildContext context) {

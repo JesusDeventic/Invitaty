@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:invitaty/themes/invitation_theme.dart';
 
 class TextModule extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  const TextModule({super.key, required this.data});
+  const TextModule({
+    super.key,
+    required this.data,
+    required InvitationTheme theme,
+  });
 
   @override
   Widget build(BuildContext context) {

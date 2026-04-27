@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:invitaty/generated/l10n.dart';
 
 import 'package:invitaty/music_controller/music_controller.dart';
+import 'package:invitaty/themes/invitation_theme.dart';
 
 class MusicModule extends StatefulWidget {
   final Map<String, dynamic> data;
 
-  const MusicModule({super.key, required this.data});
+  const MusicModule({
+    super.key,
+    required this.data,
+    required InvitationTheme theme,
+  });
 
   @override
   State<MusicModule> createState() => _MusicModuleState();
@@ -17,8 +22,20 @@ class _MusicModuleState extends State<MusicModule> {
 
   @override
   Widget build(BuildContext context) {
+    /// 🔹 BACKEND READY:
+    /// url → actualmente link externo
+    /// futuro → URL firmada o endpoint backend (ej: /media/{id})
     final title = widget.data["title"] ?? S.of(context).moduleNameMusic;
     final url = widget.data["url"] as String?;
+
+    /// 🔹 FUTURO BACKEND (no rompe nada actual)
+    /// Permite evolucionar a:
+    /// - fileId → referencia en backend
+    /// - streamingUrl → generado dinámicamente
+    final fileId = widget.data["fileId"]; // opcional futuro
+    final streamingUrl = widget.data["streamingUrl"]; // opcional futuro
+
+    final effectiveUrl = streamingUrl ?? url;
 
     final isPlaying = controller.isPlaying;
 
@@ -47,14 +64,20 @@ class _MusicModuleState extends State<MusicModule> {
           ElevatedButton.icon(
             onPressed: () async {
               try {
-                if (url == null || url.isEmpty) {
+                /// 🔹 VALIDACIÓN ROBUSTA
+                if (effectiveUrl == null || effectiveUrl.isEmpty) {
                   throw Exception("URL inválida");
                 }
 
+                /// 🔹 CONTROL PLAY / PAUSE
                 if (controller.isPlaying) {
                   await controller.pause();
                 } else {
-                  await controller.play(url);
+                  /// 🔥 IMPORTANTE:
+                  /// En backend aquí se usará:
+                  /// - URL normalizada (mp3 convertido)
+                  /// - streaming compatible multiplataforma
+                  await controller.play(effectiveUrl);
                 }
 
                 if (mounted) {

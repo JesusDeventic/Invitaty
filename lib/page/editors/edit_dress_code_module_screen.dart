@@ -19,13 +19,14 @@ class EditDressCodeModuleScreen extends StatefulWidget {
 }
 
 class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
+  // 🔤 CONTROLADORES
   late TextEditingController titleController;
   late TextEditingController descriptionController;
 
-  // 🔥 CAMBIO: usar clave interna
+  // 🎯 CLAVE INTERNA DEL ESTILO (IMPORTANTE PARA BACKEND)
   String selectedStyle = "formal";
 
-  // 🔥 CAMBIO: lista con claves internas
+  // 📦 CATÁLOGO DE ESTILOS (CLAVES, NO TEXTO)
   final List<String> styles = [
     "formal",
     "casual",
@@ -42,16 +43,17 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
 
     final data = widget.section["data"] ?? {};
 
+    // 🧠 NORMALIZACIÓN
     titleController = TextEditingController(
-      text: data["title"] ?? S.of(context).moduleNameDressCode,
+      text: (data["title"] ?? S.of(context).moduleNameDressCode).toString(),
     );
 
     descriptionController = TextEditingController(
-      text: data["description"] ?? "",
+      text: (data["description"] ?? "").toString(),
     );
 
-    // 🔥 CAMBIO: valor por defecto interno
-    selectedStyle = (data["style"] ?? "formal").toLowerCase();
+    // 🔥 CLAVE INTERNA SIEMPRE EN MINÚSCULAS
+    selectedStyle = (data["style"] ?? "formal").toString().toLowerCase();
   }
 
   @override
@@ -61,7 +63,7 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
     super.dispose();
   }
 
-  // 🔥 NUEVO: mapper de traducción
+  // 🌍 MAPEO CLAVE → TEXTO TRADUCIDO
   String _getStyleLabel(BuildContext context, String style) {
     final s = S.of(context);
 
@@ -82,11 +84,15 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
   void _save() {
     final provider = context.read<InvitationProvider>();
 
+    // 📦 ESTRUCTURA LISTA PARA BACKEND
     final updatedSection = {
       ...widget.section,
       "data": {
         "title": titleController.text,
+
+        // 🔥 CLAVE INTERNA → backend
         "style": selectedStyle,
+
         "description": descriptionController.text,
       },
     };
@@ -122,12 +128,12 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
     }
   }
 
+  // 🧩 CHIP DE SELECCIÓN DE ESTILO
   Widget _buildStyleChip(String style) {
     final isSelected = selectedStyle == style;
 
     return ChoiceChip(
-      // 🔥 CAMBIO: usar traducción
-      label: Text(_getStyleLabel(context, style)),
+      label: Text(_getStyleLabel(context, style)), // 🔤 traducido
       selected: isSelected,
       onSelected: (_) => setState(() => selectedStyle = style),
     );
@@ -146,12 +152,14 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
           IconButton(icon: const Icon(Icons.save), onPressed: _save),
         ],
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // 🏷️ TÍTULO
               TextField(
                 controller: titleController,
                 decoration: InputDecoration(labelText: S.of(context).editTitle),
@@ -160,6 +168,7 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
 
               const SizedBox(height: 20),
 
+              // 👗 TIPO DE VESTIMENTA
               Text(
                 S.of(context).editDressType,
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -175,6 +184,7 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
 
               const SizedBox(height: 20),
 
+              // 📝 DESCRIPCIÓN
               TextField(
                 controller: descriptionController,
                 decoration: InputDecoration(
@@ -186,6 +196,7 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
 
               const SizedBox(height: 24),
 
+              // 👁️ PREVIEW
               Text(
                 S.of(context).actionPreview,
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -218,6 +229,7 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
 
                     const SizedBox(height: 12),
 
+                    // 🎯 ESTILO (TRADUCIDO EN UI)
                     Container(
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
@@ -228,7 +240,6 @@ class _EditDressCodeModuleScreenState extends State<EditDressCodeModuleScreen> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        // 🔥 CAMBIO: usar traducción
                         _getStyleLabel(context, selectedStyle),
                         style: const TextStyle(fontWeight: FontWeight.w600),
                       ),

@@ -31,6 +31,7 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
 
     final data = widget.section["data"] ?? {};
 
+    /// 🔹 INIT NORMALIZADO
     nameController = TextEditingController(text: data["name"] ?? "");
     addressController = TextEditingController(text: data["address"] ?? "");
     mapsUrlController = TextEditingController(text: data["mapsUrl"] ?? "");
@@ -44,15 +45,17 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     super.dispose();
   }
 
+  /// 💾 SAVE (backend-ready)
   void _save() {
     final provider = context.read<InvitationProvider>();
 
     final updatedSection = {
       ...widget.section,
       "data": {
-        "name": nameController.text,
-        "address": addressController.text,
-        "mapsUrl": mapsUrlController.text,
+        /// 🔹 TRIM + CLEAN (clave para backend)
+        "name": nameController.text.trim(),
+        "address": addressController.text.trim(),
+        "mapsUrl": mapsUrlController.text.trim(),
       },
     };
 
@@ -60,6 +63,7 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     Navigator.pop(context);
   }
 
+  /// 🗑 DELETE
   Future<void> _delete() async {
     final provider = context.read<InvitationProvider>();
 
@@ -88,6 +92,7 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     }
   }
 
+  /// 🧠 GENERADOR DE URL (clave backend-friendly)
   void _generateMapsUrl() {
     final address = addressController.text.trim();
 
@@ -101,11 +106,13 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     });
   }
 
+  /// 🔗 OPEN MAPS (seguro)
   Future<void> _openMaps() async {
-    final url = mapsUrlController.text;
+    final url = mapsUrlController.text.trim();
     if (url.isEmpty) return;
 
-    final uri = Uri.parse(url);
+    final uri = Uri.tryParse(url);
+    if (uri == null) return;
 
     if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
       ScaffoldMessenger.of(
@@ -116,6 +123,11 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final hasContent =
+        nameController.text.isNotEmpty ||
+        addressController.text.isNotEmpty ||
+        mapsUrlController.text.isNotEmpty;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).editLocation),
@@ -127,15 +139,16 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
           IconButton(icon: const Icon(Icons.save), onPressed: _save),
         ],
       ),
+
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 🔥 FIX GLOBAL
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // 🏷️ NOMBRE
             TextField(
               controller: nameController,
-              textAlign: TextAlign.left, // 🔥 FIX
+              textAlign: TextAlign.left,
               decoration: InputDecoration(
                 labelText: S.of(context).locationName,
               ),
@@ -147,7 +160,7 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
             // 📍 DIRECCIÓN
             TextField(
               controller: addressController,
-              textAlign: TextAlign.left, // 🔥 FIX
+              textAlign: TextAlign.left,
               decoration: InputDecoration(
                 labelText: S.of(context).locationAddress,
               ),
@@ -167,7 +180,7 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
             // 🔗 URL
             TextField(
               controller: mapsUrlController,
-              textAlign: TextAlign.left, // 🔥 FIX
+              textAlign: TextAlign.left,
               decoration: InputDecoration(
                 labelText: S.of(context).locationMaps,
               ),
@@ -176,60 +189,63 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
 
             const SizedBox(height: 24),
 
-            Text(
-              S.of(context).actionPreview,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-
-            const SizedBox(height: 12),
-
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.grey.shade100,
-                borderRadius: BorderRadius.circular(12),
+            /// 🔥 PREVIEW SOLO SI HAY CONTENIDO
+            if (hasContent) ...[
+              Text(
+                S.of(context).actionPreview,
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  if (nameController.text.isNotEmpty)
-                    Text(
-                      nameController.text,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+
+              const SizedBox(height: 12),
+
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey.shade100,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (nameController.text.isNotEmpty)
+                      Text(
+                        nameController.text,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
 
-                  const SizedBox(height: 8),
+                    const SizedBox(height: 8),
 
-                  if (addressController.text.isNotEmpty)
-                    Text(addressController.text, textAlign: TextAlign.center),
+                    if (addressController.text.isNotEmpty)
+                      Text(addressController.text, textAlign: TextAlign.center),
 
-                  const SizedBox(height: 12),
+                    const SizedBox(height: 12),
 
-                  if (mapsUrlController.text.isNotEmpty)
-                    InkWell(
-                      onTap: _openMaps,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.map, size: 16),
-                          SizedBox(width: 6),
-                          Text(
-                            S.of(context).openMaps,
-                            style: TextStyle(
-                              decoration: TextDecoration.underline,
+                    if (mapsUrlController.text.isNotEmpty)
+                      InkWell(
+                        onTap: _openMaps,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.map, size: 16),
+                            const SizedBox(width: 6),
+                            Text(
+                              S.of(context).openMaps,
+                              style: const TextStyle(
+                                decoration: TextDecoration.underline,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                ],
+                  ],
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ),

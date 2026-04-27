@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:invitaty/generated/l10n.dart';
-
 import 'package:invitaty/providers/invitation_provider.dart';
 
 class EditVideoModuleScreen extends StatefulWidget {
@@ -21,6 +20,7 @@ class EditVideoModuleScreen extends StatefulWidget {
 class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
   late TextEditingController titleController;
 
+  /// 🔥 lista mutable de videos
   List<Map<String, dynamic>> videos = [];
 
   @override
@@ -33,7 +33,7 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
       text: data["title"] ?? S.of(context).moduleNameVideo,
     );
 
-    // 🔥 COPIA MUTABLE (evita error unmodifiable map)
+    // 🔥 importante: copia profunda mutable
     videos = (data["videos"] as List? ?? [])
         .map((v) => Map<String, dynamic>.from(v))
         .toList();
@@ -45,21 +45,25 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
     super.dispose();
   }
 
-  // ➕ AÑADIR VIDEO
+  /// ➕ añadir video
   void _addVideo() {
     setState(() {
-      videos.add({"title": "", "url": ""});
+      videos.add({
+        "title": "",
+        "url": "",
+        "type": "youtube", // 🔥 FUTURO: youtube | mp4 | upload
+      });
     });
   }
 
-  // ❌ ELIMINAR VIDEO
+  /// ❌ eliminar video
   void _removeVideo(int index) {
     setState(() {
       videos.removeAt(index);
     });
   }
 
-  // 💾 GUARDAR
+  /// 💾 guardar
   void _save() {
     final provider = context.read<InvitationProvider>();
 
@@ -72,8 +76,8 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
     Navigator.pop(context);
   }
 
-  // ❌ ELIMINAR MÓDULO
-  void _deleteModule() async {
+  /// 🗑 eliminar módulo
+  Future<void> _deleteModule() async {
     final provider = context.read<InvitationProvider>();
 
     final confirm = await showDialog<bool>(
@@ -86,7 +90,7 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
             onPressed: () => Navigator.pop(context, false),
             child: Text(S.of(context).buttonCancel),
           ),
-          TextButton(
+          ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
             child: Text(S.of(context).messagesDelete),
           ),
@@ -100,7 +104,7 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
     }
   }
 
-  // 🧠 EXTRAER ID YOUTUBE
+  /// 🎬 preview youtube id
   String? _getYoutubeId(String url) {
     if (url.contains("youtu.be/")) {
       return url.split("youtu.be/").last.split("?").first;
@@ -110,11 +114,12 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
     return null;
   }
 
-  // 🎨 ITEM VIDEO
   Widget _buildVideoItem(int index) {
     final video = videos[index];
 
     final url = video["url"] ?? "";
+    final title = video["title"] ?? "";
+
     final videoId = _getYoutubeId(url);
 
     return Card(
@@ -123,7 +128,7 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
-            // 🔹 HEADER
+            // 🧾 header
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -140,49 +145,44 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
 
             const SizedBox(height: 8),
 
-            // 🔹 TÍTULO
+            // 🏷️ title
             TextFormField(
-              initialValue: video["title"],
+              initialValue: title,
               decoration: InputDecoration(labelText: S.of(context).editTitle),
-              onChanged: (value) {
-                video["title"] = value;
-              },
+              onChanged: (value) => video["title"] = value,
             ),
 
             const SizedBox(height: 8),
 
-            // 🔹 URL
+            // 🔗 url
             TextFormField(
-              initialValue: video["url"],
-              decoration: const InputDecoration(
-                labelText: "URL (YouTube / Vimeo)",
-              ),
+              initialValue: url,
+              decoration: const InputDecoration(labelText: "URL"),
               onChanged: (value) {
                 video["url"] = value;
-                setState(() {}); // 🔥 refresca preview
+
+                // 🔥 refresco preview
+                setState(() {});
               },
             ),
 
             const SizedBox(height: 12),
 
-            // 🔹 PREVIEW
+            // 🎥 preview
             if (videoId != null)
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: AspectRatio(
                   aspectRatio: 16 / 9,
-                  child: Container(
-                    color: Colors.black,
-                    child: Image.network(
-                      "https://img.youtube.com/vi/$videoId/0.jpg",
-                      fit: BoxFit.contain, // 🔥 FIX ZOOM
-                    ),
+                  child: Image.network(
+                    "https://img.youtube.com/vi/$videoId/0.jpg",
+                    fit: BoxFit.cover,
                   ),
                 ),
               )
             else if (url.isNotEmpty)
               const Text(
-                "Preview no disponible",
+                "Preview no disponible (futuro MP4 backend)",
                 style: TextStyle(color: Colors.grey),
               ),
           ],
@@ -207,10 +207,8 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
 
       body: Padding(
         padding: const EdgeInsets.all(16),
-
         child: Column(
           children: [
-            // 🔹 TÍTULO
             TextField(
               controller: titleController,
               decoration: InputDecoration(labelText: S.of(context).editTitle),
@@ -218,14 +216,10 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
 
             const SizedBox(height: 16),
 
-            // 🔹 LISTA
             Expanded(
               child: ListView(
                 children: [
-                  ...List.generate(
-                    videos.length,
-                    (index) => _buildVideoItem(index),
-                  ),
+                  ...List.generate(videos.length, _buildVideoItem),
 
                   const SizedBox(height: 12),
 

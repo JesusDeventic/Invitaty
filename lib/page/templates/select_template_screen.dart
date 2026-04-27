@@ -23,6 +23,8 @@ class TemplateItem {
 class SelectTemplateScreen extends StatelessWidget {
   const SelectTemplateScreen({super.key});
 
+  /// 📦 Lista de plantillas disponibles en la app
+  /// Cada plantilla apunta a un JSON en assets
   List<TemplateItem> _templates(BuildContext context) => [
     TemplateItem(
       name: (ctx) => S.of(ctx).templateWeddingName,
@@ -70,21 +72,28 @@ class SelectTemplateScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(S.of(context).selectTemplateTitle)),
+
       body: Padding(
         padding: const EdgeInsets.all(12),
+
+        /// 📦 GRID de plantillas
         child: GridView.builder(
           itemCount: templates.length,
+
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
             mainAxisExtent: height / 3.8,
           ),
+
           itemBuilder: (context, index) {
             final template = templates[index];
 
             return InkWell(
               borderRadius: BorderRadius.circular(14),
+
+              /// 🚀 Selección de plantilla
               onTap: () async {
                 await provider.loadTemplateFromAsset(template.path);
 
@@ -92,6 +101,7 @@ class SelectTemplateScreen extends StatelessWidget {
 
                 context.push(AppRoutes.editor);
               },
+
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -99,15 +109,16 @@ class SelectTemplateScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(color: Colors.grey.shade300),
                 ),
+
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // ICONO
+                    /// 🎨 icono visual de plantilla
                     Text(template.icon, style: const TextStyle(fontSize: 26)),
 
                     const SizedBox(height: 8),
 
-                    // NOMBRE
+                    /// 🏷️ nombre traducido
                     Text(
                       template.name(context),
                       textAlign: TextAlign.center,
@@ -119,7 +130,7 @@ class SelectTemplateScreen extends StatelessWidget {
 
                     const SizedBox(height: 6),
 
-                    // DESCRIPCIÓN
+                    /// 📝 descripción traducida
                     Text(
                       template.description(context),
                       textAlign: TextAlign.center,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:invitaty/generated/l10n.dart';
+import 'package:invitaty/themes/invitation_theme.dart';
 
 /// 🧾 RSVP MODULE (FORMULARIO DINÁMICO)
 /// Renderiza un formulario basado en configuración JSON.
@@ -7,7 +8,11 @@ import 'package:invitaty/generated/l10n.dart';
 class RsvpModule extends StatefulWidget {
   final Map<String, dynamic> data;
 
-  const RsvpModule({super.key, required this.data});
+  const RsvpModule({
+    super.key,
+    required this.data,
+    required InvitationTheme theme,
+  });
 
   @override
   State<RsvpModule> createState() => _RsvpModuleState();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:invitaty/themes/invitation_theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:invitaty/generated/l10n.dart';
 
@@ -13,7 +14,11 @@ import 'package:invitaty/generated/l10n.dart';
 class GiftsModule extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  const GiftsModule({super.key, required this.data});
+  const GiftsModule({
+    super.key,
+    required this.data,
+    required InvitationTheme theme,
+  });
 
   @override
   Widget build(BuildContext context) {

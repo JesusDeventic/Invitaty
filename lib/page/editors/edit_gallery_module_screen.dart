@@ -5,6 +5,17 @@ import 'package:invitaty/generated/l10n.dart';
 
 import 'package:invitaty/providers/invitation_provider.dart';
 
+/// ✏️ EDITOR DE GALERÍA
+///
+/// 🔹 Permite:
+///    - añadir imágenes (fake ahora)
+///    - eliminar
+///    - reordenar (drag & drop)
+///
+/// 🔥 FUTURO BACKEND:
+///    - selector de imágenes real (gallery / cámara)
+///    - subida a servidor
+///    - guardado de URLs reales
 class EditGalleryModuleScreen extends StatefulWidget {
   final int index;
   final Map<String, dynamic> section;
@@ -30,9 +41,11 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
 
     final data = widget.section["data"] ?? {};
 
+    /// 🖼️ Normalización segura de lista
     final rawImages = data["images"];
     images = rawImages is List ? List<String>.from(rawImages) : [];
 
+    /// 🏷️ Título
     titleController = TextEditingController(
       text: data["title"] ?? S.of(context).moduleNameGallery,
     );
@@ -44,7 +57,7 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
     super.dispose();
   }
 
-  // 💾 SAVE
+  // 💾 SAVE (consistente con resto de módulos)
   void _save() {
     final provider = context.read<InvitationProvider>();
 
@@ -84,9 +97,14 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
     }
   }
 
-  // ➕ ADD IMAGE (FAKE NOW, FUTURE: UPLOAD)
+  // ➕ ADD IMAGE
   void _addImage() {
     setState(() {
+      /// 🎲 Placeholder actual
+      /// 🔥 FUTURO:
+      ///   - image_picker
+      ///   - subida a backend
+      ///   - recibir URL final
       images.add(
         "https://picsum.photos/400?random=${DateTime.now().millisecondsSinceEpoch}",
       );
@@ -100,10 +118,11 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
     });
   }
 
-  // 🔀 REORDER
+  // 🔀 REORDER (drag & drop)
   void _reorder(int oldIndex, int newIndex) {
     setState(() {
       if (newIndex > oldIndex) newIndex -= 1;
+
       final item = images.removeAt(oldIndex);
       images.insert(newIndex, item);
     });
@@ -123,6 +142,7 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
         ],
       ),
 
+      /// ➕ FAB añadir imagen
       floatingActionButton: FloatingActionButton(
         onPressed: _addImage,
         child: const Icon(Icons.add),
@@ -133,47 +153,55 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // 🏷️ TÍTULO
             TextField(
               controller: titleController,
               decoration: InputDecoration(labelText: S.of(context).editTitle),
+              onChanged: (_) => setState(() {}),
             ),
 
             const SizedBox(height: 16),
 
             Text(
               S.of(context).editGalleryInstructions,
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
 
             const SizedBox(height: 12),
 
+            /// 🖼️ GRID EDITABLE
             Expanded(
               child: images.isEmpty
                   ? _buildEmptyState()
                   : ReorderableGridView.builder(
                       itemCount: images.length,
                       onReorder: _reorder,
+
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 3,
                             crossAxisSpacing: 6,
                             mainAxisSpacing: 6,
                           ),
+
                       itemBuilder: (context, index) {
+                        final imageUrl = images[index];
+
                         return Container(
-                          key: ValueKey(images[index]),
+                          key: ValueKey(imageUrl),
                           child: Stack(
                             children: [
                               Positioned.fill(
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(10),
                                   child: Image.network(
-                                    images[index],
+                                    imageUrl,
                                     fit: BoxFit.cover,
                                   ),
                                 ),
                               ),
 
+                              /// ❌ BOTÓN ELIMINAR
                               Positioned(
                                 top: 4,
                                 right: 4,
@@ -205,16 +233,21 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
     );
   }
 
+  /// 📭 EMPTY STATE
   Widget _buildEmptyState() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.photo_library_outlined, size: 48, color: Colors.grey),
-          SizedBox(height: 12),
+          const Icon(
+            Icons.photo_library_outlined,
+            size: 48,
+            color: Colors.grey,
+          ),
+          const SizedBox(height: 12),
           Text(
             S.of(context).editGalleryNoImages,
-            style: TextStyle(color: Colors.grey),
+            style: const TextStyle(color: Colors.grey),
           ),
         ],
       ),

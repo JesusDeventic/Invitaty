@@ -23,6 +23,12 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
 
   bool isPlaying = false;
 
+  /// 🔹 FUTURO BACKEND
+  /// - fileId: referencia del archivo subido
+  /// - uploadStatus: estado (idle, uploading, done)
+  String? fileId;
+  String uploadStatus = "idle";
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +37,9 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
 
     titleController = TextEditingController(text: data["title"] ?? "");
     urlController = TextEditingController(text: data["url"] ?? "");
+
+    /// 🔹 BACKEND READY
+    fileId = data["fileId"];
   }
 
   @override
@@ -45,7 +54,14 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
 
     final updatedSection = {
       ...widget.section,
-      "data": {"title": titleController.text, "url": urlController.text},
+      "data": {
+        /// 🔹 CAMPOS ACTUALES
+        "title": titleController.text,
+        "url": urlController.text,
+
+        /// 🔹 CAMPOS FUTURO BACKEND
+        "fileId": fileId,
+      },
     };
 
     provider.updateSection(widget.index, updatedSection);
@@ -78,6 +94,24 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
     }
   }
 
+  /// 🔹 FUTURO: subida de música
+  void _uploadMusic() async {
+    setState(() => uploadStatus = "uploading");
+
+    /// 🔥 AQUÍ IRÁ:
+    /// - picker de archivo
+    /// - subida a backend
+    /// - conversión a formato compatible (mp3 recomendado)
+    /// - obtención de fileId
+
+    await Future.delayed(const Duration(seconds: 1)); // mock
+
+    setState(() {
+      uploadStatus = "done";
+      fileId = "mock_file_id";
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final url = urlController.text;
@@ -96,8 +130,9 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start, // 🔥 FIX
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            /// 🔹 TITLE
             TextField(
               controller: titleController,
               textAlign: TextAlign.left,
@@ -107,6 +142,7 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
 
             const SizedBox(height: 16),
 
+            /// 🔹 URL (modo actual)
             TextField(
               controller: urlController,
               textAlign: TextAlign.left,
@@ -114,8 +150,30 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
               onChanged: (_) => setState(() {}),
             ),
 
+            const SizedBox(height: 16),
+
+            /// 🔹 FUTURO BACKEND → SUBIDA
+            ElevatedButton.icon(
+              onPressed: _uploadMusic,
+              icon: const Icon(Icons.upload),
+              label: Text("Subir música (futuro backend)"),
+            ),
+
+            if (uploadStatus == "uploading")
+              const Padding(
+                padding: EdgeInsets.only(top: 8),
+                child: LinearProgressIndicator(),
+              ),
+
+            if (fileId != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Text("Archivo subido ✓"),
+              ),
+
             const SizedBox(height: 24),
 
+            /// 🔹 PREVIEW
             Text(
               S.of(context).actionPreview,
               style: TextStyle(fontWeight: FontWeight.bold),
@@ -150,7 +208,7 @@ class _EditMusicModuleScreenState extends State<EditMusicModuleScreen> {
                   const SizedBox(height: 12),
 
                   ElevatedButton.icon(
-                    onPressed: url.isEmpty ? null : () {},
+                    onPressed: url.isEmpty && fileId == null ? null : () {},
                     icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
                     label: Text(
                       isPlaying
