@@ -1,29 +1,14 @@
 import 'package:flutter/material.dart';
 
-/// 🎨 MODELO BASE DE THEME DE INVITACIÓN
+/// 🎨 MODELO DE TEMA DE INVITACIÓN
 ///
-/// ⚠️ IMPORTANTE:
-/// - NO es el ThemeData de Flutter
-/// - NO afecta a la app (light/dark)
-/// - SOLO afecta a cómo se ve la invitación
-///
-/// 👉 Se usará en:
-/// - viewer_screen (visualización final)
-/// - editor (preview en tiempo real)
-///
-/// 👉 Viene desde JSON:
-/// {
-///   "theme": "elegant"
-/// }
-///
-/// 👉 Y se convierte en:
-/// InvitationTheme
+/// 👉 Define el estilo global de TODA la invitación
+/// 👉 NO afecta a la app (eso es ThemeProvider)
 class InvitationTheme {
-  /// 🆔 ID del theme (ej: "elegant", "minimal", etc.)
+  /// 🔹 Nombre interno (ej: elegant, modern...)
   final String id;
 
-  /// 🎨 COLOR DE FONDO PRINCIPAL
-  /// 👉 Fondo de toda la invitación
+  /// 🎨 COLORES
   final Color backgroundColor;
 
   /// 🎨 COLOR PRINCIPAL
@@ -34,17 +19,27 @@ class InvitationTheme {
   /// 👉 Botones, detalles, iconos
   final Color accentColor;
 
-  /// 🔤 TIPOGRAFÍA (opcional)
-  /// 👉 Ej: PlayfairDisplay (boda elegante)
-  final String? fontFamily;
+  /// 🆕 COLOR DE TEXTO GLOBAL
+  final Color textColor;
 
-  /// 📦 CONSTRUCTOR
+  /// 🔤 TIPOGRAFÍA
+  final String fontFamily;
+
+  /// 🆕 TAMAÑOS BASE
+  final double titleFontSize;
+  final double bodyFontSize;
+
   const InvitationTheme({
     required this.id,
     required this.backgroundColor,
     required this.primaryColor,
     required this.accentColor,
-    this.fontFamily,
+
+    /// 🆕 NUEVOS CAMPOS
+    required this.textColor,
+    required this.fontFamily,
+    required this.titleFontSize,
+    required this.bodyFontSize,
   });
 
   /// 🧪 DEBUG

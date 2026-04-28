@@ -6,15 +6,15 @@ import 'package:invitaty/generated/l10n.dart';
 class VideoModule extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  const VideoModule({
-    super.key,
-    required this.data,
-    required InvitationTheme theme,
-  });
+  /// 🎨 THEME GLOBAL DE LA INVITACIÓN
+  /// 👉 Define estética base del módulo
+  final InvitationTheme theme;
+
+  const VideoModule({super.key, required this.data, required this.theme});
 
   @override
   Widget build(BuildContext context) {
-    final title = data["title"] ?? S.of(context).moduleNameVideo;
+    final title = (data["title"] ?? S.of(context).moduleNameVideo).toString();
 
     // 🔥 FUTURO BACKEND:
     // ahora: lista de links (YouTube o externos)
@@ -26,10 +26,14 @@ class VideoModule extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       padding: const EdgeInsets.all(20),
+
+      /// 🎨 fondo coherente con el sistema global
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: theme.backgroundColor,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: theme.primaryColor.withValues(alpha: 0.15)),
       ),
+
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -37,7 +41,12 @@ class VideoModule extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              fontFamily: theme.fontFamily,
+              color: theme.primaryColor,
+            ),
           ),
 
           const SizedBox(height: 16),
@@ -50,7 +59,7 @@ class VideoModule extends StatelessWidget {
             final videoId = _extractYoutubeId(url);
 
             // 🔥 SOLO PARA YOUTUBE (preview thumbnail)
-            // FUTURO: si es mp4 propio -> usar VideoPlayer (chequeo type)
+            // FUTURO: si es mp4 propio -> usar VideoPlayer (type check)
             final thumbnail = videoId != null
                 ? "https://img.youtube.com/vi/$videoId/0.jpg"
                 : null;
@@ -64,7 +73,11 @@ class VideoModule extends StatelessWidget {
                   Text(
                     videoTitle,
                     textAlign: TextAlign.center,
-                    style: const TextStyle(fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontFamily: theme.fontFamily,
+                      color: theme.textColor,
+                    ),
                   ),
 
                   const SizedBox(height: 8),
@@ -74,10 +87,13 @@ class VideoModule extends StatelessWidget {
                     Center(
                       child: ConstrainedBox(
                         constraints: const BoxConstraints(maxWidth: 320),
+
                         child: GestureDetector(
                           onTap: () => _openVideo(context, url),
+
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
+
                             child: Stack(
                               alignment: Alignment.center,
                               children: [
@@ -89,10 +105,10 @@ class VideoModule extends StatelessWidget {
                                   ),
                                 ),
 
-                                const Icon(
+                                Icon(
                                   Icons.play_circle_fill,
                                   size: 50,
-                                  color: Colors.white,
+                                  color: theme.accentColor,
                                 ),
                               ],
                             ),
@@ -106,8 +122,17 @@ class VideoModule extends StatelessWidget {
                   else
                     ElevatedButton.icon(
                       onPressed: () => _openVideo(context, url),
+
+                      /// 🎨 botón coherente con el theme
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.accentColor,
+                      ),
+
                       icon: const Icon(Icons.play_arrow),
-                      label: Text(S.of(context).actionPlayVideo),
+                      label: Text(
+                        S.of(context).actionPlayVideo,
+                        style: TextStyle(fontFamily: theme.fontFamily),
+                      ),
                     ),
                 ],
               ),

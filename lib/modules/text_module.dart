@@ -4,24 +4,31 @@ import 'package:invitaty/themes/invitation_theme.dart';
 class TextModule extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  const TextModule({
-    super.key,
-    required this.data,
-    required InvitationTheme theme,
-  });
+  /// 🎨 Tema global de la invitación
+  final InvitationTheme theme;
+
+  const TextModule({super.key, required this.data, required this.theme});
 
   @override
   Widget build(BuildContext context) {
-    // 🧠 CONTENIDO PRINCIPAL (si no viene → vacío)
+    // 🧠 CONTENIDO
     final title = (data["title"] ?? "").toString();
     final body = (data["body"] ?? "").toString();
 
-    // 🎨 CONFIGURACIÓN DE ESTILO (backend-ready)
-    final font = (data["font"] ?? "Poppins").toString();
-    final fontSize = (data["fontSize"] ?? 16).toDouble();
+    /// 🎨 CONFIGURACIÓN CON PRIORIDAD CORRECTA
 
-    // 🎨 color seguro (string HEX desde backend)
-    final color = _parseColor(data["color"]) ?? Colors.black;
+    // 🔹 FUENTE
+    // 1. Usuario
+    // 2. Tema
+    // 3. Fallback
+    final font = (data["font"] as String?) ?? theme.fontFamily;
+
+    // 🔹 TAMAÑO
+    final fontSize =
+        (data["fontSize"] as num?)?.toDouble() ?? theme.bodyFontSize;
+
+    // 🔹 COLOR
+    final color = _parseColor(data["color"]) ?? theme.textColor;
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
@@ -29,13 +36,15 @@ class TextModule extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // 🔹 TÍTULO (opcional)
+          // 🔹 TÍTULO
           if (title.isNotEmpty)
             Text(
               title,
               textAlign: TextAlign.center,
+
+              /// 🔥 AQUÍ el tema también influye
               style: TextStyle(
-                fontSize: fontSize + 4,
+                fontSize: (theme.titleFontSize),
                 fontWeight: FontWeight.bold,
                 fontFamily: font,
                 color: color,
@@ -44,7 +53,7 @@ class TextModule extends StatelessWidget {
 
           const SizedBox(height: 8),
 
-          // 🔹 CUERPO (opcional)
+          // 🔹 CUERPO
           if (body.isNotEmpty)
             Text(
               body,
@@ -60,11 +69,7 @@ class TextModule extends StatelessWidget {
     );
   }
 
-  /// 🎨 Convierte valores del backend a Color seguro
-  /// Soporta:
-  /// - "#RRGGBB"
-  /// - "0xFFRRGGBB"
-  /// - "RRGGBB"
+  /// 🎨 PARSER COLOR BACKEND-SAFE
   Color? _parseColor(dynamic value) {
     if (value == null) return null;
 
@@ -85,7 +90,7 @@ class TextModule extends StatelessWidget {
 
       return Color(int.parse(hex, radix: 16));
     } catch (_) {
-      return Colors.black;
+      return null;
     }
   }
 }

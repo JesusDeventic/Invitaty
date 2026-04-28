@@ -2,6 +2,7 @@
     "id": "baptism",
     "name": "Bautizo / Comunión",
     "theme": "classic",
+    
     "sections": [
       {
         "type": "cover",

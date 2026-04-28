@@ -5,11 +5,11 @@ import 'package:invitaty/themes/invitation_theme.dart';
 class DressCodeModule extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  const DressCodeModule({
-    super.key,
-    required this.data,
-    required InvitationTheme theme,
-  });
+  /// 🎨 THEME GLOBAL DE LA INVITACIÓN
+  /// 👉 Define base visual del módulo
+  final InvitationTheme theme;
+
+  const DressCodeModule({super.key, required this.data, required this.theme});
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +23,11 @@ class DressCodeModule extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+
+      /// 🎨 fondo consistente con theme global
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
-        border: Border.all(color: Colors.grey.shade300),
+        color: theme.backgroundColor,
+        border: Border.all(color: theme.primaryColor.withValues(alpha: 0.2)),
         borderRadius: BorderRadius.circular(12),
       ),
 
@@ -33,7 +35,7 @@ class DressCodeModule extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // 👕 ICONO VISUAL DEL MÓDULO
-          const Icon(Icons.checkroom, size: 32),
+          Icon(Icons.checkroom, size: 32, color: theme.primaryColor),
 
           const SizedBox(height: 8),
 
@@ -41,7 +43,12 @@ class DressCodeModule extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              fontFamily: theme.fontFamily,
+              color: theme.primaryColor,
+            ),
           ),
 
           const SizedBox(height: 12),
@@ -54,15 +61,19 @@ class DressCodeModule extends StatelessWidget {
           if (style.isNotEmpty)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+
               decoration: BoxDecoration(
-                color: Colors.grey.shade200,
+                color: theme.accentColor.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(20),
               ),
+
               child: Text(
-                style, // 👉 aquí podrías mapear a traducción si quisieras en el futuro
-                style: const TextStyle(
+                style,
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
+                  fontFamily: theme.fontFamily,
+                  color: theme.primaryColor,
                 ),
               ),
             ),
@@ -70,7 +81,14 @@ class DressCodeModule extends StatelessWidget {
           // 📝 DESCRIPCIÓN OPCIONAL
           if (description.isNotEmpty) ...[
             const SizedBox(height: 12),
-            Text(description, textAlign: TextAlign.center),
+            Text(
+              description,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: theme.fontFamily,
+                color: theme.textColor.withValues(alpha: 0.9),
+              ),
+            ),
           ],
         ],
       ),

@@ -9,6 +9,7 @@ import 'package:invitaty/page/login/login_page.dart';
 import 'package:invitaty/page/login/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:invitaty/page/invitation/viewer_screen.dart';
 import 'package:invitaty/page/invitation/editor_screen.dart';
 import 'package:invitaty/page/editors/edit_text_module_screen.dart';
@@ -23,8 +24,16 @@ import 'package:invitaty/page/editors/edit_music_module_screen.dart';
 import 'package:invitaty/page/editors/edit_video_module_screen.dart';
 import 'package:invitaty/page/editors/edit_rsvp_module_screen.dart';
 import 'package:invitaty/page/templates/select_template_screen.dart';
+import 'package:invitaty/providers/invitation_provider.dart';
+import 'package:invitaty/themes/theme_registry.dart';
+import 'package:invitaty/themes/invitation_theme.dart';
 
 import 'app_routes.dart';
+
+InvitationTheme _currentInvitationTheme(BuildContext context) {
+  final themeId = context.read<InvitationProvider>().invitation["theme"];
+  return ThemeRegistry.get(themeId);
+}
 
 GoRouter createAppRouter(GlobalKey<NavigatorState> navigatorKey) {
   return GoRouter(
@@ -74,10 +83,12 @@ GoRouter createAppRouter(GlobalKey<NavigatorState> navigatorKey) {
         path: '/edit-text',
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>;
+          final theme = _currentInvitationTheme(context);
 
           return EditTextModuleScreen(
             index: extra["index"],
             section: extra["section"],
+            theme: theme,
           );
         },
       ),
@@ -139,10 +150,12 @@ GoRouter createAppRouter(GlobalKey<NavigatorState> navigatorKey) {
         path: '/edit-cover',
         builder: (context, state) {
           final extra = state.extra as Map<String, dynamic>;
+          final theme = _currentInvitationTheme(context);
 
           return EditCoverModuleScreen(
             index: extra["index"],
             section: extra["section"],
+            theme: theme,
           );
         },
       ),

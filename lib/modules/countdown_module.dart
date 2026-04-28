@@ -5,11 +5,11 @@ import 'package:invitaty/themes/invitation_theme.dart';
 class CountdownModule extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  const CountdownModule({
-    super.key,
-    required this.data,
-    required InvitationTheme theme,
-  });
+  /// 🎨 THEME GLOBAL DE LA INVITACIÓN
+  /// 👉 Define estética base del módulo
+  final InvitationTheme theme;
+
+  const CountdownModule({super.key, required this.data, required this.theme});
 
   /// 🔧 PARSER SEGURO DE FECHA (backend-ready)
   /// Acepta string ISO (recomendado para backend)
@@ -25,7 +25,7 @@ class CountdownModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// 🔹 NORMALIZACIÓN DE DATOS (importante para backend)
+    // 🔹 NORMALIZACIÓN DE DATOS (backend-safe)
     final title = (data["title"] ?? S.of(context).moduleNameCountdown)
         .toString();
 
@@ -36,11 +36,20 @@ class CountdownModule extends StatelessWidget {
       return Container(
         margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
         padding: const EdgeInsets.all(16),
+
+        /// 🎨 fondo consistente con theme
         decoration: BoxDecoration(
-          color: Colors.grey.shade50,
+          color: theme.backgroundColor,
           borderRadius: BorderRadius.circular(12),
         ),
-        child: Text(S.of(context).dateNotSet),
+
+        child: Text(
+          S.of(context).dateNotSet,
+          style: TextStyle(
+            fontFamily: theme.fontFamily,
+            color: theme.textColor,
+          ),
+        ),
       );
     }
 
@@ -62,8 +71,10 @@ class CountdownModule extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       padding: const EdgeInsets.all(20),
+
+      /// 🎨 fondo global del theme
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: theme.backgroundColor,
         borderRadius: BorderRadius.circular(12),
       ),
 
@@ -74,7 +85,12 @@ class CountdownModule extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              fontFamily: theme.fontFamily,
+              color: theme.primaryColor,
+            ),
           ),
 
           const SizedBox(height: 12),
@@ -87,7 +103,8 @@ class CountdownModule extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 18,
-              color: isPast ? Colors.redAccent : Colors.black87,
+              fontFamily: theme.fontFamily,
+              color: isPast ? Colors.redAccent : theme.textColor,
               fontWeight: FontWeight.w500,
             ),
           ),

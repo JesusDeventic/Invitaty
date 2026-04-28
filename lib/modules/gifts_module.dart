@@ -14,11 +14,11 @@ import 'package:invitaty/generated/l10n.dart';
 class GiftsModule extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  const GiftsModule({
-    super.key,
-    required this.data,
-    required InvitationTheme theme,
-  });
+  /// 🎨 THEME GLOBAL DE LA INVITACIÓN
+  /// 👉 Define estética base del módulo
+  final InvitationTheme theme;
+
+  const GiftsModule({super.key, required this.data, required this.theme});
 
   @override
   Widget build(BuildContext context) {
@@ -31,15 +31,17 @@ class GiftsModule extends StatelessWidget {
     final link = data["link"];
 
     /// 📋 LISTA DE IDEAS DE REGALO
-    /// Siempre se fuerza a List<String> aunque venga vacío/null
     final items = List<String>.from(data["items"] ?? []);
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       padding: const EdgeInsets.all(16),
+
+      /// 🎨 fondo coherente con el sistema de invitación
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: theme.backgroundColor,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: theme.primaryColor.withValues(alpha: 0.15)),
       ),
 
       child: Center(
@@ -50,7 +52,7 @@ class GiftsModule extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               /// 🎁 ICONO PRINCIPAL DEL MÓDULO
-              const Icon(Icons.card_giftcard, size: 32),
+              Icon(Icons.card_giftcard, size: 32, color: theme.primaryColor),
 
               const SizedBox(height: 8),
 
@@ -58,16 +60,25 @@ class GiftsModule extends StatelessWidget {
               Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
+                  fontFamily: theme.fontFamily,
+                  color: theme.primaryColor,
                 ),
               ),
 
               /// 💬 MENSAJE OPCIONAL
               if (message.isNotEmpty) ...[
                 const SizedBox(height: 12),
-                Text(message, textAlign: TextAlign.center),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontFamily: theme.fontFamily,
+                    color: theme.textColor,
+                  ),
+                ),
               ],
 
               const SizedBox(height: 16),
@@ -89,7 +100,6 @@ class GiftsModule extends StatelessWidget {
                 ),
 
               /// 🔗 LINK EXTERNO
-              /// Abre navegador externo con url_launcher
               if (link != null && link.toString().isNotEmpty) ...[
                 const SizedBox(height: 12),
                 ElevatedButton.icon(
@@ -97,8 +107,17 @@ class GiftsModule extends StatelessWidget {
                     final uri = Uri.parse(link.toString());
                     await launchUrl(uri);
                   },
+
+                  /// 🎨 botón coherente con el theme
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.accentColor,
+                  ),
+
                   icon: const Icon(Icons.open_in_new),
-                  label: Text(S.of(context).giftsList),
+                  label: Text(
+                    S.of(context).giftsList,
+                    style: TextStyle(fontFamily: theme.fontFamily),
+                  ),
                 ),
               ],
 
@@ -108,8 +127,12 @@ class GiftsModule extends StatelessWidget {
 
                 Text(
                   S.of(context).editGiftIdeas,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
                   textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontFamily: theme.fontFamily,
+                    color: theme.primaryColor,
+                  ),
                 ),
 
                 const SizedBox(height: 8),
@@ -120,7 +143,14 @@ class GiftsModule extends StatelessWidget {
                       .map(
                         (item) => Padding(
                           padding: const EdgeInsets.symmetric(vertical: 2),
-                          child: Text("• $item", textAlign: TextAlign.center),
+                          child: Text(
+                            "• $item",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontFamily: theme.fontFamily,
+                              color: theme.textColor,
+                            ),
+                          ),
                         ),
                       )
                       .toList(),
@@ -140,21 +170,32 @@ class GiftsModule extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+
+      /// 🎨 caja adaptada al theme
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.backgroundColor,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey.shade300),
+        border: Border.all(color: theme.primaryColor.withValues(alpha: 0.2)),
       ),
 
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           /// Texto centrado con etiqueta + valor
-          Expanded(child: Text("$label: $value", textAlign: TextAlign.center)),
+          Expanded(
+            child: Text(
+              "$label: $value",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: theme.fontFamily,
+                color: theme.textColor,
+              ),
+            ),
+          ),
 
           /// 📋 COPIAR AL PORTAPAPELES
           IconButton(
-            icon: const Icon(Icons.copy),
+            icon: Icon(Icons.copy, color: theme.primaryColor),
             onPressed: () {
               Clipboard.setData(ClipboardData(text: value));
             },

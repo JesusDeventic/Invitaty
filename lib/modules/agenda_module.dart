@@ -5,11 +5,11 @@ import 'package:invitaty/themes/invitation_theme.dart';
 class AgendaModule extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  const AgendaModule({
-    super.key,
-    required this.data,
-    required InvitationTheme theme,
-  });
+  /// 🎨 THEME GLOBAL DE LA INVITACIÓN
+  /// 👉 Base visual del módulo (no reemplaza datos del backend)
+  final InvitationTheme theme;
+
+  const AgendaModule({super.key, required this.data, required this.theme});
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +20,21 @@ class AgendaModule extends StatelessWidget {
     // Cada item: { time, title, description }
     final items = List<Map<String, dynamic>>.from(data["items"] ?? []);
 
+    // 🔤 fuente global (theme base)
+    final font = theme.fontFamily;
+
+    // 🎨 colores base del timeline
+    final titleColor = theme.primaryColor;
+    final textColor = theme.textColor;
+    final accentColor = theme.accentColor;
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       padding: const EdgeInsets.all(20),
+
+      /// 🎨 fondo basado en theme (coherencia global)
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: theme.backgroundColor,
         borderRadius: BorderRadius.circular(12),
       ),
 
@@ -35,7 +45,12 @@ class AgendaModule extends StatelessWidget {
           Text(
             title,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              fontFamily: font,
+              color: titleColor,
+            ),
           ),
 
           const SizedBox(height: 24),
@@ -53,7 +68,10 @@ class AgendaModule extends StatelessWidget {
                     left: 20,
                     top: 0,
                     bottom: 0,
-                    child: Container(width: 2, color: Colors.grey.shade300),
+                    child: Container(
+                      width: 2,
+                      color: accentColor.withValues(alpha: 0.3),
+                    ),
                   ),
 
                   Column(
@@ -79,8 +97,10 @@ class AgendaModule extends StatelessWidget {
                                 child: Container(
                                   width: 12,
                                   height: 12,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.black,
+
+                                  /// 🎨 marcador con color del theme
+                                  decoration: BoxDecoration(
+                                    color: accentColor,
                                     shape: BoxShape.circle,
                                   ),
                                 ),
@@ -97,9 +117,11 @@ class AgendaModule extends StatelessWidget {
                                   if (time.isNotEmpty)
                                     Text(
                                       time,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15,
+                                        fontFamily: font,
+                                        color: textColor,
                                       ),
                                     ),
 
@@ -108,9 +130,11 @@ class AgendaModule extends StatelessWidget {
                                   if (itemTitle.isNotEmpty)
                                     Text(
                                       itemTitle,
-                                      style: const TextStyle(
+                                      style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 17,
+                                        fontFamily: font,
+                                        color: textColor,
                                       ),
                                     ),
 
@@ -121,7 +145,8 @@ class AgendaModule extends StatelessWidget {
                                       description,
                                       style: TextStyle(
                                         fontSize: 14,
-                                        color: Colors.grey.shade700,
+                                        fontFamily: font,
+                                        color: textColor.withValues(alpha: 0.8),
                                       ),
                                     ),
                                 ],

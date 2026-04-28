@@ -1,49 +1,29 @@
+import 'package:invitaty/themes/presets/christmas_theme.dart';
+import 'package:invitaty/themes/presets/default_theme.dart';
+import 'package:invitaty/themes/presets/fun_theme.dart';
+import 'package:invitaty/themes/presets/minimal_theme.dart';
+
 import 'invitation_theme.dart';
 import 'presets/elegant_theme.dart';
+import 'presets/classic_theme.dart';
 
 /// 📦 REGISTRO GLOBAL DE THEMES
-///
-/// 👉 Aquí se centralizan TODOS los themes disponibles
-/// 👉 Evita usar if/switch por toda la app
-///
-/// 💡 Idea clave:
-/// "elegant" → ElegantTheme.theme
-///
-/// 👉 Escalable:
-/// - añadir nuevos themes sin tocar lógica
-/// - conectar con backend en futuro
+/// Centraliza todos los themes disponibles en la app
 class ThemeRegistry {
-  /// 🗂️ MAPA DE THEMES DISPONIBLES
-  ///
-  /// 🔹 key → id del JSON
-  /// 🔹 value → objeto InvitationTheme
   static final Map<String, InvitationTheme> _themes = {
     ElegantTheme.id: ElegantTheme.theme,
-
-    // 🔜 FUTURO:
-    // "modern": ModernTheme.theme,
-    // "minimal": MinimalTheme.theme,
+    ClassicTheme.id: ClassicTheme.theme,
+    ChristmasTheme.id: ChristmasTheme.theme,
+    FunTheme.id: FunTheme.theme,
+    MinimalTheme.id: MinimalTheme.theme,
+    DefaultTheme.id: DefaultTheme.theme,
   };
 
-  /// 🔎 OBTENER THEME POR ID
-  ///
-  /// 👉 Se usa en:
-  /// - viewer_screen
-  /// - editor (preview)
-  ///
-  /// ⚠️ IMPORTANTE:
-  /// Siempre devuelve algo (fallback)
+  /// 🔎 Obtener theme por ID (fallback seguro)
   static InvitationTheme get(String? id) {
-    if (id == null) return ElegantTheme.theme;
-
-    return _themes[id] ?? ElegantTheme.theme;
+    return _themes[id] ?? DefaultTheme.theme;
   }
 
-  /// 📋 LISTA DE THEMES DISPONIBLES
-  ///
-  /// 👉 Útil para:
-  /// - selector de temas (futuro)
-  static List<InvitationTheme> getAll() {
-    return _themes.values.toList();
-  }
+  /// 📋 Lista de themes (para futuro selector UI)
+  static List<InvitationTheme> getAll() => _themes.values.toList();
 }

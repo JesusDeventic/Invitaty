@@ -2,6 +2,7 @@
     "id": "custom",
     "name": "Personalizada",
     "theme": "default",
+    
     "sections": [
       {
         "type": "cover",

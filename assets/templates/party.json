@@ -2,6 +2,7 @@
     "id": "party",
     "name": "Cena / Fiesta",
     "theme": "minimal",
+    
     "sections": [
       {
         "type": "cover",

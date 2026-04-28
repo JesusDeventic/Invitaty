@@ -2,6 +2,7 @@
     "id": "christmas",
     "name": "Navidad / Felicitación",
     "theme": "christmas",
+    
     "sections": [
       {
         "type": "cover",

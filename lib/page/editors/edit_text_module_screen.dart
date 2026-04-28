@@ -3,15 +3,20 @@ import 'package:provider/provider.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:invitaty/generated/l10n.dart';
 import 'package:invitaty/providers/invitation_provider.dart';
+import 'package:invitaty/themes/invitation_theme.dart';
 
 class EditTextModuleScreen extends StatefulWidget {
   final int index;
   final Map<String, dynamic> section;
 
+  /// 🎨 THEME GLOBAL (IMPORTANTE)
+  final InvitationTheme theme;
+
   const EditTextModuleScreen({
     super.key,
     required this.index,
     required this.section,
+    required this.theme,
   });
 
   @override
@@ -24,11 +29,11 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
   late TextEditingController bodyController;
 
   // 🎨 CONFIGURACIÓN VISUAL
-  String selectedFont = "Poppins";
-  double fontSize = 18;
-  Color textColor = Colors.black;
+  late String selectedFont;
+  late double fontSize;
+  late Color textColor;
 
-  // 📦 CATÁLOGO DE FUENTES (frontend-driven)
+  // 📦 CATÁLOGO DE FUENTES
   final List<String> availableFonts = [
     "Poppins",
     "Playfair",
@@ -43,128 +48,130 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
     super.initState();
 
     final data = widget.section["data"] ?? {};
+    final theme = widget.theme;
 
-    // 🧠 inicialización desde backend
+    // 🧠 TEXTO
     titleController = TextEditingController(
       text: (data["title"] ?? "").toString(),
     );
+
     bodyController = TextEditingController(
       text: (data["body"] ?? "").toString(),
     );
 
-    selectedFont = (data["font"] ?? "Poppins").toString();
+    // 🎨 FONT
+    /// PRIORIDAD:
+    /// 1. data
+    /// 2. theme
+    selectedFont = (data["font"] as String?) ?? theme.fontFamily;
 
-    // 🔧 clamp para evitar valores rotos del backend
-    fontSize = (data["fontSize"] ?? 18).toDouble().clamp(18.0, 48.0);
+    // 🎨 SIZE
+    fontSize = (data["fontSize"] as num?)?.toDouble() ?? theme.bodyFontSize;
 
-    textColor = _parseColor(data["color"]);
+    // 🎨 COLOR
+    textColor = _parseColor(data["color"]) ?? theme.textColor;
   }
 
-  // 🎨 parseo seguro de color desde backend
-  Color _parseColor(dynamic value) {
-    if (value == null) return Colors.black;
+  // 🎨 parseo seguro
+  Color? _parseColor(dynamic value) {
+    if (value == null) return null;
 
     try {
-      if (value is String) {
-        String hex = value.replaceAll("#", "");
-        if (hex.length == 6) hex = "FF$hex";
-        return Color(int.parse(hex, radix: 16));
-      }
+      String hex = value.toString().replaceAll("#", "");
+      if (hex.length == 6) hex = "FF$hex";
 
-      if (value is int) {
-        return Color(value);
-      }
-    } catch (_) {}
-
-    return Colors.black;
+      return Color(int.parse(hex, radix: 16));
+    } catch (_) {
+      return null;
+    }
   }
 
-  // 🎨 convierte Color → HEX (#RRGGBB)
+  // 🎨 color → HEX
   String _colorToHex(Color color) {
-    final int value = color.toARGB32();
-    final hex = value.toRadixString(16).padLeft(8, '0');
+    final hex = color.toARGB32().toRadixString(16).padLeft(8, '0');
     return "#${hex.substring(2).toUpperCase()}";
   }
 
-  // 🎨 selector visual de color
+  // 🎨 PICKER
   void _pickColor() {
     Color tempColor = textColor;
 
     showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(S.of(context).selectTextColor),
-
-          content: SingleChildScrollView(
-            child: ColorPicker(
-              pickerColor: tempColor,
-              onColorChanged: (color) => tempColor = color,
-              enableAlpha: false,
-              displayThumbColor: true,
-            ),
+      builder: (_) => AlertDialog(
+        title: Text(S.of(context).selectTextColor),
+        content: ColorPicker(
+          pickerColor: tempColor,
+          onColorChanged: (c) => tempColor = c,
+          enableAlpha: false,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(S.of(context).buttonCancel),
           ),
-
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: Text(S.of(context).buttonCancel),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                setState(() => textColor = tempColor);
-                Navigator.pop(context);
-              },
-              child: Text(S.of(context).buttonConfirm),
-            ),
-          ],
-        );
-      },
+          ElevatedButton(
+            onPressed: () {
+              setState(() => textColor = tempColor);
+              Navigator.pop(context);
+            },
+            child: Text(S.of(context).buttonConfirm),
+          ),
+        ],
+      ),
     );
   }
 
-  // 💾 guardar en provider (estructura limpia backend-ready)
+  // 💾 SAVE (CLAVE)
   void _save() {
     final provider = context.read<InvitationProvider>();
+    final theme = widget.theme;
 
-    final updatedSection = {
-      ...widget.section,
-      "data": {
-        "title": titleController.text,
-        "body": bodyController.text,
-        "font": selectedFont,
-        "fontSize": fontSize,
-        "color": _colorToHex(textColor),
-      },
+    /// 🧠 SOLO GUARDAMOS SI DIFERENTE AL THEME
+    final Map<String, dynamic> cleanData = {
+      "title": titleController.text,
+      "body": bodyController.text,
     };
+
+    if (selectedFont != theme.fontFamily) {
+      cleanData["font"] = selectedFont;
+    }
+
+    if (fontSize != theme.bodyFontSize) {
+      cleanData["fontSize"] = fontSize;
+    }
+
+    if (textColor != theme.textColor) {
+      cleanData["color"] = _colorToHex(textColor);
+    }
+
+    final updatedSection = {...widget.section, "data": cleanData};
 
     provider.updateSection(widget.index, updatedSection);
     Navigator.pop(context);
   }
 
-  // 🗑 eliminar módulo
+  // 🗑 DELETE
   Future<void> _delete() async {
     final provider = context.read<InvitationProvider>();
 
     final confirm = await showDialog<bool>(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(S.of(context).deleteText),
-          content: Text(S.of(context).deleteModuleConfirmation),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: Text(S.of(context).buttonCancel),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-              onPressed: () => Navigator.pop(context, true),
-              child: Text(S.of(context).messagesDelete),
-            ),
-          ],
-        );
-      },
+      builder: (_) => AlertDialog(
+        title: Text(S.of(context).deleteText),
+        content: Text(S.of(context).deleteModuleConfirmation),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: Text(S.of(context).buttonCancel),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.pop(context, true),
+            child: Text(S.of(context).messagesDelete),
+          ),
+        ],
+      ),
     );
 
     if (confirm == true) {
@@ -175,6 +182,8 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = widget.theme;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).editText),
@@ -195,33 +204,26 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
 
             children: [
-              // 🧠 título
+              // 🧠 TÍTULO
               TextField(
                 controller: titleController,
                 decoration: InputDecoration(labelText: S.of(context).editTitle),
-                onChanged: (_) => setState(() {}),
               ),
 
               const SizedBox(height: 16),
 
-              // 📝 contenido
+              // 📝 BODY
               TextField(
                 controller: bodyController,
+                maxLines: 4,
                 decoration: InputDecoration(
                   labelText: S.of(context).editContent,
                 ),
-                maxLines: 4,
-                onChanged: (_) => setState(() {}),
               ),
 
               const SizedBox(height: 16),
 
-              // 🎨 selector de fuente
-              Text(
-                S.of(context).editFont,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-
+              // 🎨 FONT
               DropdownButton<String>(
                 value: selectedFont,
                 isExpanded: true,
@@ -236,83 +238,39 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
               const SizedBox(height: 16),
 
-              // 📏 tamaño de fuente
-              Text(
-                S.of(context).labelSize,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-
+              // 📏 SIZE
               Slider(
                 value: fontSize,
-                min: 18,
+                min: 12,
                 max: 48,
-                divisions: 15,
                 label: fontSize.toStringAsFixed(0),
                 onChanged: (v) => setState(() => fontSize = v),
               ),
 
               const SizedBox(height: 16),
 
-              // 🎨 color
-              Text(
-                S.of(context).editColor,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-
-              const SizedBox(height: 8),
-
-              Row(
-                children: [
-                  GestureDetector(
-                    onTap: _pickColor,
-                    child: Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: textColor,
-                        borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: Colors.black26),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Text(S.of(context).selectTextColor),
-                ],
+              // 🎨 COLOR
+              GestureDetector(
+                onTap: _pickColor,
+                child: Container(width: 40, height: 40, color: textColor),
               ),
 
               const SizedBox(height: 24),
 
-              // 👁 PREVIEW (clave para UX)
-              Text(
-                S.of(context).actionPreview,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-
-              const SizedBox(height: 12),
-
+              // 👁 PREVIEW (USA THEME SI NO CAMBIAS)
               Container(
-                width: double.infinity,
                 padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade100,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-
+                decoration: BoxDecoration(color: theme.backgroundColor),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       titleController.text,
                       style: TextStyle(
                         fontSize: fontSize + 4,
-                        fontWeight: FontWeight.bold,
                         fontFamily: selectedFont,
                         color: textColor,
                       ),
                     ),
-
-                    const SizedBox(height: 8),
-
                     Text(
                       bodyController.text,
                       style: TextStyle(

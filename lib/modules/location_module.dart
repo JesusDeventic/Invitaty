@@ -6,11 +6,10 @@ import 'package:invitaty/generated/l10n.dart';
 class LocationModule extends StatelessWidget {
   final Map<String, dynamic> data;
 
-  const LocationModule({
-    super.key,
-    required this.data,
-    required InvitationTheme theme,
-  });
+  /// 🆕 THEME GLOBAL DE LA INVITACIÓN
+  final InvitationTheme theme;
+
+  const LocationModule({super.key, required this.data, required this.theme});
 
   /// 🔧 Abre URL de mapas de forma segura (preparado backend)
   Future<void> _openMap(String url) async {
@@ -39,8 +38,10 @@ class LocationModule extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+
+      /// 🎨 USO DEL THEME
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: theme.backgroundColor,
         borderRadius: BorderRadius.circular(12),
       ),
 
@@ -52,13 +53,25 @@ class LocationModule extends StatelessWidget {
           Text(
             name,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: theme.primaryColor,
+              fontFamily: theme.fontFamily,
+            ),
           ),
 
           const SizedBox(height: 8),
 
           // 📍 DIRECCIÓN
-          if (address.isNotEmpty) Text(address, textAlign: TextAlign.center),
+          if (address.isNotEmpty)
+            Text(
+              address,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: theme.primaryColor.withValues(alpha: 0.8),
+              ),
+            ),
 
           const SizedBox(height: 12),
 
@@ -66,8 +79,17 @@ class LocationModule extends StatelessWidget {
           if (mapsUrl != null)
             ElevatedButton.icon(
               onPressed: () => _openMap(mapsUrl),
-              icon: const Icon(Icons.map),
-              label: Text(S.of(context).openMaps),
+              icon: Icon(Icons.map, color: Colors.white),
+
+              /// 🎨 BOTÓN CON COLOR DEL THEME
+              style: ElevatedButton.styleFrom(
+                backgroundColor: theme.accentColor,
+              ),
+
+              label: Text(
+                S.of(context).openMaps,
+                style: TextStyle(fontFamily: theme.fontFamily),
+              ),
             ),
         ],
       ),

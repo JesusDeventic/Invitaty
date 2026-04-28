@@ -3,11 +3,6 @@
   "name": "Boda",
   "theme": "elegant",
 
-  "customTheme": {
-    "primaryColor": "",
-    "backgroundImage": ""
-  },
-
   "sections": [
     {
       "type": "cover",

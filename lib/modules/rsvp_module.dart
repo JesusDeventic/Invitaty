@@ -8,11 +8,10 @@ import 'package:invitaty/themes/invitation_theme.dart';
 class RsvpModule extends StatefulWidget {
   final Map<String, dynamic> data;
 
-  const RsvpModule({
-    super.key,
-    required this.data,
-    required InvitationTheme theme,
-  });
+  /// 🎨 THEME GLOBAL DE LA INVITACIÓN
+  final InvitationTheme theme;
+
+  const RsvpModule({super.key, required this.data, required this.theme});
 
   @override
   State<RsvpModule> createState() => _RsvpModuleState();
@@ -20,7 +19,6 @@ class RsvpModule extends StatefulWidget {
 
 class _RsvpModuleState extends State<RsvpModule> {
   /// 🧠 KEY GLOBAL DEL FORMULARIO
-  /// Permite validar todo el formulario de una sola vez
   final _formKey = GlobalKey<FormState>();
 
   /// ✏️ CONTROLADORES DE CAMPOS DE TEXTO
@@ -28,7 +26,6 @@ class _RsvpModuleState extends State<RsvpModule> {
   final Map<String, TextEditingController> controllers = {};
 
   /// 📦 VALORES NO-TEXTO
-  /// Switches, selects, radios, etc.
   final Map<String, dynamic> formValues = {};
 
   @override
@@ -38,9 +35,6 @@ class _RsvpModuleState extends State<RsvpModule> {
     /// 📥 CAMPOS DEFINIDOS EN EL JSON DEL MÓDULO
     final fields = List<Map<String, dynamic>>.from(widget.data["fields"] ?? []);
 
-    /// 🔁 INICIALIZACIÓN DE ESTADO DEL FORMULARIO
-    /// - TextFields → controllers
-    /// - Switch → valores booleanos
     for (final field in fields) {
       final key = field["key"];
 
@@ -57,8 +51,6 @@ class _RsvpModuleState extends State<RsvpModule> {
 
   @override
   void dispose() {
-    /// 🧹 CLEANUP DE CONTROLADORES
-    /// Evita memory leaks
     for (final controller in controllers.values) {
       controller.dispose();
     }
@@ -66,8 +58,7 @@ class _RsvpModuleState extends State<RsvpModule> {
     super.dispose();
   }
 
-  /// 🧩 BUILDER DE CAMPOS DINÁMICOS
-  /// Genera UI según tipo de campo definido en JSON
+  /// 🧩 BUILDER DE CAMPOS DINÁMICOS (SIN CAMBIOS)
   Widget _buildField(Map<String, dynamic> field) {
     final type = field["type"] ?? "text";
     final key = field["key"] ?? "";
@@ -142,9 +133,7 @@ class _RsvpModuleState extends State<RsvpModule> {
           title: Text(label),
           value: formValues[key] ?? false,
           onChanged: (value) {
-            setState(() {
-              formValues[key] = value;
-            });
+            setState(() => formValues[key] = value);
           },
         );
 
@@ -165,9 +154,7 @@ class _RsvpModuleState extends State<RsvpModule> {
               )
               .toList(),
           onChanged: (value) {
-            setState(() {
-              formValues[key] = value;
-            });
+            setState(() => formValues[key] = value);
           },
           validator: (value) {
             if (required && (value == null || value.isEmpty)) {
@@ -197,9 +184,7 @@ class _RsvpModuleState extends State<RsvpModule> {
                 value: option,
                 groupValue: formValues[key],
                 onChanged: (value) {
-                  setState(() {
-                    formValues[key] = value;
-                  });
+                  setState(() => formValues[key] = value);
                 },
               );
             }),
@@ -222,8 +207,7 @@ class _RsvpModuleState extends State<RsvpModule> {
     }
   }
 
-  /// 📤 SUBMIT DEL FORMULARIO
-  /// Junta todos los valores (controllers + formValues)
+  /// 📤 SUBMIT (SIN CAMBIOS)
   void _submitForm() {
     if (!_formKey.currentState!.validate()) return;
 
@@ -257,45 +241,74 @@ class _RsvpModuleState extends State<RsvpModule> {
     final fields = List<Map<String, dynamic>>.from(widget.data["fields"] ?? []);
 
     return Container(
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       padding: const EdgeInsets.all(16),
-      margin: const EdgeInsets.symmetric(vertical: 8),
+
+      /// 🎨 SOLO CONTENEDOR USA THEME
+      decoration: BoxDecoration(
+        color: widget.theme.backgroundColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: widget.theme.primaryColor.withValues(alpha: 0.15),
+        ),
+      ),
 
       child: Form(
         key: _formKey,
 
         child: Column(
           children: [
-            /// 🏷️ TÍTULO DEL FORMULARIO
+            /// 🏷️ TÍTULO (CON THEME)
             Text(
               title,
               textAlign: TextAlign.center,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              style: TextStyle(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                fontFamily: widget.theme.fontFamily,
+                color: widget.theme.primaryColor,
+              ),
             ),
 
-            /// 💬 DESCRIPCIÓN OPCIONAL
+            /// 💬 SUBTÍTULO (CON THEME)
             if (description.isNotEmpty) ...[
               const SizedBox(height: 8),
-              Text(description, textAlign: TextAlign.center),
+              Text(
+                description,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontFamily: widget.theme.fontFamily,
+                  color: widget.theme.textColor,
+                ),
+              ),
             ],
 
             const SizedBox(height: 20),
 
-            /// 🧩 CAMPOS DINÁMICOS
-            ...fields.map((field) {
-              return Padding(
+            /// 🧩 CAMPOS (SIN CAMBIOS DE ESTILO)
+            ...fields.map(
+              (field) => Padding(
                 padding: const EdgeInsets.only(bottom: 16),
                 child: _buildField(field),
-              );
-            }),
+              ),
+            ),
 
             const SizedBox(height: 8),
 
-            /// 📤 BOTÓN DE ENVÍO
+            /// 📤 BOTÓN (CON THEME)
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: _submitForm,
-                child: Text(S.of(context).agreeAttendance),
+
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: widget.theme.accentColor,
+                ),
+
+                child: Text(
+                  S.of(context).agreeAttendance,
+                  style: TextStyle(fontFamily: widget.theme.fontFamily),
+                ),
               ),
             ),
           ],

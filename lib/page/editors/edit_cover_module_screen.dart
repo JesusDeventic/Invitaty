@@ -4,15 +4,18 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:invitaty/generated/l10n.dart';
 
 import 'package:invitaty/providers/invitation_provider.dart';
+import 'package:invitaty/themes/invitation_theme.dart';
 
 class EditCoverModuleScreen extends StatefulWidget {
   final int index;
   final Map<String, dynamic> section;
+  final InvitationTheme theme;
 
   const EditCoverModuleScreen({
     super.key,
     required this.index,
     required this.section,
+    required this.theme,
   });
 
   @override
@@ -42,6 +45,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
     super.initState();
 
     final data = widget.section["data"] ?? {};
+    final theme = widget.theme;
 
     // 🧠 NORMALIZACIÓN (importante para evitar errores de tipo)
     titleController = TextEditingController(
@@ -52,14 +56,14 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
       text: (data["subtitle"] ?? "").toString(),
     );
 
-    selectedFont = (data["font"] ?? "Poppins").toString();
+    selectedFont = (data["font"] ?? theme.fontFamily).toString();
 
-    titleSize = (data["fontSizeTitle"] ?? 28).toDouble();
-    subtitleSize = (data["fontSizeSubtitle"] ?? 18).toDouble();
+    titleSize = (data["fontSizeTitle"] ?? theme.titleFontSize + 4).toDouble();
+    subtitleSize = (data["fontSizeSubtitle"] ?? theme.bodyFontSize).toDouble();
 
     imageUrl = (data["imageUrl"] ?? "").toString();
 
-    final colorHex = data["textColor"] ?? "#FFFFFF";
+    final colorHex = data["textColor"] ?? _colorToHex(theme.textColor);
     selectedColor = _hexToColor(colorHex);
   }
 
@@ -73,23 +77,35 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
   // 💾 SAVE
   void _save() {
     final provider = context.read<InvitationProvider>();
+    final theme = widget.theme;
 
-    // 📦 ESTRUCTURA LISTA PARA BACKEND
-    final updatedSection = {
-      ...widget.section,
-      "data": {
-        "title": titleController.text,
-        "subtitle": subtitleController.text,
-        "font": selectedFont,
-        "fontSizeTitle": titleSize,
-        "fontSizeSubtitle": subtitleSize,
-        "textColor": _colorToHex(selectedColor),
+    // 🧠 SOLO GUARDAMOS OVERRIDES SI DIFIEREN DEL THEME
+    final cleanData = <String, dynamic>{
+      "title": titleController.text,
+      "subtitle": subtitleController.text,
 
-        // 🔥 BACKEND READY:
-        // Aquí guardaremos la URL que devuelva el backend
-        "imageUrl": imageUrl,
-      },
+      // 🔥 BACKEND READY:
+      // Aquí guardaremos la URL que devuelva el backend
+      "imageUrl": imageUrl,
     };
+
+    if (selectedFont != theme.fontFamily) {
+      cleanData["font"] = selectedFont;
+    }
+
+    if (titleSize != theme.titleFontSize + 4) {
+      cleanData["fontSizeTitle"] = titleSize;
+    }
+
+    if (subtitleSize != theme.bodyFontSize) {
+      cleanData["fontSizeSubtitle"] = subtitleSize;
+    }
+
+    if (selectedColor != theme.textColor) {
+      cleanData["textColor"] = _colorToHex(selectedColor);
+    }
+
+    final updatedSection = {...widget.section, "data": cleanData};
 
     provider.updateSection(widget.index, updatedSection);
     Navigator.pop(context);
@@ -149,6 +165,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = widget.theme;
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).editCover),
@@ -182,7 +199,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
               // 🔤 FUENTE
               Text(
                 S.of(context).editFont,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
 
               DropdownButton<String>(
@@ -236,7 +253,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
               // 🎨 COLOR
               Text(
                 S.of(context).editColor,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
 
               const SizedBox(height: 8),
@@ -274,7 +291,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
               // 👁️ PREVIEW
               Text(
                 S.of(context).actionPreview,
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
 
               const SizedBox(height: 12),
@@ -290,8 +307,11 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
                         )
                       : null,
                   gradient: imageUrl.isEmpty
-                      ? const LinearGradient(
-                          colors: [Colors.purple, Colors.blue],
+                      ? LinearGradient(
+                          colors: [
+                            theme.primaryColor,
+                            theme.accentColor,
+                          ],
                         )
                       : null,
                 ),

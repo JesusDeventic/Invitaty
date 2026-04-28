@@ -2,6 +2,7 @@
     "id": "birthday",
     "name": "Cumpleaños",
     "theme": "fun",
+    
     "sections": [
       {
         "type": "cover",
