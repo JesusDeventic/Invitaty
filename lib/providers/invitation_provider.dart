@@ -13,6 +13,15 @@ class InvitationProvider extends ChangeNotifier {
   // 🔍 GETTER INVITATION COMPLETA
   Map<String, dynamic> get invitation => _invitation;
 
+  /// 🆕 CAMBIO DE THEME (REACTIVO)
+  /// 🔥 IMPORTANTE:
+  /// - Actualiza el JSON en memoria
+  /// - Dispara rebuild del viewer automáticamente
+  void setTheme(String themeId) {
+    _invitation["theme"] = themeId;
+    notifyListeners();
+  }
+
   // 🆕 SET INVITATION COMPLETA
   void setInvitation(Map<String, dynamic> invitation) {
     final sections = List<Map<String, dynamic>>.from(
@@ -120,6 +129,25 @@ class InvitationProvider extends ChangeNotifier {
     currentSections.insert(newIndex, item);
 
     _invitation["sections"] = currentSections;
+
+    notifyListeners();
+  }
+
+  /// 🎨 OVERRIDES DE THEME (customización del usuario)
+  Map<String, dynamic> _themeOverride = {};
+  Map<String, dynamic> get themeOverride => _themeOverride;
+
+  /// 🧠 APLICAR OVERRIDE DE THEME
+  void applyThemeOverride({
+    required Color background,
+    required Color primary,
+    required String font,
+  }) {
+    _themeOverride = {
+      "backgroundColor": background.value,
+      "primaryColor": primary.value,
+      "fontFamily": font,
+    };
 
     notifyListeners();
   }

@@ -20,6 +20,10 @@ class ElegantTheme {
   static const InvitationTheme theme = InvitationTheme(
     id: id,
 
+    /// 🆕 CLAVE DE TRADUCCIÓN DEL NOMBRE DEL THEME
+    /// 👉 Usado para mostrar el nombre en UI traducido
+    nameKey: "theme_elegant",
+
     /// 🌸 Fondo general
     backgroundColor: Color(0xFFFFF8F6),
 
@@ -34,11 +38,11 @@ class ElegantTheme {
     textColor: Color(0xFF4A3F3F),
 
     /// 🔤 Tipografía elegante
-    fontFamily: "Playfair",
+    fontFamily: "GreatVibes",
 
     /// 🆕 TAMAÑOS BASE
     /// 👉 Ajustados a estilo elegante (más aire, más jerarquía)
-    titleFontSize: 24,
-    bodyFontSize: 16,
+    titleFontSize: 32,
+    bodyFontSize: 18,
   );
 }

@@ -17,6 +17,10 @@ class FunTheme {
   static const InvitationTheme theme = InvitationTheme(
     id: id,
 
+    /// 🆕 CLAVE DE TRADUCCIÓN DEL NOMBRE DEL THEME
+    /// 👉 Usado para mostrar el nombre en UI traducido
+    nameKey: "theme_fun",
+
     /// 🎈 Fondo limpio para no saturar
     backgroundColor: Color(0xFFFFFDF7),
 
@@ -31,7 +35,7 @@ class FunTheme {
     fontFamily: "Disney",
 
     /// 📏 Escala ligeramente más grande (sensación “infantil”)
-    titleFontSize: 26,
-    bodyFontSize: 17,
+    titleFontSize: 32,
+    bodyFontSize: 22,
   );
 }

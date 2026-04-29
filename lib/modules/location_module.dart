@@ -11,6 +11,18 @@ class LocationModule extends StatelessWidget {
 
   const LocationModule({super.key, required this.data, required this.theme});
 
+  /// 🔧 PARSER SEGURO DE FECHA (backend-ready)
+  /// 👉 Espera ISO string (recomendado backend)
+  DateTime? _parseDate(dynamic value) {
+    if (value == null) return null;
+
+    try {
+      return DateTime.tryParse(value.toString());
+    } catch (_) {
+      return null;
+    }
+  }
+
   /// 🔧 Abre URL de mapas de forma segura (preparado backend)
   Future<void> _openMap(String url) async {
     final uri = Uri.tryParse(url);
@@ -34,6 +46,9 @@ class LocationModule extends StatelessWidget {
     final mapsUrl = (data["mapsUrl"] as String?)?.trim().isNotEmpty == true
         ? data["mapsUrl"].toString().trim()
         : null;
+
+    /// 🆕 FECHA DEL EVENTO
+    final eventDateTime = _parseDate(data["eventDateTime"]);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -75,11 +90,29 @@ class LocationModule extends StatelessWidget {
 
           const SizedBox(height: 12),
 
+          /// 🆕 📅 FECHA Y HORA DEL EVENTO
+          /// 👉 Se muestra solo si existe
+          if (eventDateTime != null)
+            Text(
+              /// 🔹 Formato simple (luego puedes mejorar con intl DateFormat)
+              "${eventDateTime.day}/${eventDateTime.month}/${eventDateTime.year} "
+              "${eventDateTime.hour.toString().padLeft(2, '0')}:${eventDateTime.minute.toString().padLeft(2, '0')}",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: theme.textColor,
+                fontFamily: theme.fontFamily,
+              ),
+            ),
+
+          if (eventDateTime != null) const SizedBox(height: 12),
+
           // 🔗 BOTÓN MAPS
           if (mapsUrl != null)
             ElevatedButton.icon(
               onPressed: () => _openMap(mapsUrl),
-              icon: Icon(Icons.map, color: Colors.white),
+              icon: const Icon(Icons.map, color: Colors.white),
 
               /// 🎨 BOTÓN CON COLOR DEL THEME
               style: ElevatedButton.styleFrom(

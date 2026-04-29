@@ -17,6 +17,10 @@ class ChristmasTheme {
   static const InvitationTheme theme = InvitationTheme(
     id: id,
 
+    /// 🆕 CLAVE DE TRADUCCIÓN DEL NOMBRE DEL THEME
+    /// 👉 Usado para mostrar el nombre en UI traducido
+    nameKey: "theme_christmas",
+
     /// ❄️ Fondo nieve / invierno
     backgroundColor: Color(0xFFFFFBF7),
 
@@ -33,7 +37,7 @@ class ChristmasTheme {
     fontFamily: "Playfair",
 
     /// 📏 Jerarquía ligeramente más festiva (un poco más grande)
-    titleFontSize: 26,
-    bodyFontSize: 16,
+    titleFontSize: 32,
+    bodyFontSize: 20,
   );
 }

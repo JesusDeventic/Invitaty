@@ -20,6 +20,10 @@ class ClassicTheme {
   static const InvitationTheme theme = InvitationTheme(
     id: id,
 
+    /// 🆕 CLAVE DE TRADUCCIÓN DEL NOMBRE DEL THEME
+    /// 👉 Usado para mostrar el nombre en UI traducido
+    nameKey: "theme_classic",
+
     /// 🤍 Fondo principal (más “papel” que rosa)
     backgroundColor: Color(0xFFFBFBF7),
 
@@ -40,7 +44,7 @@ class ClassicTheme {
     fontFamily: "Playfair",
 
     /// 🆕 TIPOGRAFÍA BASE
-    titleFontSize: 24,
-    bodyFontSize: 16,
+    titleFontSize: 26,
+    bodyFontSize: 18,
   );
 }

@@ -63,6 +63,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "appVersionChangeLogTitle": MessageLookupByLibrary.simpleMessage(
       "Changelog",
     ),
+    "applyChanges": MessageLookupByLibrary.simpleMessage("Aplicar cambios"),
     "attendanceConfirmation": MessageLookupByLibrary.simpleMessage(
       "Confirmación de asistencia",
     ),
@@ -122,7 +123,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "deleteGallery": MessageLookupByLibrary.simpleMessage("Eliminar galería"),
     "deleteGifts": MessageLookupByLibrary.simpleMessage("Eliminar regalos"),
     "deleteLocation": MessageLookupByLibrary.simpleMessage(
-      "Eliminar ubicación",
+      "Eliminar localización y fecha",
     ),
     "deleteModuleConfirmation": MessageLookupByLibrary.simpleMessage(
       "¿Estás seguro de que quieres eliminar este módulo? Esta acción no se puede deshacer",
@@ -194,7 +195,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "editGiftIdeas": MessageLookupByLibrary.simpleMessage("Ideas de regalos"),
     "editGifts": MessageLookupByLibrary.simpleMessage("Editar regalos"),
-    "editLocation": MessageLookupByLibrary.simpleMessage("Editar ubicación"),
+    "editLocation": MessageLookupByLibrary.simpleMessage(
+      "Editar ubicación y fecha",
+    ),
     "editMusic": MessageLookupByLibrary.simpleMessage("Editar música"),
     "editRsvp": MessageLookupByLibrary.simpleMessage(
       "Editar formulario de asistencia",
@@ -271,6 +274,8 @@ class MessageLookup extends MessageLookupByLibrary {
     "eventAlreadyStarted": MessageLookupByLibrary.simpleMessage(
       "El evento ya ha comenzado",
     ),
+    "eventDate": MessageLookupByLibrary.simpleMessage("Fecha del evento"),
+    "eventTime": MessageLookupByLibrary.simpleMessage("Hora del evento"),
     "expandMenu": MessageLookupByLibrary.simpleMessage("Expand"),
     "faq1Answer": MessageLookupByLibrary.simpleMessage(
       "It\'s an app to create invitations for all kinds of events. It lets you choose templates and personalize the invitation, share it on social media, receive confirmation notifications, and track attendance.",
@@ -427,7 +432,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "moduleNameGallery": MessageLookupByLibrary.simpleMessage("Galería"),
     "moduleNameGifts": MessageLookupByLibrary.simpleMessage("Regalos"),
-    "moduleNameLocation": MessageLookupByLibrary.simpleMessage("Localización"),
+    "moduleNameLocation": MessageLookupByLibrary.simpleMessage(
+      "Localización y fecha",
+    ),
     "moduleNameMusic": MessageLookupByLibrary.simpleMessage("Música"),
     "moduleNameRsvp": MessageLookupByLibrary.simpleMessage(
       "Formulario de asistencia",
@@ -525,6 +532,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Remove country",
     ),
     "retryPublicProfile": MessageLookupByLibrary.simpleMessage("Retry"),
+    "sampleText": MessageLookupByLibrary.simpleMessage("Texto de prueba"),
     "save": MessageLookupByLibrary.simpleMessage("Guardar"),
     "selectImage": MessageLookupByLibrary.simpleMessage("Seleccionar imagen"),
     "selectTemplateTitle": MessageLookupByLibrary.simpleMessage(
@@ -582,11 +590,11 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "templateCustomName": MessageLookupByLibrary.simpleMessage("Personalizada"),
     "templatePartyDesc": MessageLookupByLibrary.simpleMessage(
-      "Perfecto para eventos sociales",
+      "Estilo minimalista, perfecto para eventos sociales",
     ),
     "templatePartyName": MessageLookupByLibrary.simpleMessage("Cena / Fiesta"),
     "templateWeddingDesc": MessageLookupByLibrary.simpleMessage(
-      "Diseño clásico y romántico",
+      "Diseño elegante y romántico",
     ),
     "templateWeddingName": MessageLookupByLibrary.simpleMessage(
       "Boda elegante",
@@ -611,8 +619,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Country",
     ),
     "theme": MessageLookupByLibrary.simpleMessage("Theme"),
+    "themeChristmas": MessageLookupByLibrary.simpleMessage("Navideño"),
+    "themeClassic": MessageLookupByLibrary.simpleMessage("Clásico"),
     "themeDark": MessageLookupByLibrary.simpleMessage("Dark mode"),
+    "themeDefault": MessageLookupByLibrary.simpleMessage("Neutro"),
+    "themeElegant": MessageLookupByLibrary.simpleMessage("Elegante"),
+    "themeFun": MessageLookupByLibrary.simpleMessage("Divertido/Infantil"),
     "themeLight": MessageLookupByLibrary.simpleMessage("Light mode"),
+    "themeMinimal": MessageLookupByLibrary.simpleMessage("Minimalista"),
+    "themeSelect": MessageLookupByLibrary.simpleMessage("Seleccionar tema"),
     "timeCountdown": MessageLookupByLibrary.simpleMessage("Hora"),
     "userAvatar": MessageLookupByLibrary.simpleMessage("Avatar"),
     "userDescription": MessageLookupByLibrary.simpleMessage("Bio"),

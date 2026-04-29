@@ -13,6 +13,10 @@ class DefaultTheme {
   static const InvitationTheme theme = InvitationTheme(
     id: id,
 
+    /// 🆕 CLAVE DE TRADUCCIÓN DEL NOMBRE DEL THEME
+    /// 👉 Usado para mostrar el nombre en UI traducido
+    nameKey: "theme_default",
+
     /// 🎨 Fondo neutro absoluto
     backgroundColor: Colors.white,
 

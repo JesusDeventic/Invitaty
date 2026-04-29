@@ -13,18 +13,12 @@
         }
       },
       {
-        "type": "countdown",
-        "data": {
-          "title": "",
-          "eventDateTime": ""
-        }
-      },
-      {
         "type": "location",
         "data": {
           "name": "",
           "address": "",
-          "mapsUrl": ""
+          "mapsUrl": "",
+          "eventDateTime": ""
         }
       },
       {

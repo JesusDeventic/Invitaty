@@ -1899,10 +1899,10 @@ class S {
     );
   }
 
-  /// `Diseño clásico y romántico`
+  /// `Diseño elegante y romántico`
   String get templateWeddingDesc {
     return Intl.message(
-      'Diseño clásico y romántico',
+      'Diseño elegante y romántico',
       name: 'templateWeddingDesc',
       desc: '',
       args: [],
@@ -1959,10 +1959,10 @@ class S {
     );
   }
 
-  /// `Perfecto para eventos sociales`
+  /// `Estilo minimalista, perfecto para eventos sociales`
   String get templatePartyDesc {
     return Intl.message(
-      'Perfecto para eventos sociales',
+      'Estilo minimalista, perfecto para eventos sociales',
       name: 'templatePartyDesc',
       desc: '',
       args: [],
@@ -2039,10 +2039,10 @@ class S {
     );
   }
 
-  /// `Localización`
+  /// `Localización y fecha`
   String get moduleNameLocation {
     return Intl.message(
-      'Localización',
+      'Localización y fecha',
       name: 'moduleNameLocation',
       desc: '',
       args: [],
@@ -2509,10 +2509,10 @@ class S {
     );
   }
 
-  /// `Eliminar ubicación`
+  /// `Eliminar localización y fecha`
   String get deleteLocation {
     return Intl.message(
-      'Eliminar ubicación',
+      'Eliminar localización y fecha',
       name: 'deleteLocation',
       desc: '',
       args: [],
@@ -2529,10 +2529,10 @@ class S {
     );
   }
 
-  /// `Editar ubicación`
+  /// `Editar ubicación y fecha`
   String get editLocation {
     return Intl.message(
-      'Editar ubicación',
+      'Editar ubicación y fecha',
       name: 'editLocation',
       desc: '',
       args: [],
@@ -2844,6 +2844,96 @@ class S {
     return Intl.message(
       'Texto de ayuda (opcional)',
       name: 'placeholderText',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fecha del evento`
+  String get eventDate {
+    return Intl.message(
+      'Fecha del evento',
+      name: 'eventDate',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Hora del evento`
+  String get eventTime {
+    return Intl.message(
+      'Hora del evento',
+      name: 'eventTime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Seleccionar tema`
+  String get themeSelect {
+    return Intl.message(
+      'Seleccionar tema',
+      name: 'themeSelect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Elegante`
+  String get themeElegant {
+    return Intl.message('Elegante', name: 'themeElegant', desc: '', args: []);
+  }
+
+  /// `Clásico`
+  String get themeClassic {
+    return Intl.message('Clásico', name: 'themeClassic', desc: '', args: []);
+  }
+
+  /// `Navideño`
+  String get themeChristmas {
+    return Intl.message('Navideño', name: 'themeChristmas', desc: '', args: []);
+  }
+
+  /// `Divertido/Infantil`
+  String get themeFun {
+    return Intl.message(
+      'Divertido/Infantil',
+      name: 'themeFun',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Minimalista`
+  String get themeMinimal {
+    return Intl.message(
+      'Minimalista',
+      name: 'themeMinimal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Neutro`
+  String get themeDefault {
+    return Intl.message('Neutro', name: 'themeDefault', desc: '', args: []);
+  }
+
+  /// `Aplicar cambios`
+  String get applyChanges {
+    return Intl.message(
+      'Aplicar cambios',
+      name: 'applyChanges',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Texto de prueba`
+  String get sampleText {
+    return Intl.message(
+      'Texto de prueba',
+      name: 'sampleText',
       desc: '',
       args: [],
     );

@@ -13,9 +13,11 @@
       }
     },
     {
-      "type": "countdown",
+      "type": "location",
       "data": {
-        "title": "",
+        "name": "",
+        "address": "",
+        "mapsUrl": "",
         "eventDateTime": ""
       }
     },
@@ -24,15 +26,8 @@
       "data": {
         "name": "",
         "address": "",
-        "mapsUrl": ""
-      }
-    },
-    {
-      "type": "location",
-      "data": {
-        "name": "",
-        "address": "",
-        "mapsUrl": ""
+        "mapsUrl": "",
+        "eventDateTime": ""
       }
     },
     {

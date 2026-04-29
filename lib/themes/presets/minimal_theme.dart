@@ -17,6 +17,10 @@ class MinimalTheme {
   static const InvitationTheme theme = InvitationTheme(
     id: id,
 
+    /// 🆕 CLAVE DE TRADUCCIÓN DEL NOMBRE DEL THEME
+    /// 👉 Usado para mostrar el nombre en UI traducido
+    nameKey: "theme_minimal",
+
     /// ⚪ Fondo limpio
     backgroundColor: Color(0xFFF9F9F9),
 

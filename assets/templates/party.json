@@ -17,14 +17,8 @@
         "data": {
           "name": "",
           "address": "",
-          "mapsUrl": ""
-        }
-      },
-      {
-        "type": "agenda",
-        "data": {
-          "title": "",
-          "items": []
+          "mapsUrl": "",
+          "eventDateTime": ""
         }
       },
       {

@@ -25,6 +25,9 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
   late TextEditingController addressController;
   late TextEditingController mapsUrlController;
 
+  /// 🆕 FECHA/HORA
+  DateTime selectedDateTime = DateTime.now();
+
   @override
   void initState() {
     super.initState();
@@ -35,6 +38,12 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     nameController = TextEditingController(text: data["name"] ?? "");
     addressController = TextEditingController(text: data["address"] ?? "");
     mapsUrlController = TextEditingController(text: data["mapsUrl"] ?? "");
+
+    /// 🆕 INIT FECHA DESDE BACKEND
+    final parsed = DateTime.tryParse(data["eventDateTime"]?.toString() ?? "");
+    if (parsed != null) {
+      selectedDateTime = parsed;
+    }
   }
 
   @override
@@ -45,6 +54,48 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     super.dispose();
   }
 
+  /// 📅 SELECTOR FECHA
+  Future<void> _pickDate() async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDateTime,
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked == null) return;
+
+    setState(() {
+      selectedDateTime = DateTime(
+        picked.year,
+        picked.month,
+        picked.day,
+        selectedDateTime.hour,
+        selectedDateTime.minute,
+      );
+    });
+  }
+
+  /// ⏰ SELECTOR HORA
+  Future<void> _pickTime() async {
+    final picked = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(selectedDateTime),
+    );
+
+    if (picked == null) return;
+
+    setState(() {
+      selectedDateTime = DateTime(
+        selectedDateTime.year,
+        selectedDateTime.month,
+        selectedDateTime.day,
+        picked.hour,
+        picked.minute,
+      );
+    });
+  }
+
   /// 💾 SAVE (backend-ready)
   void _save() {
     final provider = context.read<InvitationProvider>();
@@ -52,10 +103,12 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     final updatedSection = {
       ...widget.section,
       "data": {
-        /// 🔹 TRIM + CLEAN (clave para backend)
         "name": nameController.text.trim(),
         "address": addressController.text.trim(),
         "mapsUrl": mapsUrlController.text.trim(),
+
+        /// 🆕 ISO STRING
+        "eventDateTime": selectedDateTime.toIso8601String(),
       },
     };
 
@@ -63,7 +116,7 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     Navigator.pop(context);
   }
 
-  /// 🗑 DELETE
+  /// 🗑 DELETE (INTOCADO)
   Future<void> _delete() async {
     final provider = context.read<InvitationProvider>();
 
@@ -92,7 +145,7 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     }
   }
 
-  /// 🧠 GENERADOR DE URL (clave backend-friendly)
+  /// 🧠 GENERADOR URL
   void _generateMapsUrl() {
     final address = addressController.text.trim();
 
@@ -106,7 +159,7 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
     });
   }
 
-  /// 🔗 OPEN MAPS (seguro)
+  /// 🔗 OPEN MAPS
   Future<void> _openMaps() async {
     final url = mapsUrlController.text.trim();
     if (url.isEmpty) return;
@@ -123,6 +176,13 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
 
   @override
   Widget build(BuildContext context) {
+    /// 🔹 FORMATO VISUAL (MISMO QUE COUNTDOWN)
+    final dateText =
+        "${selectedDateTime.day}/${selectedDateTime.month}/${selectedDateTime.year}";
+
+    final timeText =
+        "${selectedDateTime.hour.toString().padLeft(2, '0')}:${selectedDateTime.minute.toString().padLeft(2, '0')}";
+
     final hasContent =
         nameController.text.isNotEmpty ||
         addressController.text.isNotEmpty ||
@@ -145,7 +205,7 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 🏷️ NOMBRE
+            /// 🏷️ NOMBRE
             TextField(
               controller: nameController,
               textAlign: TextAlign.left,
@@ -153,6 +213,24 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
                 labelText: S.of(context).locationName,
               ),
               onChanged: (_) => setState(() {}),
+            ),
+
+            const SizedBox(height: 16),
+
+            /// 📅 FECHA
+            ListTile(
+              leading: const Icon(Icons.calendar_today),
+              title: Text(S.of(context).eventDate),
+              subtitle: Text(dateText),
+              onTap: _pickDate,
+            ),
+
+            /// ⏰ HORA
+            ListTile(
+              leading: const Icon(Icons.access_time),
+              title: Text(S.of(context).eventTime),
+              subtitle: Text(timeText),
+              onTap: _pickTime,
             ),
 
             const SizedBox(height: 16),
@@ -189,7 +267,7 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
 
             const SizedBox(height: 24),
 
-            /// 🔥 PREVIEW SOLO SI HAY CONTENIDO
+            /// 🔍 PREVIEW
             if (hasContent) ...[
               Text(
                 S.of(context).actionPreview,
@@ -222,6 +300,10 @@ class _EditLocationModuleScreenState extends State<EditLocationModuleScreen> {
 
                     if (addressController.text.isNotEmpty)
                       Text(addressController.text, textAlign: TextAlign.center),
+
+                    /// 🆕 FECHA EN PREVIEW
+                    const SizedBox(height: 8),
+                    Text("$dateText · $timeText"),
 
                     const SizedBox(height: 12),
 
