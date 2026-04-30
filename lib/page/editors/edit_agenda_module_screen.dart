@@ -20,6 +20,7 @@ class EditAgendaModuleScreen extends StatefulWidget {
 class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
   // 🧠 TITULO DEL MÓDULO
   late TextEditingController titleController;
+  bool _didInitLocalizedDefaults = false;
 
   // 📦 LISTA DE EVENTOS (estructura backend-ready)
   List<Map<String, dynamic>> items = [];
@@ -37,7 +38,8 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
 
     // 🧠 título con fallback internacionalizado
     titleController = TextEditingController(
-      text: (data["title"] ?? S.of(context).moduleNameAgenda).toString(),
+      // ⚠️ No usar S.of(context) en initState (puede crashear).
+      text: (data["title"] ?? "").toString(),
     );
 
     // 📦 carga de items desde backend
@@ -45,6 +47,20 @@ class _EditAgendaModuleScreenState extends State<EditAgendaModuleScreen> {
     items = List<Map<String, dynamic>>.from(rawItems);
 
     _syncControllers();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // ✅ Localizations seguro aquí.
+    if (!_didInitLocalizedDefaults) {
+      _didInitLocalizedDefaults = true;
+
+      if (titleController.text.trim().isEmpty) {
+        titleController.text = S.of(context).moduleNameAgenda;
+      }
+    }
   }
 
   // 🔄 sincroniza UI controllers con modelo de datos

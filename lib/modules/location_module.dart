@@ -12,7 +12,6 @@ class LocationModule extends StatelessWidget {
   const LocationModule({super.key, required this.data, required this.theme});
 
   /// 🔧 PARSER SEGURO DE FECHA (backend-ready)
-  /// 👉 Espera ISO string (recomendado backend)
   DateTime? _parseDate(dynamic value) {
     if (value == null) return null;
 
@@ -23,7 +22,7 @@ class LocationModule extends StatelessWidget {
     }
   }
 
-  /// 🔧 Abre URL de mapas de forma segura (preparado backend)
+  /// 🔧 Abre URL de mapas de forma segura
   Future<void> _openMap(String url) async {
     final uri = Uri.tryParse(url);
 
@@ -36,7 +35,7 @@ class LocationModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// 🔹 NORMALIZACIÓN (backend-safe)
+    // 🧠 NORMALIZACIÓN BACKEND-SAFE
     final name = (data["name"] as String?)?.trim().isNotEmpty == true
         ? data["name"].toString().trim()
         : S.of(context).moduleNameLocation;
@@ -50,11 +49,24 @@ class LocationModule extends StatelessWidget {
     /// 🆕 FECHA DEL EVENTO
     final eventDateTime = _parseDate(data["eventDateTime"]);
 
+    // 🎨 OVERRIDES (MISMO PATRÓN QUE COVER)
+    final font = (data["font"] as String?)?.isNotEmpty == true
+        ? data["font"]
+        : theme.fontFamily;
+
+    final titleSize =
+        (data["fontSizeTitle"] as num?)?.toDouble() ?? theme.titleFontSize;
+
+    final bodySize =
+        (data["fontSizeBody"] as num?)?.toDouble() ?? theme.bodyFontSize;
+
+    final textColor = _hexToColor(data["textColor"]) ?? theme.textColor;
+
     return Container(
       padding: const EdgeInsets.all(16),
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
 
-      /// 🎨 USO DEL THEME
+      /// 🎨 THEME BASE (igual que Cover / otros módulos)
       decoration: BoxDecoration(
         color: theme.backgroundColor,
         borderRadius: BorderRadius.circular(12),
@@ -64,15 +76,15 @@ class LocationModule extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // 🏷️ NOMBRE
+          // 🏷️ NOMBRE DEL LUGAR
           Text(
             name,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 20,
+              fontSize: titleSize,
               fontWeight: FontWeight.bold,
+              fontFamily: font,
               color: theme.primaryColor,
-              fontFamily: theme.fontFamily,
             ),
           ),
 
@@ -84,14 +96,15 @@ class LocationModule extends StatelessWidget {
               address,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: theme.primaryColor.withValues(alpha: 0.8),
+                fontSize: bodySize,
+                fontFamily: font,
+                color: textColor.withValues(alpha: 0.8),
               ),
             ),
 
           const SizedBox(height: 12),
 
-          /// 🆕 📅 FECHA Y HORA DEL EVENTO
-          /// 👉 Se muestra solo si existe
+          // 📅 FECHA DEL EVENTO
           if (eventDateTime != null)
             Text(
               /// 🔹 Formato simple (luego puedes mejorar con intl DateFormat)
@@ -99,10 +112,10 @@ class LocationModule extends StatelessWidget {
               "${eventDateTime.hour.toString().padLeft(2, '0')}:${eventDateTime.minute.toString().padLeft(2, '0')}",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 16,
+                fontSize: bodySize,
                 fontWeight: FontWeight.w500,
-                color: theme.textColor,
-                fontFamily: theme.fontFamily,
+                fontFamily: font,
+                color: textColor,
               ),
             ),
 
@@ -121,11 +134,28 @@ class LocationModule extends StatelessWidget {
 
               label: Text(
                 S.of(context).openMaps,
-                style: TextStyle(fontFamily: theme.fontFamily),
+                style: TextStyle(fontFamily: font, fontSize: bodySize),
               ),
             ),
         ],
       ),
     );
+  }
+
+  /// 🎨 HEX → COLOR (CONSISTENTE CON COVER)
+  Color? _hexToColor(dynamic value) {
+    if (value == null) return null;
+
+    try {
+      String hex = value.toString().trim();
+
+      if (hex.startsWith("#")) hex = hex.substring(1);
+      if (hex.startsWith("0x")) hex = hex.substring(2);
+      if (hex.length == 6) hex = "FF$hex";
+
+      return Color(int.parse(hex, radix: 16));
+    } catch (_) {
+      return null;
+    }
   }
 }

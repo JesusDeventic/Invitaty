@@ -53,17 +53,33 @@ class InvitationTheme {
     return InvitationTheme(
       id: id,
       nameKey: nameKey,
+
+      /// 🆕 TODOS LOS CAMPOS SOPORTAN OVERRIDE
       backgroundColor: override["backgroundColor"] != null
           ? Color(override["backgroundColor"])
           : backgroundColor,
+
       primaryColor: override["primaryColor"] != null
           ? Color(override["primaryColor"])
           : primaryColor,
-      accentColor: accentColor,
-      textColor: textColor,
+
+      accentColor: override["accentColor"] != null
+          ? Color(override["accentColor"])
+          : accentColor,
+
+      textColor: override["textColor"] != null
+          ? Color(override["textColor"])
+          : textColor,
+
       fontFamily: override["fontFamily"] ?? fontFamily,
-      titleFontSize: titleFontSize,
-      bodyFontSize: bodyFontSize,
+
+      titleFontSize: override["titleFontSize"] != null
+          ? (override["titleFontSize"] as num).toDouble()
+          : titleFontSize,
+
+      bodyFontSize: override["bodyFontSize"] != null
+          ? (override["bodyFontSize"] as num).toDouble()
+          : bodyFontSize,
     );
   }
 

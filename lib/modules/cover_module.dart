@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:invitaty/themes/invitation_theme.dart';
 
 class CoverModule extends StatelessWidget {
-  // 📦 DATA dinámica (vendrá del backend en el futuro)
   final Map<String, dynamic> data;
 
   // 🎨 THEME GLOBAL DE LA INVITACIÓN
@@ -20,19 +19,19 @@ class CoverModule extends StatelessWidget {
     // 🖼️ Imagen de fondo (futuro: CDN / backend storage)
     final imageUrl = (data["imageUrl"] ?? "").toString();
 
-    // 🔤 Tipografía (override usuario → theme fallback)
+    /// 🔤 PRIORIDAD: data > theme
     final font = (data["font"] as String?)?.isNotEmpty == true
         ? data["font"]
         : theme.fontFamily;
 
-    // 📏 Tamaños de texto (override usuario → fallback theme)
+    /// 📏 PRIORIDAD: data > theme
     final titleSize =
         (data["fontSizeTitle"] as num?)?.toDouble() ?? theme.titleFontSize;
 
     final subtitleSize =
         (data["fontSizeSubtitle"] as num?)?.toDouble() ?? theme.bodyFontSize;
 
-    // 🎨 Color de texto (override usuario → theme fallback)
+    /// 🎨 PRIORIDAD: data > theme
     final textColor = _hexToColor(data["textColor"]) ?? theme.textColor;
 
     return Container(
@@ -42,18 +41,13 @@ class CoverModule extends StatelessWidget {
       // 🎨 FONDO: imagen o fallback con gradiente
       decoration: BoxDecoration(
         image: imageUrl.isNotEmpty
-            ? DecorationImage(
-                image: NetworkImage(
-                  imageUrl,
-                ), // 🔥 FUTURO: CDN / backend media service
-                fit: BoxFit.cover,
-              )
+            ? DecorationImage(image: NetworkImage(imageUrl), fit: BoxFit.cover)
             : null,
 
         // 🌈 fallback visual si no hay imagen
         gradient: imageUrl.isEmpty
-            ? const LinearGradient(
-                colors: [Color(0xFF6A11CB), Color(0xFF2575FC)],
+            ? LinearGradient(
+                colors: [theme.primaryColor, theme.accentColor],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               )
@@ -111,20 +105,9 @@ class CoverModule extends StatelessWidget {
     try {
       String hex = value.toString().trim();
 
-      // 🔹 elimina #
-      if (hex.startsWith("#")) {
-        hex = hex.substring(1);
-      }
-
-      // 🔹 elimina 0x si viene del backend
-      if (hex.startsWith("0x")) {
-        hex = hex.substring(2);
-      }
-
-      // 🔹 añade alpha si no viene
-      if (hex.length == 6) {
-        hex = "FF$hex";
-      }
+      if (hex.startsWith("#")) hex = hex.substring(1);
+      if (hex.startsWith("0x")) hex = hex.substring(2);
+      if (hex.length == 6) hex = "FF$hex";
 
       return Color(int.parse(hex, radix: 16));
     } catch (_) {

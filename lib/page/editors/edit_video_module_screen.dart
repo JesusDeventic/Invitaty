@@ -22,6 +22,7 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
 
   /// 🔥 lista mutable de videos
   List<Map<String, dynamic>> videos = [];
+  bool _didInitLocalizedDefaults = false;
 
   @override
   void initState() {
@@ -30,13 +31,28 @@ class _EditVideoModuleScreenState extends State<EditVideoModuleScreen> {
     final data = widget.section["data"] ?? {};
 
     titleController = TextEditingController(
-      text: data["title"] ?? S.of(context).moduleNameVideo,
+      // ⚠️ No usar S.of(context) en initState (puede crashear).
+      text: (data["title"] ?? "").toString(),
     );
 
     // 🔥 importante: copia profunda mutable
     videos = (data["videos"] as List? ?? [])
         .map((v) => Map<String, dynamic>.from(v))
         .toList();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // ✅ Localizations seguro aquí.
+    if (!_didInitLocalizedDefaults) {
+      _didInitLocalizedDefaults = true;
+
+      if (titleController.text.trim().isEmpty) {
+        titleController.text = S.of(context).moduleNameVideo;
+      }
+    }
   }
 
   @override

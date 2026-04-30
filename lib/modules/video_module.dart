@@ -7,54 +7,71 @@ class VideoModule extends StatelessWidget {
   final Map<String, dynamic> data;
 
   /// 🎨 THEME GLOBAL DE LA INVITACIÓN
-  /// 👉 Define estética base del módulo
   final InvitationTheme theme;
 
   const VideoModule({super.key, required this.data, required this.theme});
 
   @override
   Widget build(BuildContext context) {
+    /// 🧠 TÍTULO (backend-safe)
     final title = (data["title"] ?? S.of(context).moduleNameVideo).toString();
 
-    // 🔥 FUTURO BACKEND:
-    // ahora: lista de links (YouTube o externos)
-    // después: lista de vídeos subidos (mp4 en storage propio)
+    /// 🎥 VIDEOS (backend-safe)
     final videos = List<Map<String, dynamic>>.from(data["videos"] ?? []);
 
     if (videos.isEmpty) return const SizedBox();
+
+    /// 🔤 FONT (data > theme)
+    final font = (data["font"] as String?)?.isNotEmpty == true
+        ? data["font"]
+        : theme.fontFamily;
+
+    /// 🎨 COLORS (data > theme)
+    final titleColor = _hexToColor(data["titleColor"]) ?? theme.primaryColor;
+
+    final textColor = _hexToColor(data["textColor"]) ?? theme.textColor;
+
+    final accentColor = _hexToColor(data["accentColor"]) ?? theme.accentColor;
+
+    /// 📏 SIZES
+    final titleSize =
+        (data["titleFontSize"] as num?)?.toDouble() ?? theme.titleFontSize;
+
+    final bodySize =
+        (data["bodyFontSize"] as num?)?.toDouble() ?? theme.bodyFontSize;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       padding: const EdgeInsets.all(20),
 
-      /// 🎨 fondo coherente con el sistema global
+      /// 🎨 fondo consistente global
       decoration: BoxDecoration(
         color: theme.backgroundColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: theme.primaryColor.withValues(alpha: 0.15)),
+        border: Border.all(color: titleColor.withValues(alpha: 0.15)),
       ),
 
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          // 🎬 TÍTULO
+          /// 🎬 TÍTULO
           Text(
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 22,
+              fontSize: titleSize,
               fontWeight: FontWeight.bold,
-              fontFamily: theme.fontFamily,
-              color: theme.primaryColor,
+              fontFamily: font,
+              color: titleColor,
             ),
           ),
 
           const SizedBox(height: 16),
 
-          // 🎥 LISTA DE VIDEOS
+          /// 🎥 LISTA DE VIDEOS
           ...videos.map((video) {
             final url = video["url"] as String?;
-            final videoTitle = video["title"] ?? S.of(context).moduleNameVideo;
+            final videoTitle = (video["title"] ?? title).toString();
 
             final videoId = _extractYoutubeId(url);
 
@@ -66,23 +83,25 @@ class VideoModule extends StatelessWidget {
 
             return Container(
               margin: const EdgeInsets.only(bottom: 20),
+
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  // 🏷️ título del video
+                  /// 🏷️ TÍTULO VIDEO
                   Text(
                     videoTitle,
                     textAlign: TextAlign.center,
                     style: TextStyle(
+                      fontSize: bodySize,
                       fontWeight: FontWeight.bold,
-                      fontFamily: theme.fontFamily,
-                      color: theme.textColor,
+                      fontFamily: font,
+                      color: textColor,
                     ),
                   ),
 
                   const SizedBox(height: 8),
 
-                  // 🎬 PREVIEW YOUTUBE
+                  /// 🎬 PREVIEW YOUTUBE
                   if (thumbnail != null)
                     Center(
                       child: ConstrainedBox(
@@ -108,7 +127,7 @@ class VideoModule extends StatelessWidget {
                                 Icon(
                                   Icons.play_circle_fill,
                                   size: 50,
-                                  color: theme.accentColor,
+                                  color: accentColor,
                                 ),
                               ],
                             ),
@@ -116,22 +135,19 @@ class VideoModule extends StatelessWidget {
                         ),
                       ),
                     )
-                  // 🔥 FUTURO BACKEND:
-                  // aquí irá el reproductor REAL de mp4 subido
-                  // (video_player / chewie / better_player)
+                  /// 🔥 fallback (no youtube preview)
                   else
                     ElevatedButton.icon(
                       onPressed: () => _openVideo(context, url),
 
-                      /// 🎨 botón coherente con el theme
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: theme.accentColor,
+                        backgroundColor: accentColor,
                       ),
 
                       icon: const Icon(Icons.play_arrow),
                       label: Text(
                         S.of(context).actionPlayVideo,
-                        style: TextStyle(fontFamily: theme.fontFamily),
+                        style: TextStyle(fontFamily: font),
                       ),
                     ),
                 ],
@@ -175,5 +191,22 @@ class VideoModule extends StatelessWidget {
     }
 
     return null;
+  }
+
+  /// 🎨 HEX → COLOR (backend-safe estándar del proyecto)
+  Color? _hexToColor(dynamic value) {
+    if (value == null) return null;
+
+    try {
+      String hex = value.toString().trim();
+
+      if (hex.startsWith("#")) hex = hex.substring(1);
+      if (hex.startsWith("0x")) hex = hex.substring(2);
+      if (hex.length == 6) hex = "FF$hex";
+
+      return Color(int.parse(hex, radix: 16));
+    } catch (_) {
+      return null;
+    }
   }
 }

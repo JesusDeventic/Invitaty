@@ -20,11 +20,30 @@ class GalleryModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// 🏷️ Título configurable
+    /// 🏷️ TÍTULO (backend-safe)
     final title = (data["title"] ?? S.of(context).moduleNameGallery).toString();
 
-    /// 🖼️ Lista de imágenes (siempre lista segura)
+    /// 🖼️ IMÁGENES (backend-safe)
     final images = List<String>.from(data["images"] ?? []);
+
+    /// 🔤 FONT (data > theme)
+    final font = (data["font"] as String?)?.isNotEmpty == true
+        ? data["font"]
+        : theme.fontFamily;
+
+    /// 🎨 COLORS (data > theme)
+    final titleColor = _hexToColor(data["titleColor"]) ?? theme.primaryColor;
+
+    final textColor = _hexToColor(data["textColor"]) ?? theme.textColor;
+
+    final accentColor = _hexToColor(data["accentColor"]) ?? theme.accentColor;
+
+    /// 📏 SIZES (coherente con resto de módulos)
+    final titleSize =
+        (data["titleFontSize"] as num?)?.toDouble() ?? theme.titleFontSize;
+
+    final bodySize =
+        (data["bodyFontSize"] as num?)?.toDouble() ?? theme.bodyFontSize;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -44,10 +63,10 @@ class GalleryModule extends StatelessWidget {
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 20,
+              fontSize: titleSize,
               fontWeight: FontWeight.bold,
-              fontFamily: theme.fontFamily,
-              color: theme.primaryColor,
+              fontFamily: font,
+              color: titleColor,
             ),
           ),
 
@@ -58,8 +77,9 @@ class GalleryModule extends StatelessWidget {
             Text(
               S.of(context).editGalleryNoImages,
               style: TextStyle(
-                fontFamily: theme.fontFamily,
-                color: theme.textColor.withValues(alpha: 0.6),
+                fontSize: bodySize,
+                fontFamily: font,
+                color: textColor.withValues(alpha: 0.6),
               ),
             )
           else
@@ -67,17 +87,17 @@ class GalleryModule extends StatelessWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
 
-              /// 🔢 Número de imágenes
+              /// 🔢 número de imágenes
               itemCount: images.length,
 
-              /// 📐 Layout del grid
+              /// 📐 layout grid
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
                 crossAxisSpacing: 6,
                 mainAxisSpacing: 6,
               ),
 
-              /// 🖼️ Render imagen
+              /// 🖼️ render imagen
               itemBuilder: (context, index) {
                 final imageUrl = images[index];
 
@@ -88,13 +108,10 @@ class GalleryModule extends StatelessWidget {
                     imageUrl,
                     fit: BoxFit.cover,
 
-                    /// ⚠️ Mejora UX (fallback básico)
-                    errorBuilder: (_, __, ___) => Container(
-                      color: theme.primaryColor.withValues(alpha: 0.1),
-                      child: Icon(
-                        Icons.broken_image,
-                        color: theme.primaryColor,
-                      ),
+                    /// ⚠️ fallback UX
+                    errorBuilder: (_, _, _) => Container(
+                      color: accentColor.withValues(alpha: 0.1),
+                      child: Icon(Icons.broken_image, color: accentColor),
                     ),
                   ),
                 );
@@ -103,5 +120,22 @@ class GalleryModule extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// 🎨 HEX → COLOR (backend-safe estándar del proyecto)
+  Color? _hexToColor(dynamic value) {
+    if (value == null) return null;
+
+    try {
+      String hex = value.toString().trim();
+
+      if (hex.startsWith("#")) hex = hex.substring(1);
+      if (hex.startsWith("0x")) hex = hex.substring(2);
+      if (hex.length == 6) hex = "FF$hex";
+
+      return Color(int.parse(hex, radix: 16));
+    } catch (_) {
+      return null;
+    }
   }
 }

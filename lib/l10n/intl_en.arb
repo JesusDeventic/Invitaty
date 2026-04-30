@@ -341,5 +341,15 @@
     "themeMinimal": "Minimalista",
     "themeDefault": "Neutro",
     "applyChanges": "Aplicar cambios",
-    "sampleText": "Texto de prueba"
+    "sampleText": "Texto de prueba",
+    "customizeTheme": "Personalizar tema",
+    "colorBackground": "Color de fondo",
+    "colorPrimary": "Color texto primario",
+    "themeFont": "Fuente del tema",
+    "colorSelect": "Seleccionar color",
+    "fontSelect": "Seleccionar fuente",
+    "buttonColorAccent": "Color botones",
+    "colorSecondary": "Color texto secundario",
+    "themeTitleSize": "Tamaño texto principal",
+    "themeBodySize": "Tamaño texto secundario"
 }

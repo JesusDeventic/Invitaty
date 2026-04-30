@@ -137,16 +137,24 @@ class InvitationProvider extends ChangeNotifier {
   Map<String, dynamic> _themeOverride = {};
   Map<String, dynamic> get themeOverride => _themeOverride;
 
-  /// 🧠 APLICAR OVERRIDE DE THEME
+  /// 🧠 APLICAR OVERRIDE DE THEME (AMPLIADO)
   void applyThemeOverride({
     required Color background,
     required Color primary,
+    required Color accent,
+    required Color text,
     required String font,
+    required double titleSize,
+    required double bodySize,
   }) {
     _themeOverride = {
       "backgroundColor": background.value,
       "primaryColor": primary.value,
+      "accentColor": accent.value,
+      "textColor": text.value,
       "fontFamily": font,
+      "titleFontSize": titleSize,
+      "bodyFontSize": bodySize,
     };
 
     notifyListeners();

@@ -17,22 +17,33 @@ class AgendaModule extends StatelessWidget {
     final title = (data["title"] ?? S.of(context).moduleNameAgenda).toString();
 
     // 📦 ITEMS DEL BACKEND (lista de eventos)
-    // Cada item: { time, title, description }
     final items = List<Map<String, dynamic>>.from(data["items"] ?? []);
 
-    // 🔤 fuente global (theme base)
-    final font = theme.fontFamily;
+    /// 🔤 PRIORIDAD: data > theme
+    final font = (data["font"] as String?)?.isNotEmpty == true
+        ? data["font"]
+        : theme.fontFamily;
 
-    // 🎨 colores base del timeline
-    final titleColor = theme.primaryColor;
-    final textColor = theme.textColor;
-    final accentColor = theme.accentColor;
+    /// 🎨 COLORS (data > theme)
+    final textColor = _hexToColor(data["textColor"]) ?? theme.textColor;
+
+    final accentColor = _hexToColor(data["accentColor"]) ?? theme.accentColor;
+
+    final titleColor = _hexToColor(data["titleColor"]) ?? theme.primaryColor;
+
+    /// 📏 SIZES (CONSISTENTE CON COVERMODULE)
+    /// 🧠 sin hardcode, todo viene de theme o override futuro
+    final titleSize =
+        (data["titleFontSize"] as num?)?.toDouble() ?? theme.titleFontSize;
+
+    final bodySize =
+        (data["bodyFontSize"] as num?)?.toDouble() ?? theme.bodyFontSize;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
       padding: const EdgeInsets.all(20),
 
-      /// 🎨 fondo basado en theme (coherencia global)
+      /// 🎨 fondo global del theme
       decoration: BoxDecoration(
         color: theme.backgroundColor,
         borderRadius: BorderRadius.circular(12),
@@ -46,7 +57,7 @@ class AgendaModule extends StatelessWidget {
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: titleSize,
               fontWeight: FontWeight.bold,
               fontFamily: font,
               color: titleColor,
@@ -63,7 +74,7 @@ class AgendaModule extends StatelessWidget {
               // 🧭 TIMELINE VISUAL
               child: Stack(
                 children: [
-                  // 🧵 línea vertical de la agenda
+                  // 🧵 línea vertical
                   Positioned(
                     left: 20,
                     top: 0,
@@ -78,7 +89,7 @@ class AgendaModule extends StatelessWidget {
                     children: List.generate(items.length, (index) {
                       final item = items[index];
 
-                      // 🧠 CAMPOS DEL EVENTO (backend-ready)
+                      // 🧠 CAMPOS BACKEND-READY
                       final time = (item["time"] ?? "").toString();
                       final itemTitle = (item["title"] ?? "").toString();
                       final description = (item["description"] ?? "")
@@ -90,15 +101,13 @@ class AgendaModule extends StatelessWidget {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // 🔴 marcador del evento
+                            // 🔴 marcador
                             SizedBox(
                               width: 40,
                               child: Center(
                                 child: Container(
                                   width: 12,
                                   height: 12,
-
-                                  /// 🎨 marcador con color del theme
                                   decoration: BoxDecoration(
                                     color: accentColor,
                                     shape: BoxShape.circle,
@@ -109,7 +118,7 @@ class AgendaModule extends StatelessWidget {
 
                             const SizedBox(width: 12),
 
-                            // 📝 contenido del evento
+                            // 📝 contenido
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,7 +128,7 @@ class AgendaModule extends StatelessWidget {
                                       time,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 15,
+                                        fontSize: bodySize - 1,
                                         fontFamily: font,
                                         color: textColor,
                                       ),
@@ -132,7 +141,7 @@ class AgendaModule extends StatelessWidget {
                                       itemTitle,
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 17,
+                                        fontSize: bodySize + 2,
                                         fontFamily: font,
                                         color: textColor,
                                       ),
@@ -144,7 +153,7 @@ class AgendaModule extends StatelessWidget {
                                     Text(
                                       description,
                                       style: TextStyle(
-                                        fontSize: 14,
+                                        fontSize: bodySize - 2,
                                         fontFamily: font,
                                         color: textColor.withValues(alpha: 0.8),
                                       ),
@@ -164,5 +173,22 @@ class AgendaModule extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// 🎨 HEX → COLOR (backend-safe igual que CoverModule)
+  Color? _hexToColor(dynamic value) {
+    if (value == null) return null;
+
+    try {
+      String hex = value.toString().trim();
+
+      if (hex.startsWith("#")) hex = hex.substring(1);
+      if (hex.startsWith("0x")) hex = hex.substring(2);
+      if (hex.length == 6) hex = "FF$hex";
+
+      return Color(int.parse(hex, radix: 16));
+    } catch (_) {
+      return null;
+    }
   }
 }

@@ -45,25 +45,32 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
     super.initState();
 
     final data = widget.section["data"] ?? {};
-    final theme = widget.theme;
+    final provider = context.read<InvitationProvider>();
 
-    // 🧠 NORMALIZACIÓN (importante para evitar errores de tipo)
+    final effectiveTheme = widget.theme.copyWithOverride(
+      provider.themeOverride,
+    );
+
     titleController = TextEditingController(
       text: (data["title"] ?? "").toString(),
-    );
+    )..addListener(() => setState(() {}));
 
     subtitleController = TextEditingController(
       text: (data["subtitle"] ?? "").toString(),
-    );
+    )..addListener(() => setState(() {}));
 
-    selectedFont = (data["font"] ?? theme.fontFamily).toString();
+    selectedFont = (data["font"] ?? effectiveTheme.fontFamily).toString();
 
-    titleSize = (data["fontSizeTitle"] ?? theme.titleFontSize + 4).toDouble();
-    subtitleSize = (data["fontSizeSubtitle"] ?? theme.bodyFontSize).toDouble();
+    titleSize = (data["fontSizeTitle"] ?? effectiveTheme.titleFontSize)
+        .toDouble();
+
+    subtitleSize = (data["fontSizeSubtitle"] ?? effectiveTheme.bodyFontSize)
+        .toDouble();
 
     imageUrl = (data["imageUrl"] ?? "").toString();
 
-    final colorHex = data["textColor"] ?? _colorToHex(theme.textColor);
+    final colorHex = data["textColor"] ?? _colorToHex(effectiveTheme.textColor);
+
     selectedColor = _hexToColor(colorHex);
   }
 
@@ -93,7 +100,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
       cleanData["font"] = selectedFont;
     }
 
-    if (titleSize != theme.titleFontSize + 4) {
+    if (titleSize != theme.titleFontSize) {
       cleanData["fontSizeTitle"] = titleSize;
     }
 
@@ -125,9 +132,8 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
               children: [
                 ColorPicker(
                   pickerColor: tempColor,
-                  onColorChanged: (color) => tempColor = color,
+                  onColorChanged: (c) => tempColor = c,
                   enableAlpha: false,
-                  displayThumbColor: true,
                 ),
               ],
             ),
@@ -139,9 +145,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
             ),
             ElevatedButton(
               onPressed: () {
-                setState(() {
-                  selectedColor = tempColor;
-                });
+                setState(() => selectedColor = tempColor);
                 Navigator.pop(context);
               },
               child: Text(S.of(context).buttonConfirm),
@@ -166,6 +170,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = widget.theme;
+
     return Scaffold(
       appBar: AppBar(
         title: Text(S.of(context).editCover),
@@ -194,13 +199,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
                 ),
               ),
 
-              const SizedBox(height: 24),
-
-              // 🔤 FUENTE
-              Text(
-                S.of(context).editFont,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
+              const SizedBox(height: 16),
 
               DropdownButton<String>(
                 value: selectedFont,
@@ -213,18 +212,14 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
                       "GreatVibes",
                       "Creepster",
                       "Disney",
+                      "Roboto",
                     ].map((font) {
                       return DropdownMenuItem(
                         value: font,
-                        child: Text(
-                          font,
-                          style: TextStyle(fontFamily: font, fontSize: 16),
-                        ),
+                        child: Text(font, style: TextStyle(fontFamily: font)),
                       );
                     }).toList(),
-                onChanged: (value) {
-                  setState(() => selectedFont = value!);
-                },
+                onChanged: (v) => setState(() => selectedFont = v!),
               ),
 
               const SizedBox(height: 16),
@@ -233,24 +228,22 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
               Text(S.of(context).sizeTitle),
               Slider(
                 value: titleSize,
-                min: 18,
-                max: 48,
-                divisions: 15,
+                min: 16,
+                max: 64,
                 onChanged: (v) => setState(() => titleSize = v),
               ),
 
               Text(S.of(context).sizeSubtitle),
               Slider(
                 value: subtitleSize,
-                min: 14,
-                max: 32,
-                divisions: 10,
+                min: 12,
+                max: 48,
                 onChanged: (v) => setState(() => subtitleSize = v),
               ),
 
               const SizedBox(height: 16),
 
-              // 🎨 COLOR
+              /// 🎨 COLOR PICKER CON LABEL (FIX UX)
               Text(
                 S.of(context).editColor,
                 style: const TextStyle(fontWeight: FontWeight.bold),
@@ -277,25 +270,16 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
                 ],
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
-              // 🖼️ IMAGEN
-              ElevatedButton.icon(
+              ElevatedButton(
                 onPressed: _setFakeImage,
-                icon: const Icon(Icons.image),
-                label: Text(S.of(context).selectImage),
+                child: Text(S.of(context).selectImage),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
-              // 👁️ PREVIEW
-              Text(
-                S.of(context).actionPreview,
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              ),
-
-              const SizedBox(height: 12),
-
+              /// 👁️ PREVIEW FIXED (IMAGEN + TEXTO)
               Container(
                 height: 200,
                 width: double.infinity,
@@ -308,10 +292,7 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
                       : null,
                   gradient: imageUrl.isEmpty
                       ? LinearGradient(
-                          colors: [
-                            theme.primaryColor,
-                            theme.accentColor,
-                          ],
+                          colors: [theme.primaryColor, theme.accentColor],
                         )
                       : null,
                 ),
@@ -336,7 +317,6 @@ class _EditCoverModuleScreenState extends State<EditCoverModuleScreen> {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 8),
                       Text(
                         subtitleController.text,
                         textAlign: TextAlign.center,

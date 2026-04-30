@@ -41,6 +41,7 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
     "GreatVibes",
     "Creepster",
     "Disney",
+    "Roboto",
   ];
 
   @override
@@ -48,28 +49,33 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
     super.initState();
 
     final data = widget.section["data"] ?? {};
-    final theme = widget.theme;
+    final provider = context.read<InvitationProvider>();
 
-    // 🧠 TEXTO
+    /// 🔥 THEME REAL (BASE + OVERRIDE) -> igual que cover
+    final effectiveTheme = widget.theme.copyWithOverride(
+      provider.themeOverride,
+    );
+
+    // 🧠 TEXTO (reactivo como cover)
     titleController = TextEditingController(
       text: (data["title"] ?? "").toString(),
-    );
+    )..addListener(() => setState(() {}));
 
     bodyController = TextEditingController(
       text: (data["body"] ?? "").toString(),
-    );
+    )..addListener(() => setState(() {}));
 
-    // 🎨 FONT
-    /// PRIORIDAD:
-    /// 1. data
-    /// 2. theme
-    selectedFont = (data["font"] as String?) ?? theme.fontFamily;
+    // 🎨 FONT (prioridad igual que cover)
+    selectedFont = (data["font"] as String?)?.isNotEmpty == true
+        ? data["font"]
+        : effectiveTheme.fontFamily;
 
-    // 🎨 SIZE
-    fontSize = (data["fontSize"] as num?)?.toDouble() ?? theme.bodyFontSize;
+    // 🎨 SIZE (override correcto)
+    fontSize =
+        (data["fontSize"] as num?)?.toDouble() ?? effectiveTheme.bodyFontSize;
 
     // 🎨 COLOR
-    textColor = _parseColor(data["color"]) ?? theme.textColor;
+    textColor = _parseColor(data["color"]) ?? effectiveTheme.textColor;
   }
 
   // 🎨 parseo seguro
@@ -122,7 +128,7 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
     );
   }
 
-  // 💾 SAVE (CLAVE)
+  // 💾 SAVE (igual lógica base que cover)
   void _save() {
     final provider = context.read<InvitationProvider>();
     final theme = widget.theme;
@@ -249,15 +255,36 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
 
               const SizedBox(height: 16),
 
-              // 🎨 COLOR
-              GestureDetector(
-                onTap: _pickColor,
-                child: Container(width: 40, height: 40, color: textColor),
+              // 🎨 COLOR (igual UX que cover)
+              Text(
+                S.of(context).editColor,
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
+
+              const SizedBox(height: 8),
+
+              Row(
+                children: [
+                  GestureDetector(
+                    onTap: _pickColor,
+                    child: Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: textColor,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.black26),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(S.of(context).selectTextColor),
+                ],
               ),
 
               const SizedBox(height: 24),
 
-              // 👁 PREVIEW (USA THEME SI NO CAMBIAS)
+              // 👁 PREVIEW (MISMO PATRÓN QUE COVER)
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(color: theme.backgroundColor),
@@ -269,8 +296,10 @@ class _EditTextModuleScreenState extends State<EditTextModuleScreen> {
                         fontSize: fontSize + 4,
                         fontFamily: selectedFont,
                         color: textColor,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
+                    const SizedBox(height: 8),
                     Text(
                       bodyController.text,
                       style: TextStyle(

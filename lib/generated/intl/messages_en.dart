@@ -78,6 +78,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Change password",
     ),
     "buttonClose": MessageLookupByLibrary.simpleMessage("Close"),
+    "buttonColorAccent": MessageLookupByLibrary.simpleMessage("Color botones"),
     "buttonConfirm": MessageLookupByLibrary.simpleMessage("Confirm"),
     "buttonDeleteAccount": MessageLookupByLibrary.simpleMessage(
       "Delete account",
@@ -92,6 +93,14 @@ class MessageLookup extends MessageLookupByLibrary {
       "If the account exists, a code has been sent to your email.",
     ),
     "collapseMenu": MessageLookupByLibrary.simpleMessage("Collapse"),
+    "colorBackground": MessageLookupByLibrary.simpleMessage("Color de fondo"),
+    "colorPrimary": MessageLookupByLibrary.simpleMessage(
+      "Color texto primario",
+    ),
+    "colorSecondary": MessageLookupByLibrary.simpleMessage(
+      "Color texto secundario",
+    ),
+    "colorSelect": MessageLookupByLibrary.simpleMessage("Seleccionar color"),
     "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
     "confirmPassword": MessageLookupByLibrary.simpleMessage("Confirm password"),
     "cookiePolicyLabel": MessageLookupByLibrary.simpleMessage("Cookie policy"),
@@ -107,6 +116,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "currentServerVersionText": MessageLookupByLibrary.simpleMessage(
       "Available version",
     ),
+    "customizeTheme": MessageLookupByLibrary.simpleMessage("Personalizar tema"),
     "dateCountdown": MessageLookupByLibrary.simpleMessage("Fecha"),
     "dateFormat": MessageLookupByLibrary.simpleMessage("Date format"),
     "dateNotSet": MessageLookupByLibrary.simpleMessage("Fecha no definida"),
@@ -299,6 +309,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "fieldsAdded": MessageLookupByLibrary.simpleMessage(
       "Campos añadidos al formulario",
     ),
+    "fontSelect": MessageLookupByLibrary.simpleMessage("Seleccionar fuente"),
     "forgotPassword": MessageLookupByLibrary.simpleMessage(
       "Forgot your password?",
     ),
@@ -619,15 +630,22 @@ class MessageLookup extends MessageLookupByLibrary {
       "Country",
     ),
     "theme": MessageLookupByLibrary.simpleMessage("Theme"),
+    "themeBodySize": MessageLookupByLibrary.simpleMessage(
+      "Tamaño texto secundario",
+    ),
     "themeChristmas": MessageLookupByLibrary.simpleMessage("Navideño"),
     "themeClassic": MessageLookupByLibrary.simpleMessage("Clásico"),
     "themeDark": MessageLookupByLibrary.simpleMessage("Dark mode"),
     "themeDefault": MessageLookupByLibrary.simpleMessage("Neutro"),
     "themeElegant": MessageLookupByLibrary.simpleMessage("Elegante"),
+    "themeFont": MessageLookupByLibrary.simpleMessage("Fuente del tema"),
     "themeFun": MessageLookupByLibrary.simpleMessage("Divertido/Infantil"),
     "themeLight": MessageLookupByLibrary.simpleMessage("Light mode"),
     "themeMinimal": MessageLookupByLibrary.simpleMessage("Minimalista"),
     "themeSelect": MessageLookupByLibrary.simpleMessage("Seleccionar tema"),
+    "themeTitleSize": MessageLookupByLibrary.simpleMessage(
+      "Tamaño texto principal",
+    ),
     "timeCountdown": MessageLookupByLibrary.simpleMessage("Hora"),
     "userAvatar": MessageLookupByLibrary.simpleMessage("Avatar"),
     "userDescription": MessageLookupByLibrary.simpleMessage("Bio"),

@@ -2938,6 +2938,106 @@ class S {
       args: [],
     );
   }
+
+  /// `Personalizar tema`
+  String get customizeTheme {
+    return Intl.message(
+      'Personalizar tema',
+      name: 'customizeTheme',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Color de fondo`
+  String get colorBackground {
+    return Intl.message(
+      'Color de fondo',
+      name: 'colorBackground',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Color texto primario`
+  String get colorPrimary {
+    return Intl.message(
+      'Color texto primario',
+      name: 'colorPrimary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fuente del tema`
+  String get themeFont {
+    return Intl.message(
+      'Fuente del tema',
+      name: 'themeFont',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Seleccionar color`
+  String get colorSelect {
+    return Intl.message(
+      'Seleccionar color',
+      name: 'colorSelect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Seleccionar fuente`
+  String get fontSelect {
+    return Intl.message(
+      'Seleccionar fuente',
+      name: 'fontSelect',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Color botones`
+  String get buttonColorAccent {
+    return Intl.message(
+      'Color botones',
+      name: 'buttonColorAccent',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Color texto secundario`
+  String get colorSecondary {
+    return Intl.message(
+      'Color texto secundario',
+      name: 'colorSecondary',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tamaño texto principal`
+  String get themeTitleSize {
+    return Intl.message(
+      'Tamaño texto principal',
+      name: 'themeTitleSize',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Tamaño texto secundario`
+  String get themeBodySize {
+    return Intl.message(
+      'Tamaño texto secundario',
+      name: 'themeBodySize',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

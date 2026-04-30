@@ -22,16 +22,36 @@ class GiftsModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// 🧠 DATOS PRINCIPALES DEL MÓDULO
-    /// Se leen desde el JSON del backend/local storage
+    /// 🧠 DATOS PRINCIPALES (backend-safe)
     final title = (data["title"] ?? S.of(context).moduleNameGifts).toString();
+
     final message = (data["message"] ?? "").toString();
+
     final iban = data["iban"];
     final bizum = data["bizum"];
     final link = data["link"];
 
     /// 📋 LISTA DE IDEAS DE REGALO
     final items = List<String>.from(data["items"] ?? []);
+
+    /// 🔤 FONT (data > theme)
+    final font = (data["font"] as String?)?.isNotEmpty == true
+        ? data["font"]
+        : theme.fontFamily;
+
+    /// 🎨 COLORS (data > theme)
+    final titleColor = _hexToColor(data["titleColor"]) ?? theme.primaryColor;
+
+    final textColor = _hexToColor(data["textColor"]) ?? theme.textColor;
+
+    final accentColor = _hexToColor(data["accentColor"]) ?? theme.accentColor;
+
+    /// 📏 SIZES (consistente con resto de módulos)
+    final titleSize =
+        (data["titleFontSize"] as num?)?.toDouble() ?? theme.titleFontSize;
+
+    final bodySize =
+        (data["bodyFontSize"] as num?)?.toDouble() ?? theme.bodyFontSize;
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -41,7 +61,7 @@ class GiftsModule extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.backgroundColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: theme.primaryColor.withValues(alpha: 0.15)),
+        border: Border.all(color: accentColor.withValues(alpha: 0.15)),
       ),
 
       child: Center(
@@ -51,20 +71,20 @@ class GiftsModule extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              /// 🎁 ICONO PRINCIPAL DEL MÓDULO
-              Icon(Icons.card_giftcard, size: 32, color: theme.primaryColor),
+              /// 🎁 ICONO PRINCIPAL
+              Icon(Icons.card_giftcard, size: 32, color: titleColor),
 
               const SizedBox(height: 8),
 
-              /// 🏷️ TÍTULO DEL MÓDULO
+              /// 🏷️ TÍTULO
               Text(
                 title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 20,
+                  fontSize: titleSize,
                   fontWeight: FontWeight.bold,
-                  fontFamily: theme.fontFamily,
-                  color: theme.primaryColor,
+                  fontFamily: font,
+                  color: titleColor,
                 ),
               ),
 
@@ -75,28 +95,35 @@ class GiftsModule extends StatelessWidget {
                   message,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontFamily: theme.fontFamily,
-                    color: theme.textColor,
+                    fontSize: bodySize,
+                    fontFamily: font,
+                    color: textColor,
                   ),
                 ),
               ],
 
               const SizedBox(height: 16),
 
-              /// 🏦 IBAN (SI EXISTE)
+              /// 🏦 IBAN
               if (iban != null && iban.toString().isNotEmpty)
                 _buildCopyBox(
                   context,
                   S.of(context).labelIban,
                   iban.toString(),
+                  font,
+                  textColor,
+                  accentColor,
                 ),
 
-              /// 📱 BIZUM (SI EXISTE)
+              /// 📱 BIZUM
               if (bizum != null && bizum.toString().isNotEmpty)
                 _buildCopyBox(
                   context,
                   S.of(context).labelBizum,
                   bizum.toString(),
+                  font,
+                  textColor,
+                  accentColor,
                 ),
 
               /// 🔗 LINK EXTERNO
@@ -108,20 +135,17 @@ class GiftsModule extends StatelessWidget {
                     await launchUrl(uri);
                   },
 
-                  /// 🎨 botón coherente con el theme
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.accentColor,
-                  ),
+                  style: ElevatedButton.styleFrom(backgroundColor: accentColor),
 
                   icon: const Icon(Icons.open_in_new),
                   label: Text(
                     S.of(context).giftsList,
-                    style: TextStyle(fontFamily: theme.fontFamily),
+                    style: TextStyle(fontFamily: font),
                   ),
                 ),
               ],
 
-              /// 🎁 LISTA DE IDEAS DE REGALO
+              /// 🎁 LISTA DE IDEAS
               if (items.isNotEmpty) ...[
                 const SizedBox(height: 16),
 
@@ -129,9 +153,10 @@ class GiftsModule extends StatelessWidget {
                   S.of(context).editGiftIdeas,
                   textAlign: TextAlign.center,
                   style: TextStyle(
+                    fontSize: bodySize,
                     fontWeight: FontWeight.bold,
-                    fontFamily: theme.fontFamily,
-                    color: theme.primaryColor,
+                    fontFamily: font,
+                    color: titleColor,
                   ),
                 ),
 
@@ -147,8 +172,9 @@ class GiftsModule extends StatelessWidget {
                             "• $item",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontFamily: theme.fontFamily,
-                              color: theme.textColor,
+                              fontSize: bodySize - 1,
+                              fontFamily: font,
+                              color: textColor,
                             ),
                           ),
                         ),
@@ -163,10 +189,15 @@ class GiftsModule extends StatelessWidget {
     );
   }
 
-  /// 📋 WIDGET AUXILIAR: BLOQUE COPIABLE
-  /// Se usa para IBAN y Bizum
-  /// Incluye botón de copiar al portapapeles
-  Widget _buildCopyBox(BuildContext context, String label, String value) {
+  /// 📋 BLOQUE COPIABLE (refactor consistente)
+  Widget _buildCopyBox(
+    BuildContext context,
+    String label,
+    String value,
+    String font,
+    Color textColor,
+    Color accentColor,
+  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 8),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -175,7 +206,7 @@ class GiftsModule extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.backgroundColor,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: theme.primaryColor.withValues(alpha: 0.2)),
+        border: Border.all(color: accentColor.withValues(alpha: 0.2)),
       ),
 
       child: Row(
@@ -186,16 +217,13 @@ class GiftsModule extends StatelessWidget {
             child: Text(
               "$label: $value",
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontFamily: theme.fontFamily,
-                color: theme.textColor,
-              ),
+              style: TextStyle(fontFamily: font, color: textColor),
             ),
           ),
 
           /// 📋 COPIAR AL PORTAPAPELES
           IconButton(
-            icon: Icon(Icons.copy, color: theme.primaryColor),
+            icon: Icon(Icons.copy, color: accentColor),
             onPressed: () {
               Clipboard.setData(ClipboardData(text: value));
             },
@@ -203,5 +231,22 @@ class GiftsModule extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// 🎨 HEX → COLOR (backend-safe estándar del proyecto)
+  Color? _hexToColor(dynamic value) {
+    if (value == null) return null;
+
+    try {
+      String hex = value.toString().trim();
+
+      if (hex.startsWith("#")) hex = hex.substring(1);
+      if (hex.startsWith("0x")) hex = hex.substring(2);
+      if (hex.length == 6) hex = "FF$hex";
+
+      return Color(int.parse(hex, radix: 16));
+    } catch (_) {
+      return null;
+    }
   }
 }

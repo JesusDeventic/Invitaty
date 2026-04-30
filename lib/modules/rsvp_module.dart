@@ -51,14 +51,31 @@ class _RsvpModuleState extends State<RsvpModule> {
 
   @override
   void dispose() {
-    for (final controller in controllers.values) {
-      controller.dispose();
+    for (final c in controllers.values) {
+      c.dispose();
     }
 
     super.dispose();
   }
 
-  /// 🧩 BUILDER DE CAMPOS DINÁMICOS (SIN CAMBIOS)
+  // 🎨 HEX → COLOR
+  Color? _hexToColor(dynamic value) {
+    if (value == null) return null;
+
+    try {
+      String hex = value.toString().trim();
+
+      if (hex.startsWith("#")) hex = hex.substring(1);
+      if (hex.startsWith("0x")) hex = hex.substring(2);
+      if (hex.length == 6) hex = "FF$hex";
+
+      return Color(int.parse(hex, radix: 16));
+    } catch (_) {
+      return null;
+    }
+  }
+
+  /// 🧩 BUILDER DE CAMPOS DINÁMICOS (SIN CAMBIOS DE LÓGICA)
   Widget _buildField(Map<String, dynamic> field) {
     final type = field["type"] ?? "text";
     final key = field["key"] ?? "";
@@ -66,12 +83,29 @@ class _RsvpModuleState extends State<RsvpModule> {
     final placeholder = field["placeholder"] ?? "";
     final required = field["required"] ?? false;
 
+    /// 🔤 FONT FIJA (RSVP NO USA THEME FONT)
+    final font = "Poppins";
+
+    /// 🎨 COLOR FIJO (RSVP LIMPIO Y LEGIBLE)
+    final textColor = Colors.black;
+
+    final primaryColor =
+        _hexToColor(field["primaryColor"]) ?? widget.theme.primaryColor;
+
+    /// 📏 SIZE BASE
+    final fontSize =
+        (field["fontSize"] as num?)?.toDouble() ?? widget.theme.bodyFontSize;
+
+    TextStyle baseStyle() =>
+        TextStyle(fontFamily: font, fontSize: fontSize, color: textColor);
+
     switch (type) {
       /// ✏️ INPUT DE TEXTO NORMAL
       case "text":
         return TextFormField(
           controller: controllers[key],
           decoration: InputDecoration(labelText: label, hintText: placeholder),
+          style: baseStyle(),
           validator: (value) {
             if (required && (value == null || value.trim().isEmpty)) {
               return S.of(context).fieldMandatory;
@@ -86,6 +120,7 @@ class _RsvpModuleState extends State<RsvpModule> {
           controller: controllers[key],
           decoration: InputDecoration(labelText: label, hintText: placeholder),
           keyboardType: TextInputType.emailAddress,
+          style: baseStyle(),
           validator: (value) {
             if (required && (value == null || value.trim().isEmpty)) {
               return S.of(context).fieldMandatory;
@@ -105,6 +140,7 @@ class _RsvpModuleState extends State<RsvpModule> {
           controller: controllers[key],
           decoration: InputDecoration(labelText: label, hintText: placeholder),
           keyboardType: TextInputType.number,
+          style: baseStyle(),
           validator: (value) {
             if (required && (value == null || value.trim().isEmpty)) {
               return S.of(context).fieldMandatory;
@@ -119,6 +155,7 @@ class _RsvpModuleState extends State<RsvpModule> {
           controller: controllers[key],
           decoration: InputDecoration(labelText: label, hintText: placeholder),
           maxLines: 3,
+          style: baseStyle(),
           validator: (value) {
             if (required && (value == null || value.trim().isEmpty)) {
               return S.of(context).fieldMandatory;
@@ -130,8 +167,9 @@ class _RsvpModuleState extends State<RsvpModule> {
       /// 🔘 SWITCH (BOOLEANO)
       case "switch":
         return SwitchListTile(
-          title: Text(label),
+          title: Text(label, style: baseStyle()),
           value: formValues[key] ?? false,
+          activeColor: primaryColor,
           onChanged: (value) {
             setState(() => formValues[key] = value);
           },
@@ -147,6 +185,7 @@ class _RsvpModuleState extends State<RsvpModule> {
         return DropdownButtonFormField<String>(
           value: formValues[key],
           decoration: InputDecoration(labelText: label, hintText: placeholder),
+          style: baseStyle(),
           items: options
               .map(
                 (option) =>
@@ -174,18 +213,18 @@ class _RsvpModuleState extends State<RsvpModule> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// 🏷️ LABEL DEL GRUPO
-            Text(label, style: const TextStyle(fontWeight: FontWeight.bold)),
+            Text(
+              label,
+              style: baseStyle().copyWith(fontWeight: FontWeight.bold),
+            ),
 
-            /// 🔘 OPCIONES RADIO
-            ...options.map((option) {
+            ...options.map((o) {
               return RadioListTile<String>(
-                title: Text(option),
-                value: option,
+                value: o,
                 groupValue: formValues[key],
-                onChanged: (value) {
-                  setState(() => formValues[key] = value);
-                },
+                onChanged: (v) => setState(() => formValues[key] = v),
+                activeColor: primaryColor,
+                title: Text(o, style: baseStyle()),
               );
             }),
 
@@ -213,9 +252,8 @@ class _RsvpModuleState extends State<RsvpModule> {
 
     final result = <String, dynamic>{};
 
-    /// 🧾 TEXT INPUTS
-    for (final entry in controllers.entries) {
-      result[entry.key] = entry.value.text;
+    for (final e in controllers.entries) {
+      result[e.key] = e.value.text;
     }
 
     /// 📦 NON-TEXT INPUTS
@@ -233,12 +271,16 @@ class _RsvpModuleState extends State<RsvpModule> {
 
   @override
   Widget build(BuildContext context) {
-    /// 🧾 DATOS DEL MÓDULO
+    final theme = widget.theme;
+
     final title = widget.data["title"] ?? S.of(context).attendanceConfirmation;
 
     final description = widget.data["description"] ?? "";
 
     final fields = List<Map<String, dynamic>>.from(widget.data["fields"] ?? []);
+
+    /// 🔤 RSVP FIX FONT (global form)
+    final font = "Poppins";
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
@@ -246,11 +288,9 @@ class _RsvpModuleState extends State<RsvpModule> {
 
       /// 🎨 SOLO CONTENEDOR USA THEME
       decoration: BoxDecoration(
-        color: widget.theme.backgroundColor,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(
-          color: widget.theme.primaryColor.withValues(alpha: 0.15),
-        ),
+        border: Border.all(color: theme.primaryColor.withValues(alpha: 0.15)),
       ),
 
       child: Form(
@@ -263,10 +303,10 @@ class _RsvpModuleState extends State<RsvpModule> {
               title,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 22,
+                fontSize: theme.titleFontSize,
                 fontWeight: FontWeight.bold,
-                fontFamily: widget.theme.fontFamily,
-                color: widget.theme.primaryColor,
+                fontFamily: font,
+                color: Colors.black,
               ),
             ),
 
@@ -276,9 +316,10 @@ class _RsvpModuleState extends State<RsvpModule> {
               Text(
                 description,
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: widget.theme.fontFamily,
-                  color: widget.theme.textColor,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontFamily: "Poppins",
+                  color: Colors.black,
                 ),
               ),
             ],
@@ -287,9 +328,9 @@ class _RsvpModuleState extends State<RsvpModule> {
 
             /// 🧩 CAMPOS (SIN CAMBIOS DE ESTILO)
             ...fields.map(
-              (field) => Padding(
+              (f) => Padding(
                 padding: const EdgeInsets.only(bottom: 16),
-                child: _buildField(field),
+                child: _buildField(f),
               ),
             ),
 
@@ -302,12 +343,15 @@ class _RsvpModuleState extends State<RsvpModule> {
                 onPressed: _submitForm,
 
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: widget.theme.accentColor,
+                  backgroundColor: theme.accentColor,
                 ),
 
                 child: Text(
                   S.of(context).agreeAttendance,
-                  style: TextStyle(fontFamily: widget.theme.fontFamily),
+                  style: const TextStyle(
+                    fontFamily: "Poppins",
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

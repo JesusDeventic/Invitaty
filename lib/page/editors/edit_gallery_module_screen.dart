@@ -34,6 +34,7 @@ class EditGalleryModuleScreen extends StatefulWidget {
 class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
   late List<String> images;
   late TextEditingController titleController;
+  bool _didInitLocalizedDefaults = false;
 
   @override
   void initState() {
@@ -47,8 +48,23 @@ class _EditGalleryModuleScreenState extends State<EditGalleryModuleScreen> {
 
     /// 🏷️ Título
     titleController = TextEditingController(
-      text: data["title"] ?? S.of(context).moduleNameGallery,
+      // ⚠️ No usar S.of(context) en initState (puede crashear).
+      text: (data["title"] ?? "").toString(),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // ✅ Localizations seguro aquí.
+    if (!_didInitLocalizedDefaults) {
+      _didInitLocalizedDefaults = true;
+
+      if (titleController.text.trim().isEmpty) {
+        titleController.text = S.of(context).moduleNameGallery;
+      }
+    }
   }
 
   @override

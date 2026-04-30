@@ -170,16 +170,24 @@ class ViewerScreen extends StatelessWidget {
     );
   }
 
-  /// 🎛️ CUSTOMIZADOR REAL FUNCIONAL (FIX FINAL)
+  /// 🎛️ CUSTOMIZADOR COMPLETO (TODOS LOS PARÁMETROS)
   void _openThemeCustomizer(BuildContext context) {
     final provider = context.read<InvitationProvider>();
 
     final themeId = provider.invitation["theme"];
     final baseTheme = ThemeRegistry.get(themeId);
 
-    final background = ValueNotifier<Color>(baseTheme.backgroundColor);
-    final primary = ValueNotifier<Color>(baseTheme.primaryColor);
-    final font = ValueNotifier<String>(baseTheme.fontFamily);
+    /// ✅ USAR OVERRIDE ACTUAL
+    final override = provider.themeOverride;
+    final currentTheme = baseTheme.copyWithOverride(override);
+
+    final background = ValueNotifier<Color>(currentTheme.backgroundColor);
+    final primary = ValueNotifier<Color>(currentTheme.primaryColor);
+    final accent = ValueNotifier<Color>(currentTheme.accentColor);
+    final text = ValueNotifier<Color>(currentTheme.textColor);
+    final font = ValueNotifier<String>(currentTheme.fontFamily);
+    final titleSize = ValueNotifier<double>(currentTheme.titleFontSize);
+    final bodySize = ValueNotifier<double>(currentTheme.bodyFontSize);
 
     showModalBottomSheet(
       context: context,
@@ -187,79 +195,162 @@ class ViewerScreen extends StatelessWidget {
       builder: (context) {
         return Padding(
           padding: const EdgeInsets.all(16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                "Personalizar tema",
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  S.of(context).customizeTheme,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
 
-              const SizedBox(height: 16),
+                const SizedBox(height: 16),
 
-              /// 🎨 BACKGROUND
-              ValueListenableBuilder<Color>(
-                valueListenable: background,
-                builder: (_, value, __) {
-                  return ListTile(
-                    title: const Text("Color de fondo"),
-                    trailing: Container(width: 24, height: 24, color: value),
-                    onTap: () async {
-                      final picked = await _pickColor(context, value);
-                      if (picked != null) background.value = picked;
-                    },
-                  );
-                },
-              ),
+                /// 🎨 BACKGROUND
+                ValueListenableBuilder<Color>(
+                  valueListenable: background,
+                  builder: (_, value, __) {
+                    return ListTile(
+                      title: Text(S.of(context).colorBackground),
+                      trailing: Container(width: 24, height: 24, color: value),
+                      onTap: () async {
+                        final picked = await _pickColor(context, value);
+                        if (picked != null) background.value = picked;
+                      },
+                    );
+                  },
+                ),
 
-              /// 🎨 PRIMARY
-              ValueListenableBuilder<Color>(
-                valueListenable: primary,
-                builder: (_, value, __) {
-                  return ListTile(
-                    title: const Text("Color principal"),
-                    trailing: Container(width: 24, height: 24, color: value),
-                    onTap: () async {
-                      final picked = await _pickColor(context, value);
-                      if (picked != null) primary.value = picked;
-                    },
-                  );
-                },
-              ),
+                /// 🎨 PRIMARY
+                ValueListenableBuilder<Color>(
+                  valueListenable: primary,
+                  builder: (_, value, __) {
+                    return ListTile(
+                      title: Text(S.of(context).colorPrimary),
+                      trailing: Container(width: 24, height: 24, color: value),
+                      onTap: () async {
+                        final picked = await _pickColor(context, value);
+                        if (picked != null) primary.value = picked;
+                      },
+                    );
+                  },
+                ),
 
-              /// 🔤 FONT SELECTOR REAL
-              ValueListenableBuilder<String>(
-                valueListenable: font,
-                builder: (_, value, __) {
-                  return ListTile(
-                    title: const Text("Tipografía"),
-                    subtitle: Text(value),
-                    onTap: () async {
-                      final selected = await _pickFont(context, value);
-                      if (selected != null) font.value = selected;
-                    },
-                  );
-                },
-              ),
+                /// 🎨 ACCENT
+                ValueListenableBuilder<Color>(
+                  valueListenable: accent,
+                  builder: (_, value, __) {
+                    return ListTile(
+                      title: Text(S.of(context).buttonColorAccent),
+                      trailing: Container(width: 24, height: 24, color: value),
+                      onTap: () async {
+                        final picked = await _pickColor(context, value);
+                        if (picked != null) accent.value = picked;
+                      },
+                    );
+                  },
+                ),
 
-              const SizedBox(height: 12),
+                /// 🎨 TEXT
+                ValueListenableBuilder<Color>(
+                  valueListenable: text,
+                  builder: (_, value, __) {
+                    return ListTile(
+                      title: Text(S.of(context).colorSecondary),
+                      trailing: Container(width: 24, height: 24, color: value),
+                      onTap: () async {
+                        final picked = await _pickColor(context, value);
+                        if (picked != null) text.value = picked;
+                      },
+                    );
+                  },
+                ),
 
-              ElevatedButton(
-                onPressed: () {
-                  provider.applyThemeOverride(
-                    background: background.value,
-                    primary: primary.value,
-                    font: font.value,
-                  );
+                /// 🔤 FONT
+                ValueListenableBuilder<String>(
+                  valueListenable: font,
+                  builder: (_, value, __) {
+                    return ListTile(
+                      title: Text(S.of(context).themeFont),
+                      subtitle: Text(value),
+                      onTap: () async {
+                        final selected = await _pickFont(context, value);
+                        if (selected != null) font.value = selected;
+                      },
+                    );
+                  },
+                ),
 
-                  Navigator.pop(context);
-                },
-                child: const Text("Aplicar"),
-              ),
-            ],
+                /// TITLE
+                ValueListenableBuilder<double>(
+                  valueListenable: titleSize,
+                  builder: (_, value, __) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${S.of(context).themeTitleSize}: ${value.toInt()}",
+                          style: const TextStyle(fontWeight: FontWeight.w500),
+                        ),
+
+                        Slider(
+                          value: value,
+                          min: 16,
+                          max: 64,
+                          onChanged: (v) => titleSize.value = v,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+
+                /// 📏 BODY SIZE
+                ValueListenableBuilder<double>(
+                  valueListenable: bodySize,
+                  builder: (_, value, __) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        /// 🆕 LABEL VISIBLE
+                        Text(
+                          "${S.of(context).themeBodySize}: ${value.toInt()}",
+                          style: const TextStyle(fontWeight: FontWeight.w500),
+                        ),
+
+                        Slider(
+                          value: value,
+                          min: 12,
+                          max: 48,
+                          onChanged: (v) => bodySize.value = v,
+                        ),
+                      ],
+                    );
+                  },
+                ),
+
+                const SizedBox(height: 12),
+
+                ElevatedButton(
+                  onPressed: () {
+                    provider.applyThemeOverride(
+                      background: background.value,
+                      primary: primary.value,
+                      accent: accent.value,
+                      text: text.value,
+                      font: font.value,
+                      titleSize: titleSize.value,
+                      bodySize: bodySize.value,
+                    );
+
+                    Navigator.pop(context);
+                  },
+                  child: Text(S.of(context).applyChanges),
+                ),
+              ],
+            ),
           ),
         );
       },
@@ -272,7 +363,7 @@ class ViewerScreen extends StatelessWidget {
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          title: const Text("Seleccionar color"),
+          title: Text(S.of(context).colorSelect),
           content: Wrap(
             spacing: 8,
             children: [
@@ -316,13 +407,14 @@ class ViewerScreen extends StatelessWidget {
       "GreatVibes",
       "Creepster",
       "Disney",
+      "Roboto",
     ];
 
     return showDialog<String>(
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
-          title: const Text("Seleccionar tipografía"),
+          title: Text(S.of(context).fontSelect),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: fonts.map((f) {

@@ -13,12 +13,31 @@ class DressCodeModule extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // 🧠 NORMALIZACIÓN (evita errores de tipo desde backend)
+    // 🧠 NORMALIZACIÓN (backend-safe)
     final title = (data["title"] ?? S.of(context).moduleNameDressCode)
         .toString();
 
     final style = (data["style"] ?? "").toString();
     final description = (data["description"] ?? "").toString();
+
+    /// 🔤 FONT (data > theme)
+    final font = (data["font"] as String?)?.isNotEmpty == true
+        ? data["font"]
+        : theme.fontFamily;
+
+    /// 🎨 COLORS (data > theme)
+    final titleColor = _hexToColor(data["titleColor"]) ?? theme.primaryColor;
+
+    final textColor = _hexToColor(data["textColor"]) ?? theme.textColor;
+
+    final accentColor = _hexToColor(data["accentColor"]) ?? theme.accentColor;
+
+    /// 📏 SIZES (consistente con resto de módulos)
+    final titleSize =
+        (data["titleFontSize"] as num?)?.toDouble() ?? theme.titleFontSize;
+
+    final bodySize =
+        (data["bodyFontSize"] as num?)?.toDouble() ?? theme.bodyFontSize;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -27,7 +46,7 @@ class DressCodeModule extends StatelessWidget {
       /// 🎨 fondo consistente con theme global
       decoration: BoxDecoration(
         color: theme.backgroundColor,
-        border: Border.all(color: theme.primaryColor.withValues(alpha: 0.2)),
+        border: Border.all(color: accentColor.withValues(alpha: 0.2)),
         borderRadius: BorderRadius.circular(12),
       ),
 
@@ -35,7 +54,7 @@ class DressCodeModule extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // 👕 ICONO VISUAL DEL MÓDULO
-          Icon(Icons.checkroom, size: 32, color: theme.primaryColor),
+          Icon(Icons.checkroom, size: 32, color: titleColor),
 
           const SizedBox(height: 8),
 
@@ -44,36 +63,35 @@ class DressCodeModule extends StatelessWidget {
             title,
             textAlign: TextAlign.center,
             style: TextStyle(
-              fontSize: 20,
+              fontSize: titleSize,
               fontWeight: FontWeight.bold,
-              fontFamily: theme.fontFamily,
-              color: theme.primaryColor,
+              fontFamily: font,
+              color: titleColor,
             ),
           ),
 
           const SizedBox(height: 12),
 
-          // 🎯 ESTILO PRINCIPAL (CLAVE IMPORTANTE)
-          // 🔥 IMPORTANTE BACKEND:
-          // - style es una CLAVE ("formal", "casual"...)
+          // 🎯 ESTILO PRINCIPAL (CLAVE BACKEND)
+          // 🔥 IMPORTANTE:
           // - NO es texto traducido
-          // - el backend guarda la clave, no el label
+          // - es clave lógica ("formal", "casual", etc.)
           if (style.isNotEmpty)
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
 
               decoration: BoxDecoration(
-                color: theme.accentColor.withValues(alpha: 0.15),
+                color: accentColor.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(20),
               ),
 
               child: Text(
                 style,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: bodySize,
                   fontWeight: FontWeight.w600,
-                  fontFamily: theme.fontFamily,
-                  color: theme.primaryColor,
+                  fontFamily: font,
+                  color: titleColor,
                 ),
               ),
             ),
@@ -85,13 +103,31 @@ class DressCodeModule extends StatelessWidget {
               description,
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontFamily: theme.fontFamily,
-                color: theme.textColor.withValues(alpha: 0.9),
+                fontSize: bodySize - 1,
+                fontFamily: font,
+                color: textColor.withValues(alpha: 0.9),
               ),
             ),
           ],
         ],
       ),
     );
+  }
+
+  /// 🎨 HEX → COLOR (backend-safe estándar del proyecto)
+  Color? _hexToColor(dynamic value) {
+    if (value == null) return null;
+
+    try {
+      String hex = value.toString().trim();
+
+      if (hex.startsWith("#")) hex = hex.substring(1);
+      if (hex.startsWith("0x")) hex = hex.substring(2);
+      if (hex.length == 6) hex = "FF$hex";
+
+      return Color(int.parse(hex, radix: 16));
+    } catch (_) {
+      return null;
+    }
   }
 }

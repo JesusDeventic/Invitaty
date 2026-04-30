@@ -18,12 +18,15 @@ class TextModule extends StatelessWidget {
     /// 🎨 CONFIGURACIÓN CON PRIORIDAD CORRECTA
 
     // 🔹 FUENTE
-    // 1. Usuario
-    // 2. Tema
-    // 3. Fallback
-    final font = (data["font"] as String?) ?? theme.fontFamily;
+    final font = (data["font"] as String?)?.isNotEmpty == true
+        ? data["font"]
+        : theme.fontFamily;
 
-    // 🔹 TAMAÑO
+    // 🔹 TAMAÑO TITULO (AHORA RESPETA OVERRIDE)
+    final titleSize =
+        (data["fontSizeTitle"] as num?)?.toDouble() ?? theme.titleFontSize;
+
+    // 🔹 TAMAÑO BODY
     final fontSize =
         (data["fontSize"] as num?)?.toDouble() ?? theme.bodyFontSize;
 
@@ -42,9 +45,8 @@ class TextModule extends StatelessWidget {
               title,
               textAlign: TextAlign.center,
 
-              /// 🔥 AQUÍ el tema también influye
               style: TextStyle(
-                fontSize: (theme.titleFontSize),
+                fontSize: titleSize,
                 fontWeight: FontWeight.bold,
                 fontFamily: font,
                 color: color,
